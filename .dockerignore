@@ -1,0 +1,58 @@
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+.installed.cfg
+*.egg
+venv/
+env/
+ENV/
+
+# Documentation
+*.md
+!README.md
+DEPLOYMENT.md
+README_HF.md
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary files
+downloads/*.mp4
+downloads/*.avi
+downloads/*.mov
+user_tokens/*.json
+temp_audio/*.mp3
+temp_audio/*.m4a
+flask_session/
+*.log
+
+# Environment
+.env
+.env.local
+.env.example
+
+# Build files
+render.yaml
+Procfile
+runtime.txt
+requirements_hf.txt
+
+# Test files
+test_*.py
+tests/

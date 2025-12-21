@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Automation Machine - AI-Powered Content Management</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="background-animation">
+        <div class="gradient-orb orb-1"></div>
+        <div class="gradient-orb orb-2"></div>
+        <div class="gradient-orb orb-3"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar glass-card">
+        <div class="nav-container">
+            <a href="/" class="nav-brand">
+                <i class="fab fa-youtube"></i>
+                <span>YouTube Automation</span>
+            </a>
+            <div class="nav-menu">
+                <a href="/" class="nav-link active"><i class="fas fa-home"></i> Home</a>
+                <a href="/downloader" class="nav-link"><i class="fas fa-download"></i> Downloader</a>
+                <a href="/metadata-generator" class="nav-link"><i class="fas fa-brain"></i> Metadata</a>
+                <a href="/uploader" class="nav-link"><i class="fas fa-upload"></i> Uploader</a>
+            </div>
+            <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu glass-card" id="mobileMenu">
+        <a href="/" class="mobile-menu-link"><i class="fas fa-home"></i> Home</a>
+        <a href="/downloader" class="mobile-menu-link"><i class="fas fa-download"></i> Downloader</a>
+        <a href="/metadata-generator" class="mobile-menu-link"><i class="fas fa-brain"></i> Metadata Generator</a>
+        <a href="/uploader" class="mobile-menu-link"><i class="fas fa-upload"></i> Uploader</a>
+    </div>
+
+    <div class="container">
+        <!-- Hero Section -->
+        <section class="hero-section fade-in">
+            <div class="hero-content text-center">
+                <div class="hero-badge">
+                    <i class="fas fa-rocket"></i>
+                    <span>AI-Powered Automation</span>
+                </div>
+                <h1 class="hero-title">Transform Instagram Reels into <span class="gradient-text">YouTube Success</span></h1>
+                <p class="hero-description">
+                    Automate your content workflow with AI-powered metadata generation, 
+                    seamless downloads, and instant YouTube uploads. Save hours of work and grow your channel faster.
+                </p>
+                <div class="hero-buttons">
+                    <a href="/uploader" class="btn btn-primary btn-large">
+                        <i class="fas fa-play"></i> Start Uploading Now
+                    </a>
+                    <a href="#features" class="btn btn-secondary btn-large">
+                        <i class="fas fa-info-circle"></i> Learn More
+                    </a>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <i class="fas fa-download"></i>
+                        <strong>Fast Downloads</strong>
+                        <span>HD Quality with Audio</span>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-brain"></i>
+                        <strong>AI Metadata</strong>
+                        <span>Powered by Gemini</span>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-upload"></i>
+                        <strong>Auto Upload</strong>
+                        <span>Direct to YouTube</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section id="features" class="features-section-detailed fade-in-delay">
+            <div class="section-header">
+                <h2>Powerful Features for Content Creators</h2>
+                <p>Everything you need to automate your content workflow</p>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card-detailed glass-card">
+                    <div class="feature-icon-large">
+                        <i class="fas fa-download"></i>
+                    </div>
+                    <h3>Instagram Reel Downloader</h3>
+                    <p class="feature-description">Download Instagram Reels in high quality with audio preservation. Fast, reliable, and secure.</p>
+                    
+                    <div class="feature-benefits">
+                        <div class="benefit-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>HD quality video downloads</span>
+                        </div>
+                        <div class="benefit-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Audio preservation included</span>
+                        </div>
+                        <div class="benefit-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Fast download speeds</span>
+                        </div>
+                        <div class="benefit-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Batch download support</span>
+                        </div>
+                    </div>
+                    
+                    <a href="/downloader" class="btn btn-secondary" style="width: 100%; margin-top: 20px;">
+                        <i class="fas fa-arrow-right"></i> Try Downloader
+                    </a>
+                </div>
+
+                <div class="feature-card-detailed glass-card">
+                    <div class="feature-icon-large">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3>AI Metadata Generator</h3>
+                    <p class="feature-description">Generate SEO-optimized titles, descriptions, and tags using advanced AI powered by Google Gemini.</p>
+                    
+                    <div class="feature-benefits">
+                        <div class="benefit-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>AI-powered content analysis</span>
+                        </div>
+                        <div class="benefit-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>SEO-optimized titles & descriptions</span>
+                        </div>
+                        <div class="benefit-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Relevant hashtags & keywords</span>
+                        </div>
+                        <div class="benefit-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Customizable for your audience</span>
+                        </div>
+                    </div>
+                    
+                    <a href="/metadata-generator" class="btn btn-preview" style="width: 100%; margin-top: 20px;">
+                        <i class="fas fa-arrow-right"></i> Generate Metadata
+                    </a>
+                </div>
+
+                <div class="feature-card-detailed glass-card">
+                    <div class="feature-icon-large">
+                        <i class="fas fa-upload"></i>
+                    </div>
+                    <h3>YouTube Auto Uploader</h3>
+                    <p class="feature-description">Upload videos directly to YouTube with AI-generated metadata. Fully automated workflow from download to publish.</p>
+                    
+                    <div class="feature-benefits">
+                        <div class="benefit-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Direct YouTube API integration</span>
+                        </div>
+                        <div class="benefit-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Automatic metadata application</span>
+                        </div>
+                        <div class="benefit-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Custom privacy settings</span>
+                        </div>
+                        <div class="benefit-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Real-time upload tracking</span>
+                        </div>
+                    </div>
+                    
+                    <a href="/uploader" class="btn btn-primary" style="width: 100%; margin-top: 20px;">
+                        <i class="fas fa-arrow-right"></i> Start Uploading
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- How It Works -->
+        <section class="how-it-works-detailed glass-card fade-in-delay-1">
+            <div class="section-header">
+                <h2>How It Works</h2>
+                <p>Simple 3-step process to automate your content</p>
+            </div>
+
+            <div class="steps-detailed">
+                <div class="step-detailed">
+                    <div class="step-number-large">1</div>
+                    <div class="step-content">
+                        <i class="fas fa-link step-icon-large"></i>
+                        <h3>Paste Instagram Reel URL</h3>
+                        <p>Copy the link to any Instagram Reel you want to upload. Our system supports all public Instagram Reels.</p>
+                        <div class="step-tips">
+                            <strong>Pro Tips:</strong>
+                            <ul>
+                                <li>Works with any public Instagram Reel</li>
+                                <li>No Instagram login required</li>
+                                <li>Supports both mobile and desktop links</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step-divider">
+                    <i class="fas fa-arrow-down"></i>
+                </div>
+
+                <div class="step-detailed">
+                    <div class="step-number-large">2</div>
+                    <div class="step-content">
+                        <i class="fas fa-magic step-icon-large"></i>
+                        <h3>AI Analyzes & Generates</h3>
+                        <p>Our AI powered by Google Gemini analyzes the video content and generates SEO-optimized metadata including title, description, tags, and hashtags.</p>
+                        <div class="step-tips">
+                            <strong>AI Features:</strong>
+                            <ul>
+                                <li>Content understanding & analysis</li>
+                                <li>SEO keyword optimization</li>
+                                <li>Trend-aware hashtag generation</li>
+                                <li>Audience-targeted descriptions</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step-divider">
+                    <i class="fas fa-arrow-down"></i>
+                </div>
+
+                <div class="step-detailed">
+                    <div class="step-number-large">3</div>
+                    <div class="step-content">
+                        <i class="fas fa-cloud-upload-alt step-icon-large"></i>
+                        <h3>Auto Upload to YouTube</h3>
+                        <p>The video is automatically downloaded and uploaded to your YouTube channel with all AI-generated metadata applied.</p>
+                        <div class="step-tips">
+                            <strong>Upload Benefits:</strong>
+                            <ul>
+                                <li>Instant publishing to YouTube</li>
+                                <li>Real-time progress tracking</li>
+                                <li>Custom privacy settings</li>
+                                <li>Automatic video optimization</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Benefits Section -->
+        <section class="benefits-section fade-in-delay-2">
+            <div class="section-header">
+                <h2>Why Choose YouTube Automation Machine?</h2>
+                <p>Built for content creators who value their time</p>
+            </div>
+
+            <div class="benefits-grid">
+                <div class="benefit-card glass-card">
+                    <i class="fas fa-clock benefit-icon"></i>
+                    <h3>Save Time</h3>
+                    <p>Automate hours of manual work. Download, generate metadata, and upload in minutes instead of hours.</p>
+                </div>
+
+                <div class="benefit-card glass-card">
+                    <i class="fas fa-chart-line benefit-icon"></i>
+                    <h3>Boost SEO</h3>
+                    <p>AI-generated metadata is optimized for search engines, helping your videos rank higher and get more views.</p>
+                </div>
+
+                <div class="benefit-card glass-card">
+                    <i class="fas fa-robot benefit-icon"></i>
+                    <h3>AI-Powered</h3>
+                    <p>Leverage Google Gemini AI for intelligent content analysis and metadata generation.</p>
+                </div>
+
+                <div class="benefit-card glass-card">
+                    <i class="fas fa-shield-alt benefit-icon"></i>
+                    <h3>Secure & Private</h3>
+                    <p>Your credentials and content are protected. We use official YouTube API with OAuth 2.0 security.</p>
+                </div>
+
+                <div class="benefit-card glass-card">
+                    <i class="fas fa-bolt benefit-icon"></i>
+                    <h3>Lightning Fast</h3>
+                    <p>High-speed downloads and uploads. Process multiple videos efficiently with our optimized workflow.</p>
+                </div>
+
+                <div class="benefit-card glass-card">
+                    <i class="fas fa-mobile-alt benefit-icon"></i>
+                    <h3>Mobile Friendly</h3>
+                    <p>Works perfectly on all devices. Manage your content from anywhere, anytime.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Use Cases Section -->
+        <section class="use-cases-section glass-card fade-in-delay-3">
+            <div class="section-header">
+                <h2>Perfect For</h2>
+                <p>Content creators across different niches</p>
+            </div>
+
+            <div class="use-cases-grid">
+                <div class="use-case-item">
+                    <i class="fas fa-user-tie"></i>
+                    <h4>Social Media Managers</h4>
+                    <p>Repurpose Instagram content for YouTube channels efficiently</p>
+                </div>
+
+                <div class="use-case-item">
+                    <i class="fas fa-video"></i>
+                    <h4>Content Creators</h4>
+                    <p>Expand your reach by posting on multiple platforms seamlessly</p>
+                </div>
+
+                <div class="use-case-item">
+                    <i class="fas fa-bullhorn"></i>
+                    <h4>Digital Marketers</h4>
+                    <p>Automate video marketing campaigns across platforms</p>
+                </div>
+
+                <div class="use-case-item">
+                    <i class="fas fa-store"></i>
+                    <h4>E-commerce Brands</h4>
+                    <p>Share product videos on YouTube for better reach</p>
+                </div>
+
+                <div class="use-case-item">
+                    <i class="fas fa-graduation-cap"></i>
+                    <h4>Educators</h4>
+                    <p>Share educational content across multiple platforms</p>
+                </div>
+
+                <div class="use-case-item">
+                    <i class="fas fa-music"></i>
+                    <h4>Musicians & Artists</h4>
+                    <p>Promote your work on YouTube with optimized metadata</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section class="faq-section fade-in-delay-3">
+            <div class="section-header">
+                <h2>Frequently Asked Questions</h2>
+                <p>Everything you need to know</p>
+            </div>
+
+            <div class="faq-container">
+                <div class="faq-item glass-card">
+                    <div class="faq-question">
+                        <i class="fas fa-question-circle"></i>
+                        <h3>Do I need to login to Instagram?</h3>
+                        <i class="fas fa-chevron-down faq-toggle"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>No direct Instagram login is required. However, you need to provide your Instagram session ID in the .env configuration file for the downloader to work. This is a one-time setup.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item glass-card">
+                    <div class="faq-question">
+                        <i class="fas fa-question-circle"></i>
+                        <h3>Is my YouTube account safe?</h3>
+                        <i class="fas fa-chevron-down faq-toggle"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Yes, absolutely! We use YouTube's official API with OAuth 2.0 authentication. Your credentials are never stored on our servers. You can revoke access anytime from your Google account settings.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item glass-card">
+                    <div class="faq-question">
+                        <i class="fas fa-question-circle"></i>
+                        <h3>What video quality is supported?</h3>
+                        <i class="fas fa-chevron-down faq-toggle"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>We download videos in the highest quality available from Instagram, including HD quality with original audio. The quality depends on the original upload quality on Instagram.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item glass-card">
+                    <div class="faq-question">
+                        <i class="fas fa-question-circle"></i>
+                        <h3>Can I edit the AI-generated metadata?</h3>
+                        <i class="fas fa-chevron-down faq-toggle"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Currently, the metadata is automatically generated and applied. We're working on adding an editor feature in future updates where you can review and modify metadata before upload.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item glass-card">
+                    <div class="faq-question">
+                        <i class="fas fa-question-circle"></i>
+                        <h3>How accurate is the AI metadata generation?</h3>
+                        <i class="fas fa-chevron-down faq-toggle"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Our AI uses Google's Gemini model which provides highly accurate and contextually relevant metadata. It analyzes video content, understands context, and generates SEO-optimized titles, descriptions, and tags.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item glass-card">
+                    <div class="faq-question">
+                        <i class="fas fa-question-circle"></i>
+                        <h3>Are there any usage limits?</h3>
+                        <i class="fas fa-chevron-down faq-toggle"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Usage limits depend on YouTube API quotas and your Instagram session validity. For heavy usage, we recommend upgrading to YouTube API quota extensions through Google Cloud Console.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="cta-section glass-card fade-in-delay-3 text-center">
+            <i class="fas fa-rocket cta-icon"></i>
+            <h2>Ready to Automate Your Content?</h2>
+            <p>Join thousands of content creators who are saving time and growing faster</p>
+            <div class="cta-buttons">
+                <a href="/uploader" class="btn btn-primary btn-large">
+                    <i class="fas fa-play"></i> Get Started Free
+                </a>
+                <a href="/downloader" class="btn btn-secondary btn-large">
+                    <i class="fas fa-download"></i> Try Downloader
+                </a>
+            </div>
+            <p class="cta-note">No credit card required • Start in minutes</p>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer-detailed fade-in-delay-3">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <i class="fab fa-youtube"></i>
+                <h3>YouTube Automation Machine</h3>
+                <p>AI-powered content automation for modern creators</p>
+            </div>
+            
+            <div class="footer-links">
+                <div class="footer-column">
+                    <h4>Product</h4>
+                    <a href="/downloader">Downloader</a>
+                    <a href="/metadata-generator">Metadata Generator</a>
+                    <a href="/uploader">Uploader</a>
+                </div>
+                
+                <div class="footer-column">
+                    <h4>Resources</h4>
+                    <a href="#features">Features</a>
+                    <a href="#how-it-works">How It Works</a>
+                    <a href="#faq">FAQ</a>
+                </div>
+                
+                <div class="footer-column">
+                    <h4>Technology</h4>
+                    <a href="https://cloud.google.com/vertex-ai/generative-ai/docs/model-reference/gemini" target="_blank">Google Gemini AI</a>
+                    <a href="https://developers.google.com/youtube/v3" target="_blank">YouTube API</a>
+                    <a href="https://www.instagram.com/developer" target="_blank">Instagram API</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>Made with <i class="fas fa-heart"></i> by YouTube Automation Team</p>
+            <p class="footer-tech">Powered by Google Gemini AI • YouTube Data API v3 • Flask</p>
+            <p class="footer-tech">Nitesh Sain</p>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+        const mobileMenu = document.getElementById('mobileMenu');
+        
+        if (mobileMenuToggle) {
+            mobileMenuToggle.addEventListener('click', () => {
+                mobileMenu.classList.toggle('active');
+            });
+        }
+        
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (mobileMenu && 
+                mobileMenu.classList.contains('active') &&
+                !mobileMenu.contains(e.target) &&
+                !mobileMenuToggle.contains(e.target)) {
+                mobileMenu.classList.remove('active');
+            }
+        });
+        
+        // FAQ Accordion
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', () => {
+                const faqItem = question.parentElement;
+                const isActive = faqItem.classList.contains('active');
+                
+                // Close all FAQ items
+                document.querySelectorAll('.faq-item').forEach(item => {
+                    item.classList.remove('active');
+                });
+                
+                // Open clicked item if it wasn't active
+                if (!isActive) {
+                    faqItem.classList.add('active');
+                }
+            });
+        });
+        
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

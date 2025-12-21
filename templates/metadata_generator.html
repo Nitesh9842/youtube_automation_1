@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Metadata Generator - YouTube Automation</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="background-animation">
+        <div class="gradient-orb orb-1"></div>
+        <div class="gradient-orb orb-2"></div>
+        <div class="gradient-orb orb-3"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar glass-card">
+        <div class="nav-container">
+            <a href="/" class="nav-brand">
+                <i class="fab fa-youtube"></i>
+                <span>YouTube Automation</span>
+            </a>
+            <div class="nav-menu">
+                <a href="/" class="nav-link"><i class="fas fa-home"></i> Home</a>
+                <a href="/downloader" class="nav-link"><i class="fas fa-download"></i> Downloader</a>
+                <a href="/metadata-generator" class="nav-link active"><i class="fas fa-brain"></i> Metadata</a>
+                <a href="/uploader" class="nav-link"><i class="fas fa-upload"></i> Uploader</a>
+            </div>
+            <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu glass-card" id="mobileMenu">
+        <a href="/" class="mobile-menu-link"><i class="fas fa-home"></i> Home</a>
+        <a href="/downloader" class="mobile-menu-link"><i class="fas fa-download"></i> Downloader</a>
+        <a href="/metadata-generator" class="mobile-menu-link"><i class="fas fa-brain"></i> Metadata Generator</a>
+        <a href="/uploader" class="mobile-menu-link"><i class="fas fa-upload"></i> Uploader</a>
+    </div>
+
+    <div class="container">
+        <!-- Hero Section -->
+        <section class="page-hero fade-in">
+            <div class="hero-badge">
+                <i class="fas fa-brain"></i>
+                <span>AI-Powered Intelligence</span>
+            </div>
+            <h1>AI Metadata Generator</h1>
+            <p class="hero-subtitle">Generate SEO-optimized titles, descriptions, and tags using advanced AI. Powered by Google Gemini for intelligent content analysis.</p>
+        </section>
+
+        <!-- Metadata Generator Section -->
+        <section class="upload-section glass-card fade-in-delay">
+            <div class="section-header">
+                <i class="fas fa-magic"></i>
+                <h2>Generate Metadata</h2>
+                <p>Our AI will analyze your video and create perfect metadata</p>
+            </div>
+
+            <!-- Tab Selection -->
+            <div class="tab-selection" style="display: flex; gap: 10px; margin-bottom: 20px;">
+                <button id="tabInstagram" class="btn btn-secondary" style="flex: 1;">
+                    <i class="fab fa-instagram"></i> Instagram Link
+                </button>
+                <button id="tabGallery" class="btn btn-secondary" style="flex: 1;">
+                    <i class="fas fa-photo-video"></i> Gallery Video
+                </button>
+            </div>
+
+            <!-- Instagram URL Input -->
+            <div id="instagramSection" class="input-section">
+                <div class="input-group">
+                    <i class="fab fa-instagram"></i>
+                    <input type="text" id="metadataUrl" class="glass-input" 
+                           placeholder="Paste Instagram Reel URL here...">
+                </div>
+            </div>
+
+            <!-- Gallery Video Selection -->
+            <div id="gallerySection" class="input-section" style="display: none;">
+                <!-- Upload from Device -->
+                <div style="margin-bottom: 20px;">
+                    <label for="deviceVideoUpload" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 8px; cursor: pointer; margin: 0;">
+                        <i class="fas fa-upload"></i> Upload Video from Device
+                    </label>
+                    <input type="file" id="deviceVideoUpload" accept="video/*" style="display: none;">
+                    <div id="uploadProgress" style="display: none; margin-top: 10px;">
+                        <div class="progress-bar">
+                            <div id="uploadProgressFill" class="progress-fill" style="width: 0%;"></div>
+                        </div>
+                        <p id="uploadStatus" class="progress-message">Uploading...</p>
+                    </div>
+                </div>
+                
+                <!-- Or divider -->
+                <div style="text-align: center; margin: 20px 0; color: rgba(255, 255, 255, 0.5);">
+                    <span>— OR —</span>
+                </div>
+                
+                <!-- Select from Gallery -->
+                <div class="input-group">
+                    <i class="fas fa-photo-video"></i>
+                    <select id="gallerySelect" class="glass-input">
+                        <option value="">Select existing video from gallery...</option>
+                    </select>
+                </div>
+                <button id="refreshGalleryBtn" class="btn btn-secondary" style="margin-top: 10px;">
+                    <i class="fas fa-sync-alt"></i> Refresh Gallery
+                </button>
+            </div>
+
+            <div class="button-group">
+                <button id="generateBtn" class="btn btn-preview">
+                    <i class="fas fa-magic"></i> Generate Metadata
+                </button>
+                <button id="downloadBtn" class="btn btn-secondary" style="display: none;">
+                    <i class="fas fa-download"></i> Download Video
+                </button>
+            </div>
+
+            <!-- Metadata Preview -->
+            <div id="metadataPreview" class="metadata-preview glass-card" style="display: none;">
+                <h3><i class="fas fa-sparkles"></i> AI Generated Metadata</h3>
+                <div class="metadata-content">
+                    <div class="metadata-item">
+                        <label>
+                            <i class="fas fa-heading"></i> Title
+                            <button class="btn-copy-small" data-copy-target="previewTitle" title="Copy title">
+                                <i class="fas fa-copy"></i> Copy
+                            </button>
+                        </label>
+                        <div id="previewTitle" class="metadata-value"></div>
+                    </div>
+                    <div class="metadata-item">
+                        <label>
+                            <i class="fas fa-align-left"></i> Description
+                            <button class="btn-copy-small" data-copy-target="previewDescription" title="Copy description">
+                                <i class="fas fa-copy"></i> Copy
+                            </button>
+                        </label>
+                        <div id="previewDescription" class="metadata-value scrollable"></div>
+                    </div>
+                    <div class="metadata-item">
+                        <label><i class="fas fa-tags"></i> Tags</label>
+                        <div id="previewTags" class="metadata-tags"></div>
+                    </div>
+                    <div class="metadata-item">
+                        <label><i class="fas fa-hashtag"></i> Hashtags</label>
+                        <div id="previewHashtags" class="metadata-tags"></div>
+                    </div>
+                    <div class="metadata-item">
+                        <label><i class="fas fa-eye"></i> Video Analysis</label>
+                        <div id="previewAnalysis" class="metadata-value scrollable"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- AI Features Section -->
+        <section class="features-section fade-in-delay-1">
+            <div class="section-header">
+                <h2>AI-Powered Features</h2>
+                <p>Advanced capabilities powered by Google Gemini</p>
+            </div>
+
+            <div class="features-grid-small">
+                <div class="feature-card glass-card">
+                    <i class="fas fa-eye feature-icon-small"></i>
+                    <h3>Video Analysis</h3>
+                    <p>AI analyzes video content, scenes, objects, and context to understand what your video is about.</p>
+                </div>
+
+                <div class="feature-card glass-card">
+                    <i class="fas fa-search feature-icon-small"></i>
+                    <h3>SEO Optimization</h3>
+                    <p>Generate titles and descriptions optimized for search engines to help your content rank higher.</p>
+                </div>
+
+                <div class="feature-card glass-card">
+                    <i class="fas fa-hashtag feature-icon-small"></i>
+                    <h3>Smart Hashtags</h3>
+                    <p>AI suggests trending and relevant hashtags to maximize your content's reach and engagement.</p>
+                </div>
+
+                <div class="feature-card glass-card">
+                    <i class="fas fa-bullseye feature-icon-small"></i>
+                    <h3>Targeted Keywords</h3>
+                    <p>Generate keywords that match your target audience's search intent and interests.</p>
+                </div>
+
+                <div class="feature-card glass-card">
+                    <i class="fas fa-language feature-icon-small"></i>
+                    <h3>Natural Language</h3>
+                    <p>Descriptions written in natural, engaging language that connects with viewers.</p>
+                </div>
+
+                <div class="feature-card glass-card">
+                    <i class="fas fa-chart-line feature-icon-small"></i>
+                    <h3>Trend Awareness</h3>
+                    <p>AI stays updated with current trends to suggest relevant and timely metadata.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- How It Works Section -->
+        <section class="how-to-use glass-card fade-in-delay-2">
+            <div class="section-header">
+                <h2>How AI Metadata Generation Works</h2>
+                <p>Behind the scenes intelligence</p>
+            </div>
+
+            <div class="steps-list">
+                <div class="step-card">
+                    <div class="step-number-badge">1</div>
+                    <div class="step-info">
+                        <h3>Video Download & Analysis</h3>
+                        <p>The system downloads the reel and AI analyzes frames, audio, text overlays, and overall content to understand the video's theme and message.</p>
+                        <div class="step-tip">
+                            <i class="fas fa-robot"></i>
+                            <span>Powered by Google Gemini Vision AI</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number-badge">2</div>
+                    <div class="step-info">
+                        <h3>Context Understanding</h3>
+                        <p>AI identifies key elements, emotions, actions, and themes. It understands the story, purpose, and target audience of your content.</p>
+                        <div class="step-tip">
+                            <i class="fas fa-brain"></i>
+                            <span>Deep learning models process video semantics</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number-badge">3</div>
+                    <div class="step-info">
+                        <h3>Metadata Generation</h3>
+                        <p>Based on analysis, AI creates engaging titles, detailed descriptions, relevant tags, and trending hashtags optimized for maximum visibility.</p>
+                        <div class="step-tip">
+                            <i class="fas fa-magic"></i>
+                            <span>SEO-optimized for better discoverability</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Benefits Section -->
+        <section class="benefits-section fade-in-delay-2">
+            <div class="section-header">
+                <h2>Why Use AI for Metadata?</h2>
+                <p>Advantages over manual metadata creation</p>
+            </div>
+
+            <div class="benefits-grid">
+                <div class="benefit-card glass-card">
+                    <i class="fas fa-clock benefit-icon"></i>
+                    <h3>Save Hours</h3>
+                    <p>No more brainstorming titles or writing descriptions. AI does it instantly.</p>
+                </div>
+
+                <div class="benefit-card glass-card">
+                    <i class="fas fa-trophy benefit-icon"></i>
+                    <h3>Better Results</h3>
+                    <p>AI-generated metadata often performs better than manual creation.</p>
+                </div>
+
+                <div class="benefit-card glass-card">
+                    <i class="fas fa-chart-line benefit-icon"></i>
+                    <h3>SEO Optimized</h3>
+                    <p>Built-in SEO best practices for improved search rankings.</p>
+                </div>
+
+                <div class="benefit-card glass-card">
+                    <i class="fas fa-brain benefit-icon"></i>
+                    <h3>Intelligent Analysis</h3>
+                    <p>Deep understanding of video content beyond what humans can process quickly.</p>
+                </div>
+
+                <div class="benefit-card glass-card">
+                    <i class="fas fa-globe benefit-icon"></i>
+                    <h3>Trend Aware</h3>
+                    <p>Stays current with trending topics and popular keywords.</p>
+                </div>
+
+                <div class="benefit-card glass-card">
+                    <i class="fas fa-sync benefit-icon"></i>
+                    <h3>Consistent Quality</h3>
+                    <p>Every video gets professional-quality metadata, every time.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Use Cases Section -->
+        <section class="use-cases-section glass-card fade-in-delay-3">
+            <div class="section-header">
+                <h2>Perfect For</h2>
+                <p>Who benefits from AI metadata generation</p>
+            </div>
+
+            <div class="use-cases-grid">
+                <div class="use-case-item">
+                    <i class="fas fa-video"></i>
+                    <h4>YouTubers</h4>
+                    <p>Optimize every upload for maximum views and engagement</p>
+                </div>
+
+                <div class="use-case-item">
+                    <i class="fas fa-bullhorn"></i>
+                    <h4>Digital Marketers</h4>
+                    <p>Create SEO-friendly content at scale</p>
+                </div>
+
+                <div class="use-case-item">
+                    <i class="fas fa-store"></i>
+                    <h4>E-commerce Brands</h4>
+                    <p>Generate product video descriptions automatically</p>
+                </div>
+
+                <div class="use-case-item">
+                    <i class="fas fa-users"></i>
+                    <h4>Social Media Teams</h4>
+                    <p>Maintain consistency across multiple content pieces</p>
+                </div>
+
+                <div class="use-case-item">
+                    <i class="fas fa-graduation-cap"></i>
+                    <h4>Content Educators</h4>
+                    <p>Make educational content more discoverable</p>
+                </div>
+
+                <div class="use-case-item">
+                    <i class="fas fa-film"></i>
+                    <h4>Production Companies</h4>
+                    <p>Streamline post-production metadata workflow</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section class="faq-section fade-in-delay-3">
+            <div class="section-header">
+                <h2>Frequently Asked Questions</h2>
+                <p>Learn more about AI metadata generation</p>
+            </div>
+
+            <div class="faq-container">
+                <div class="faq-item glass-card">
+                    <div class="faq-question">
+                        <i class="fas fa-question-circle"></i>
+                        <h3>How accurate is the AI metadata?</h3>
+                        <i class="fas fa-chevron-down faq-toggle"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Our AI uses Google's Gemini model which provides highly accurate and contextually relevant metadata. It analyzes video content comprehensively and generates professional-quality results.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item glass-card">
+                    <div class="faq-question">
+                        <i class="fas fa-question-circle"></i>
+                        <h3>Can I edit the generated metadata?</h3>
+                        <i class="fas fa-chevron-down faq-toggle"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Currently, metadata is automatically generated and applied. We're working on adding an editor feature where you can review and modify metadata before applying it.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item glass-card">
+                    <div class="faq-question">
+                        <i class="fas fa-question-circle"></i>
+                        <h3>What languages are supported?</h3>
+                        <i class="fas fa-chevron-down faq-toggle"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Currently, the AI generates metadata primarily in English. We're working on adding support for multiple languages in future updates.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item glass-card">
+                    <div class="faq-question">
+                        <i class="fas fa-question-circle"></i>
+                        <h3>How long does generation take?</h3>
+                        <i class="fas fa-chevron-down faq-toggle"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>The AI typically takes 10-30 seconds to analyze a video and generate complete metadata including title, description, tags, and hashtags.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item glass-card">
+                    <div class="faq-question">
+                        <i class="fas fa-question-circle"></i>
+                        <h3>Is there a limit on video length?</h3>
+                        <i class="fas fa-chevron-down faq-toggle"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>The AI works best with Instagram Reels (typically under 90 seconds). Longer videos may take more time to process but are supported.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="cta-section glass-card fade-in-delay-3 text-center">
+            <i class="fas fa-rocket cta-icon"></i>
+            <h2>Ready to Automate?</h2>
+            <p>Use AI-generated metadata with our auto-uploader</p>
+            <div class="cta-buttons">
+                <a href="/uploader" class="btn btn-primary btn-large">
+                    <i class="fas fa-upload"></i> Try Auto Uploader
+                </a>
+                <a href="/downloader" class="btn btn-secondary btn-large">
+                    <i class="fas fa-download"></i> Download Only
+                </a>
+            </div>
+        </section>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay" style="display: none;">
+        <div class="loading-spinner"></div>
+        <p>AI is analyzing your video...</p>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+
+    <script>
+        // Mobile menu toggle
+        const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+        const mobileMenu = document.getElementById('mobileMenu');
+        
+        if (mobileMenuToggle) {
+            mobileMenuToggle.addEventListener('click', () => {
+                mobileMenu.classList.toggle('active');
+            });
+        }
+        
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (mobileMenu && 
+                mobileMenu.classList.contains('active') &&
+                !mobileMenu.contains(e.target) &&
+                !mobileMenuToggle.contains(e.target)) {
+                mobileMenu.classList.remove('active');
+            }
+        });
+        
+        // FAQ Accordion
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', () => {
+                const faqItem = question.parentElement;
+                const isActive = faqItem.classList.contains('active');
+                
+                document.querySelectorAll('.faq-item').forEach(item => {
+                    item.classList.remove('active');
+                });
+                
+                if (!isActive) {
+                    faqItem.classList.add('active');
+                }
+            });
+        });
+
+        // Copy to clipboard functionality
+        document.querySelectorAll('.btn-copy-small').forEach(button => {
+            button.addEventListener('click', () => {
+                const targetId = button.getAttribute('data-copy-target');
+                const targetElement = document.getElementById(targetId);
+                
+                if (targetElement) {
+                    navigator.clipboard.writeText(targetElement.innerText)
+                        .then(() => {
+                            showToast('Copied to clipboard!');
+                        })
+                        .catch(err => {
+                            console.error('Error copying text: ', err);
+                        });
+                }
+            });
+        });
+    </script>
+    <script src="{{ url_for('static', filename='js/metadata.js') }}"></script>
+</body>
+</html>

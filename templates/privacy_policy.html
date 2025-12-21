@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy - YouTube Automation</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="background-animation">
+        <div class="gradient-orb orb-1"></div>
+        <div class="gradient-orb orb-2"></div>
+        <div class="gradient-orb orb-3"></div>
+    </div>
+
+    <div class="container">
+        <div class="glass-card" style="max-width: 900px; margin: 50px auto; padding: 40px;">
+            <h1 style="margin-bottom: 30px;">Privacy Policy</h1>
+            
+            <p style="margin-bottom: 20px; color: var(--text-secondary);">
+                Last updated: {{ current_date }}
+            </p>
+
+            <h2 style="margin-top: 30px; margin-bottom: 15px;">1. Information We Collect</h2>
+            <p>We collect information you provide when using our service:</p>
+            <ul style="margin-left: 20px; margin-bottom: 20px;">
+                <li>YouTube account information via OAuth 2.0</li>
+                <li>Instagram Reel URLs you provide</li>
+                <li>Usage data and analytics</li>
+            </ul>
+
+            <h2 style="margin-top: 30px; margin-bottom: 15px;">2. How We Use Your Information</h2>
+            <p>Your information is used to:</p>
+            <ul style="margin-left: 20px; margin-bottom: 20px;">
+                <li>Process video uploads to your YouTube channel</li>
+                <li>Generate AI-powered metadata</li>
+                <li>Improve our service</li>
+            </ul>
+
+            <h2 style="margin-top: 30px; margin-bottom: 15px;">3. Data Security</h2>
+            <p>We use industry-standard security measures including:</p>
+            <ul style="margin-left: 20px; margin-bottom: 20px;">
+                <li>OAuth 2.0 authentication</li>
+                <li>HTTPS encryption</li>
+                <li>No password storage</li>
+            </ul>
+
+            <h2 style="margin-top: 30px; margin-bottom: 15px;">4. Third-Party Services</h2>
+            <p>We use the following third-party services:</p>
+            <ul style="margin-left: 20px; margin-bottom: 20px;">
+                <li>Google YouTube API</li>
+                <li>Google Gemini AI</li>
+                <li>Google Analytics</li>
+                <li>Google AdSense</li>
+            </ul>
+
+            <h2 style="margin-top: 30px; margin-bottom: 15px;">5. Your Rights</h2>
+            <p>You have the right to:</p>
+            <ul style="margin-left: 20px; margin-bottom: 20px;">
+                <li>Revoke access at any time</li>
+                <li>Request data deletion</li>
+                <li>Opt-out of analytics</li>
+            </ul>
+
+            <h2 style="margin-top: 30px; margin-bottom: 15px;">6. Contact Us</h2>
+            <p>For privacy concerns, contact us at: privacy@yourapp.com</p>
+
+            <div style="margin-top: 40px; text-align: center;">
+                <a href="/" class="btn btn-primary">Back to Home</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
