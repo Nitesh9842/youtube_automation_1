@@ -3,6 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#FF0000">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="YT Auto">
+    <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='icons/icon-192.png') }}">
     <title>YouTube Automation Machine - AI-Powered Content Management</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -442,6 +448,21 @@
     </div>
 
     <!-- Footer -->
+    <!-- Install App Banner -->
+    <div id="installBanner" class="install-banner glass-card" style="display:none;">
+        <div class="install-banner-content">
+            <i class="fas fa-mobile-alt"></i>
+            <div>
+                <strong>Install App</strong>
+                <p style="margin:0;font-size:13px;color:rgba(255,255,255,0.65)">Add to home screen for quick access</p>
+            </div>
+        </div>
+        <div style="display:flex;gap:8px;">
+            <button id="installBtn" class="btn btn-primary" style="padding:8px 16px;font-size:13px;">Install</button>
+            <button id="dismissInstall" class="btn btn-secondary" style="padding:8px 12px;font-size:13px;">Later</button>
+        </div>
+    </div>
+
     <footer class="footer-detailed fade-in-delay-3">
         <div class="footer-content">
             <div class="footer-brand">
@@ -529,6 +550,35 @@
                     target.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }
             });
+        });
+
+        // Register Service Worker
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/static/sw.js', { scope: '/' })
+                .then(reg => console.log('SW registered'))
+                .catch(err => console.log('SW failed:', err));
+        }
+
+        // PWA Install Prompt
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            const installBanner = document.getElementById('installBanner');
+            if (installBanner) installBanner.style.display = 'flex';
+        });
+
+        document.getElementById('installBtn')?.addEventListener('click', async () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                deferredPrompt = null;
+                document.getElementById('installBanner').style.display = 'none';
+            }
+        });
+
+        document.getElementById('dismissInstall')?.addEventListener('click', () => {
+            document.getElementById('installBanner').style.display = 'none';
         });
     </script>
 </body>

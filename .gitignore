@@ -30,8 +30,13 @@ wheels/
 # Tokens and credentials
 token.json
 token_*.json
+token.pickle
 client_secret.json
 user_tokens/
+
+# Metadata output files
+metadata_output.json
+metadata_reel_*.json
 
 # Temporary files
 temp_audio/

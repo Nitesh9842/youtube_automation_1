@@ -1238,6 +1238,11 @@ def background_local_upload_task(task_id: str, video_path: str, editing_options:
                 except Exception as cleanup_error:
                     logger.warning(f"⚠️ Could not clean up file {path}: {cleanup_error}")
 
+@app.route('/offline')
+def offline_page():
+    """Offline fallback page for PWA"""
+    return render_template('offline.html')
+
 @app.route('/privacy-policy')
 def privacy_policy():
     """Privacy policy page"""
