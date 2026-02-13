@@ -15,8 +15,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy application files
 COPY . .
 
-# Expose port (adjust as needed)
+# Expose port
 EXPOSE 8000
 
-# Run the application
-CMD ["python", "video_editor.py"]
+# Run the web application via gunicorn
+CMD ["gunicorn", "app:app", "--bind", "0.0.0.0:8000", "--workers", "2", "--timeout", "300"]
