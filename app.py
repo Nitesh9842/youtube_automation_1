@@ -799,7 +799,10 @@ def generate_metadata_instagram():
             'tags': generated_metadata.get('tags', []),
             'hashtags': generated_metadata.get('hashtags', []),
             'video_analysis': generated_metadata.get('video_analysis', 'Analysis unavailable'),
-            'video_file': video_filename
+            'video_file': video_filename,
+            'saved_to_gallery': True,
+            'gallery_path': 'gallery',
+            'message': f'Video downloaded to gallery as {video_filename}'
         })
         
     except Exception as e:

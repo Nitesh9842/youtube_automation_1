@@ -23,7 +23,7 @@ yt-dlp==2024.11.4
 
 # HTTP & Environment
 requests==2.32.3
-urllib3==2.2.3
+urllib3==2.2.3 
 python-dotenv==1.0.1
 
 # Session Management

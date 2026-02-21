@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#FF0000">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="YT Auto">
+    <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='icons/icon-192.png') }}">
+
+    <!-- SEO Meta -->
+    <meta name="description" content="{% block meta_description %}AI-powered YouTube automation — download Instagram Reels, generate metadata with Gemini AI, and auto-upload to YouTube.{% endblock %}">
+    <meta name="keywords" content="{% block meta_keywords %}youtube automation, instagram downloader, ai metadata generator, youtube upload, content creator tools, seo optimization{% endblock %}">
+    <link rel="canonical" href="{{ request.url }}">
+    <meta name="robots" content="index, follow">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="{% block og_title %}YouTube Automation Studio{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}AI-powered content automation for modern creators{% endblock %}">
+    <meta property="og:url" content="{{ request.url }}">
+    <meta property="og:site_name" content="YouTube Automation Studio">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{% block tw_title %}YouTube Automation Studio{% endblock %}">
+    <meta name="twitter:description" content="{% block tw_description %}AI-powered content automation for modern creators{% endblock %}">
+
+    <title>{% block title %}YouTube Automation Studio{% endblock %}</title>
+
+    <!-- Preconnect for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/components.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- AdSense — only loads when consent is given -->
+    {% if config.ADSENSE_PUB_ID %}
+    <script>
+        window.__ADSENSE_PUB_ID = "{{ config.ADSENSE_PUB_ID }}";
+    </script>
+    {% endif %}
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "YouTube Automation Studio",
+        "url": "{{ request.host_url }}",
+        "description": "AI-powered automation tool for downloading Instagram Reels, generating metadata, and uploading to YouTube.",
+        "applicationCategory": "MultimediaApplication",
+        "operatingSystem": "Web",
+        "offers": {
+            "@type": "AggregateOffer",
+            "lowPrice": "0",
+            "highPrice": "9.99",
+            "priceCurrency": "USD"
+        }
+    }
+    </script>
+
+    {% block head_extra %}{% endblock %}
+</head>
+<body>
+    <div class="background-animation">
+        <div class="gradient-orb orb-1"></div>
+        <div class="gradient-orb orb-2"></div>
+        <div class="gradient-orb orb-3"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar glass-card">
+        <div class="nav-container">
+            <a href="/" class="nav-brand">
+                <i class="fab fa-youtube"></i>
+                <span>YouTube Automation</span>
+            </a>
+            <div class="nav-menu">
+                <a href="/" class="nav-link {% if request.path == '/' %}active{% endif %}">
+                    <i class="fas fa-home"></i> Home
+                </a>
+                <a href="/downloader" class="nav-link {% if request.path == '/downloader' %}active{% endif %}">
+                    <i class="fas fa-download"></i> Downloader
+                </a>
+                <a href="/metadata-generator" class="nav-link {% if '/metadata' in request.path %}active{% endif %}">
+                    <i class="fas fa-brain"></i> Metadata
+                </a>
+                <a href="/uploader" class="nav-link {% if request.path == '/uploader' %}active{% endif %}">
+                    <i class="fas fa-upload"></i> Uploader
+                </a>
+                <a href="/pricing" class="nav-link nav-link-pro {% if request.path == '/pricing' %}active{% endif %}">
+                    <i class="fas fa-crown"></i> Pro
+                </a>
+            </div>
+
+            {% block nav_auth %}{% endblock %}
+
+            <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu glass-card" id="mobileMenu">
+        <a href="/" class="mobile-menu-link"><i class="fas fa-home"></i> Home</a>
+        <a href="/downloader" class="mobile-menu-link"><i class="fas fa-download"></i> Downloader</a>
+        <a href="/metadata-generator" class="mobile-menu-link"><i class="fas fa-brain"></i> Metadata Generator</a>
+        <a href="/uploader" class="mobile-menu-link"><i class="fas fa-upload"></i> Uploader</a>
+        <a href="/pricing" class="mobile-menu-link"><i class="fas fa-crown"></i> Pro</a>
+        {% block mobile_menu_extra %}{% endblock %}
+    </div>
+
+    <!-- Top Ad Slot (free users only) -->
+    {% if not is_pro and config.ADSENSE_PUB_ID %}
+    <div class="ad-container ad-top" id="adTop" style="display:none;">
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="{{ config.ADSENSE_PUB_ID }}"
+             data-ad-slot="TOP_AD_SLOT"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+    </div>
+    {% endif %}
+
+    <div class="container">
+        {% block content %}{% endblock %}
+
+        <!-- Mid-page Ad Slot (free users only) -->
+        {% if not is_pro and config.ADSENSE_PUB_ID %}
+        <div class="ad-container ad-mid" id="adMid" style="display:none;">
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="{{ config.ADSENSE_PUB_ID }}"
+                 data-ad-slot="MID_AD_SLOT"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+        </div>
+        {% endif %}
+    </div>
+
+    {% block footer %}
+    <!-- Default Footer -->
+    <footer class="footer-detailed fade-in-delay-3">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <i class="fab fa-youtube"></i>
+                <h3>YouTube Automation Studio</h3>
+                <p>AI-powered content automation for modern creators</p>
+            </div>
+            <div class="footer-links">
+                <div class="footer-column">
+                    <h4>Product</h4>
+                    <a href="/downloader">Downloader</a>
+                    <a href="/metadata-generator">Metadata Generator</a>
+                    <a href="/uploader">Uploader</a>
+                    <a href="/pricing">Pricing</a>
+                </div>
+                <div class="footer-column">
+                    <h4>Resources</h4>
+                    <a href="/#features">Features</a>
+                    <a href="/#how-it-works">How It Works</a>
+                    <a href="/#faq">FAQ</a>
+                </div>
+                <div class="footer-column">
+                    <h4>Legal</h4>
+                    <a href="/privacy-policy">Privacy Policy</a>
+                    <a href="/terms">Terms of Service</a>
+                    <a href="/cookie-policy">Cookie Policy</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>Made with <i class="fas fa-heart"></i> by YouTube Automation Team</p>
+            <p class="footer-tech">Powered by Google Gemini AI &bull; YouTube Data API v3 &bull; Flask</p>
+        </div>
+    </footer>
+    {% endblock %}
+
+    <!-- Cookie Consent Banner -->
+    <div id="cookieConsent" class="cookie-consent" style="display:none;">
+        <div class="cookie-consent-inner">
+            <div class="cookie-text">
+                <i class="fas fa-cookie-bite"></i>
+                <div>
+                    <strong>We value your privacy</strong>
+                    <p>We use cookies to enhance your experience, serve personalized ads, and analyze traffic. 
+                       <a href="/cookie-policy">Learn more</a></p>
+                </div>
+            </div>
+            <div class="cookie-buttons">
+                <button id="cookieAccept" class="btn btn-primary cookie-btn">Accept All</button>
+                <button id="cookieDecline" class="btn btn-secondary cookie-btn">Essential Only</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay" style="display: none;">
+        <div class="loading-spinner"></div>
+        <p>Processing...</p>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+
+    <!-- Common Scripts -->
+    <script>
+        // Mobile menu toggle
+        const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+        const mobileMenu = document.getElementById('mobileMenu');
+
+        if (mobileMenuToggle) {
+            mobileMenuToggle.addEventListener('click', () => {
+                mobileMenu.classList.toggle('active');
+            });
+        }
+
+        document.addEventListener('click', (e) => {
+            if (mobileMenu &&
+                mobileMenu.classList.contains('active') &&
+                !mobileMenu.contains(e.target) &&
+                !mobileMenuToggle.contains(e.target)) {
+                mobileMenu.classList.remove('active');
+            }
+        });
+
+        // FAQ Accordion (works on any page that has .faq-question)
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', () => {
+                const faqItem = question.parentElement;
+                const isActive = faqItem.classList.contains('active');
+                document.querySelectorAll('.faq-item').forEach(item => item.classList.remove('active'));
+                if (!isActive) faqItem.classList.add('active');
+            });
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+        });
+
+        // Copy to clipboard (works on any page with .btn-copy-small)
+        document.querySelectorAll('.btn-copy-small').forEach(button => {
+            button.addEventListener('click', () => {
+                const targetId = button.getAttribute('data-copy-target');
+                const el = document.getElementById(targetId);
+                if (el) {
+                    navigator.clipboard.writeText(el.innerText).then(() => showToast('Copied to clipboard!'));
+                }
+            });
+        });
+
+        // Toast helper
+        function showToast(message, type = 'info') {
+            const toast = document.getElementById('toast');
+            if (!toast) return;
+            toast.textContent = message;
+            toast.className = 'toast show';
+            if (type === 'success') toast.style.borderLeft = '4px solid var(--success)';
+            else if (type === 'error') toast.style.borderLeft = '4px solid var(--error)';
+            else toast.style.borderLeft = '4px solid var(--secondary)';
+            setTimeout(() => toast.classList.remove('show'), 4000);
+        }
+
+        // Register Service Worker
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/static/sw.js', { scope: '/' }).catch(() => {});
+        }
+    </script>
+
+    <!-- Cookie Consent + AdSense Loader -->
+    <script src="{{ url_for('static', filename='js/consent.js') }}"></script>
+
+    {% block page_scripts %}{% endblock %}
+</body>
+</html>

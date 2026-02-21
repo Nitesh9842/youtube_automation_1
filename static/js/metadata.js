@@ -216,8 +216,29 @@ class MetadataGenerator {
             if (data.success) {
                 this.currentVideoFile = data.video_file;
                 this.displayMetadata(data);
-                this.downloadBtn.style.display = 'none'; // No download button needed - it's in gallery
-                this.showToast('Video saved to gallery & metadata generated! ✨', 'success');
+                
+                // Show saved location info
+                if (data.saved_to_gallery) {
+                    this.downloadBtn.style.display = 'none';
+                    this.showToast(`✅ Video saved to gallery as "${data.video_file}"\n📁 Available in Gallery tab`, 'success');
+                    
+                    // Add info message to metadata preview
+                    const saveInfo = document.createElement('div');
+                    saveInfo.className = 'alert alert-success';
+                    saveInfo.style.cssText = 'background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.3); padding: 12px; border-radius: 8px; margin-bottom: 15px;';
+                    saveInfo.innerHTML = `
+                        <i class="fas fa-check-circle" style="color: #22c55e;"></i>
+                        <strong>Video Saved!</strong> The video has been downloaded to your gallery as:<br>
+                        <code style="background: rgba(0,0,0,0.2); padding: 2px 6px; border-radius: 4px; font-size: 0.85em;">${data.video_file}</code>
+                        <br><small>💡 Switch to the <strong>Gallery Video</strong> tab to see all your saved videos</small>
+                    `;
+                    const previewContainer = document.getElementById('metadataPreview');
+                    const firstChild = previewContainer.querySelector('h3');
+                    if (firstChild && firstChild.nextSibling) {
+                        previewContainer.insertBefore(saveInfo, firstChild.nextSibling);
+                    }
+                }
+                
                 // Refresh gallery list
                 await this.loadGalleryVideos();
             } else {
