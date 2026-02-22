@@ -106,7 +106,8 @@ def background_upload_task(task_id: str, reel_url: str, editing_options: Optiona
             if "RAPIDAPI_KEY" in error_msg:
                 raise Exception("RapidAPI key not configured. Please add RAPIDAPI_KEY to your .env file")
             else:
-                raise Exception(f"Failed to download reel: {error_msg}")
+                # Don't wrap the error again - pass it through
+                raise
         
         if not video_path or not os.path.exists(video_path):
             raise Exception("Failed to download video file")
@@ -513,7 +514,7 @@ def download_reel():
             video_path = download_reel_with_audio(reel_url, DOWNLOAD_FOLDER)
         except Exception as download_error:
             error_msg = str(download_error)
-            return jsonify({'success': False, 'error': f'Download failed: {error_msg}'})
+            return jsonify({'success': False, 'error': error_msg})
         
         if not video_path or not os.path.exists(video_path):
             return jsonify({'success': False, 'error': 'Failed to download video'})
@@ -701,9 +702,10 @@ def generate_preview():
                 temp_video_path = download_reel_with_audio(reel_url, DOWNLOAD_FOLDER)
             except Exception as download_error:
                 error_msg = str(download_error)
+                logger.error(f"Download failed: {error_msg}")
                 return jsonify({
                     'success': False,
-                    'error': f'Download failed: {error_msg}'
+                    'error': error_msg
                 })
             
             # Verify video was downloaded successfully
@@ -755,24 +757,30 @@ def generate_metadata_instagram():
         data = request.get_json(silent=True) or {}
         reel_url = data.get('url')
         
+        logger.info(f"🎬 Metadata generation request for URL: {reel_url}")
+        
         if not reel_url:
             return jsonify({'success': False, 'error': 'URL is required'})
         
         # Check RapidAPI key
         if not RAPIDAPI_KEY:
+            logger.error("❌ RAPIDAPI_KEY not configured")
             return jsonify({
                 'success': False, 
                 'error': 'RAPIDAPI_KEY not configured in .env file'
             })
+        
+        logger.info("🔑 API key verified, starting download...")
         
         # Download video to gallery
         try:
             video_path = download_reel_with_audio(reel_url, GALLERY_FOLDER)
         except Exception as download_error:
             error_msg = str(download_error)
+            logger.error(f"Download failed: {error_msg}")
             return jsonify({
                 'success': False,
-                'error': f'Download failed: {error_msg}'
+                'error': error_msg
             })
         
         # Verify video was downloaded successfully
@@ -1337,6 +1345,44 @@ def health_check():
             'status': 'unhealthy',
             'error': str(e)
         }), 503
+
+@app.route('/test-api', methods=['POST'])
+def test_api():
+    """Test endpoint to verify RapidAPI connection and response format"""
+    try:
+        data = request.get_json(silent=True) or {}
+        test_url = data.get('url')
+        
+        if not test_url:
+            return jsonify({'success': False, 'error': 'URL required for testing'})
+        
+        if not RAPIDAPI_KEY:
+            return jsonify({'success': False, 'error': 'RAPIDAPI_KEY not configured'})
+        
+        logger.info(f"🧪 Testing API with URL: {test_url}")
+        
+        # Make direct API call to see response
+        import requests
+        api_url = "https://instagram-downloader-download-instagram-stories-videos4.p.rapidapi.com/convert"
+        headers = {
+            "x-rapidapi-host": "instagram-downloader-download-instagram-stories-videos4.p.rapidapi.com",
+            "x-rapidapi-key": RAPIDAPI_KEY
+        }
+        query = {"url": test_url}
+        
+        response = requests.get(api_url, headers=headers, params=query, timeout=30)
+        
+        return jsonify({
+            'success': True,
+            'status_code': response.status_code,
+            'response_keys': list(response.json().keys()) if response.ok else [],
+            'response_preview': str(response.json())[:500] if response.ok else response.text[:500],
+            'full_response': response.json() if response.ok else {'error': response.text}
+        })
+        
+    except Exception as e:
+        logger.error(f"API test failed: {str(e)}")
+        return jsonify({'success': False, 'error': str(e)})
 
 # ✅ Request logging middleware - UPDATED
 @app.before_request

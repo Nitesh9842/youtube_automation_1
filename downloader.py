@@ -42,14 +42,25 @@ def download_reel_with_audio(reel_url: str, output_folder: str = "downloads") ->
         
         data = response.json()
         logger.info("✅ Response received successfully!")
+        logger.info(f"📦 Response data keys: {list(data.keys())}")
+        
+        # Check for error in response
+        if "error" in data or "message" in data:
+            error_msg = data.get("error") or data.get("message", "Unknown API error")
+            logger.error(f"❌ API returned error: {error_msg}")
+            logger.error(f"Full response: {data}")
+            raise Exception(f"API Error: {error_msg}")
         
         media_list = data.get("media", [])
         if not media_list:
-            raise Exception("No media found in response")
+            logger.error(f"❌ No 'media' field in response. Available fields: {list(data.keys())}")
+            logger.error(f"Full response: {data}")
+            raise Exception(f"No media found in API response. Response contains: {list(data.keys())}")
         
         video_url = media_list[0].get("url")
         if not video_url:
-            raise Exception("Couldn't find video URL in response")
+            logger.error(f"❌ No 'url' in media object. Media keys: {list(media_list[0].keys()) if media_list else 'empty'}")
+            raise Exception("No video URL found in media response")
         
         logger.info(f"🎥 Download URL found: {video_url[:50]}...")
         
@@ -74,13 +85,14 @@ def download_reel_with_audio(reel_url: str, output_folder: str = "downloads") ->
         
     except requests.exceptions.RequestException as e:
         logger.error(f"❌ Request error: {str(e)}")
-        raise Exception(f"Failed to download reel: {str(e)}")
+        raise Exception(f"Network error: {str(e)}")
     except KeyError as e:
         logger.error(f"❌ Invalid response format: {str(e)}")
         raise Exception(f"Invalid API response format: {str(e)}")
     except Exception as e:
         logger.error(f"❌ Download error: {str(e)}")
-        raise Exception(f"Download failed: {str(e)}")
+        # Don't wrap the error message again if it's already descriptive
+        raise
 
 # For backward compatibility - can still run as standalone script
 if __name__ == "__main__":
