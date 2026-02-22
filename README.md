@@ -11,12 +11,12 @@ app_port: 7860
 
 # 🎬 YouTube Automation Studio
 
-AI-powered automation tool for downloading Instagram Reels, generating metadata with Google Gemini AI, and uploading to YouTube automatically.
+AI-powered automation tool for downloading Instagram Reels, generating metadata with Groq AI, and uploading to YouTube automatically.
 
 ## ✨ Features
 
-- 📥 **Instagram Reel Downloader**: Download Reels in HD quality with original audio
-- 🤖 **AI Metadata Generator**: Generate SEO-optimized titles, descriptions, tags using Google Gemini 2.0
+- 📥 **Instagram Reel Downloader**: Download Reels in HD quality with original audio using RapidAPI
+- 🤖 **AI Metadata Generator**: Generate SEO-optimized titles, descriptions, tags using Groq AI
 - 📤 **YouTube Auto Uploader**: Upload directly to YouTube with automated metadata
 - 🎵 **Video Editor**: Add background music and text overlays to videos
 - 🔐 **Multi-User Support**: Each user has their own isolated YouTube authentication
@@ -24,8 +24,8 @@ AI-powered automation tool for downloading Instagram Reels, generating metadata 
 ## 🚀 Quick Start
 
 1. **Set Environment Variables** (Required):
-   - `GEMINI_API_KEY`: Get from [Google AI Studio](https://makersuite.google.com/app/apikey)
-   - `IG_SESSIONID`: Instagram session cookie (see below)
+   - `GROQ_API_KEY`: Get from [Groq Console](https://console.groq.com/)
+   - `RAPIDAPI_KEY`: Get from [RapidAPI Instagram Downloader](https://rapidapi.com/hub)
    - `SECRET_KEY`: Generate with `python -c "import secrets; print(secrets.token_hex(32))"`
 
 2. **Upload client_secret.json**:
@@ -35,12 +35,17 @@ AI-powered automation tool for downloading Instagram Reels, generating metadata 
 
 3. **Access the app** and start automating!
 
-## 🔑 Getting Instagram Session ID
+## 🔑 Getting API Keys
 
-1. Open Instagram in Chrome
-2. Press `F12` → Application → Cookies → instagram.com
-3. Find `sessionid` cookie and copy its value
-4. Add to Space secrets as `IG_SESSIONID`
+### Groq API Key (for AI metadata generation)
+1. Visit [Groq Console](https://console.groq.com/)
+2. Create an account and get your API key
+3. Add to environment as `GROQ_API_KEY`
+
+### RapidAPI Key (for Instagram downloads)
+1. Visit [RapidAPI](https://rapidapi.com/)
+2. Subscribe to an Instagram downloader API
+3. Add to environment as `RAPIDAPI_KEY`
 
 ## 🎯 Usage
 
@@ -55,19 +60,19 @@ AI-powered automation tool for downloading Instagram Reels, generating metadata 
 ## 🛠️ Tech Stack
 
 - **Backend**: Flask, Python 3.11, Gunicorn
-- **AI**: Google Gemini 2.0 Flash
-- **APIs**: YouTube Data API v3, Instagram
+- **AI**: Groq AI (Llama 4 Scout Vision & Llama 3.3 70B)
+- **APIs**: YouTube Data API v3, RapidAPI Instagram Downloader
 - **Video Processing**: MoviePy, OpenCV, FFmpeg
 - **Auth**: OAuth 2.0, Session-based authentication
 
 ## 📋 Environment Variables
 
-Set these in your Hugging Face Space settings:
+Set these in your deployment platform settings:
 
 ```env
 ENVIRONMENT=production
-GEMINI_API_KEY=your-gemini-api-key-here
-IG_SESSIONID=your-instagram-sessionid-here
+GROQ_API_KEY=your-groq-api-key-here
+RAPIDAPI_KEY=your-rapidapi-key-here
 SECRET_KEY=your-secret-key-here
 ```
 

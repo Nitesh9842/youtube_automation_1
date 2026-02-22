@@ -29,7 +29,7 @@ app = Flask(__name__)
 # Configuration
 DOWNLOAD_FOLDER = 'downloads'
 GALLERY_FOLDER = 'gallery'
-GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')
+GROQ_API_KEY = os.getenv('GROQ_API_KEY')
 RAPIDAPI_KEY = os.getenv('RAPIDAPI_KEY')
 # ✅ NEW: Store user tokens in a separate folder
 USER_TOKENS_FOLDER = 'user_tokens'
@@ -170,7 +170,7 @@ def background_upload_task(task_id: str, reel_url: str, editing_options: Optiona
         # Generate metadata using AI with actual video analysis
         try:
             # Create AI Metadata Generator instance
-            ai_generator = AIMetadataGenerator(GEMINI_API_KEY)
+            ai_generator = AIMetadataGenerator(GROQ_API_KEY)
             
             # Generate metadata based on actual video content
             generated_metadata = ai_generator.generate_complete_metadata(
@@ -713,7 +713,7 @@ def generate_preview():
                 raise Exception("Failed to download video for analysis")
             
             # Create AI Metadata Generator instance
-            ai_generator = AIMetadataGenerator(GEMINI_API_KEY)
+            ai_generator = AIMetadataGenerator(GROQ_API_KEY)
             
             # Generate metadata based on actual video content
             generated_metadata = ai_generator.generate_complete_metadata(
@@ -790,7 +790,7 @@ def generate_metadata_instagram():
         logger.info(f"✅ Video downloaded to gallery: {video_path}")
         
         # Create AI Metadata Generator instance
-        ai_generator = AIMetadataGenerator(GEMINI_API_KEY)
+        ai_generator = AIMetadataGenerator(GROQ_API_KEY)
         
         # Generate metadata based on actual video content
         generated_metadata = ai_generator.generate_complete_metadata(
@@ -837,7 +837,7 @@ def generate_metadata_gallery():
         logger.info(f"✅ Analyzing gallery video: {video_path}")
         
         # Create AI Metadata Generator instance
-        ai_generator = AIMetadataGenerator(GEMINI_API_KEY)
+        ai_generator = AIMetadataGenerator(GROQ_API_KEY)
         
         # Generate metadata based on actual video content
         generated_metadata = ai_generator.generate_complete_metadata(
@@ -1178,7 +1178,7 @@ def background_local_upload_task(task_id: str, video_path: str, editing_options:
         
         # Generate metadata using AI
         try:
-            ai_generator = AIMetadataGenerator(GEMINI_API_KEY)
+            ai_generator = AIMetadataGenerator(GROQ_API_KEY)
             
             generated_metadata = ai_generator.generate_complete_metadata(
                 video_path=final_video_path
@@ -1328,7 +1328,7 @@ def health_check():
             'checks': {
                 'downloads_folder': os.path.exists(DOWNLOAD_FOLDER),
                 'user_tokens_folder': os.path.exists(USER_TOKENS_FOLDER),
-                'gemini_configured': bool(GEMINI_API_KEY and GEMINI_API_KEY != 'your-gemini-api-key-here'),
+                'groq_configured': bool(GROQ_API_KEY and GROQ_API_KEY != 'your-groq-api-key-here'),
                 'rapidapi_configured': bool(RAPIDAPI_KEY)
             }
         }
@@ -1407,7 +1407,7 @@ if __name__ == "__main__":
     print(f"📁 Downloads folder: {DOWNLOAD_FOLDER}")
     print(f"🎨 Gallery folder: {GALLERY_FOLDER}")
     print(f"📁 User tokens folder: {USER_TOKENS_FOLDER}")
-    print(f"🤖 Gemini AI: {'Configured' if GEMINI_API_KEY else 'Not configured'}")
+    print(f"🤖 Groq AI: {'Configured' if GROQ_API_KEY else 'NOT CONFIGURED'}")
     print(f"🔑 RapidAPI: {'Configured' if RAPIDAPI_KEY else 'NOT CONFIGURED'}")
     print(f"🌐 Environment: {os.getenv('ENVIRONMENT', 'development')}")
     

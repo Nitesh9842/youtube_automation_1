@@ -20,9 +20,24 @@ class AIMetadataGenerator:
     def __init__(self, api_key=None):
         self.api_key = api_key or os.getenv("GROQ_API_KEY")
         if not self.api_key:
-            raise ValueError("Groq API key not found!")
+            raise ValueError("Groq API key not found! Set GROQ_API_KEY in environment.")
 
-        self.client = Groq(api_key=self.api_key)
+        # Initialize Groq client without proxies (Render compatibility)
+        try:
+            self.client = Groq(api_key=self.api_key)
+        except TypeError as e:
+            # If proxies parameter issue, try without any extra params
+            if 'proxies' in str(e):
+                # Some environments auto-inject proxy settings
+                # Create client with minimal params only
+                import httpx
+                self.client = Groq(
+                    api_key=self.api_key,
+                    http_client=httpx.Client()
+                )
+            else:
+                raise
+        
         self.model = "meta-llama/llama-4-scout-17b-16e-instruct"  # New vision-capable model
         self.text_model = "llama-3.3-70b-versatile"  # Text model
 
