@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+{% block title %}Upload Video{% endblock %}
+{% block page_id %}upload{% endblock %}
+
+{% block body %}
+<div class="app-layout">
+    {% include 'partials/sidebar.html' %}
+    <div class="sidebar-overlay"></div>
+
+    <div class="main-content">
+        <div class="topbar">
+            <div class="topbar-left">
+                <button class="mobile-sidebar-btn">☰</button>
+                <h1 class="topbar-title">Upload Video</h1>
+            </div>
+            <div class="topbar-right">
+                <div class="token-widget">
+                    <span class="token-icon">🪙</span>
+                    <span class="token-count">{{ tokens_balance }}</span>
+                    <span style="color:var(--text-muted)">tokens</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="page-content">
+            <div class="upload-area">
+
+                {% if not yt_connected %}
+                <div class="glass-card" style="padding:28px;text-align:center;margin-bottom:24px;">
+                    <div style="font-size:2.5rem;margin-bottom:12px;">📺</div>
+                    <h3>Connect YouTube First</h3>
+                    <p class="text-muted mt-1">You need to connect your YouTube channel before uploading.</p>
+                    <button class="btn btn-primary mt-2" onclick="connectYouTube()">🔗 Connect YouTube Channel</button>
+                </div>
+                {% endif %}
+
+                <!-- Source Picker -->
+                <div class="source-picker">
+                    <div class="source-option glass-card active" data-source="instagram">
+                        <div class="source-icon">📱</div>
+                        <h4>Instagram Reel</h4>
+                        <p>Paste a reel URL to import</p>
+                    </div>
+                    <div class="source-option glass-card" data-source="device">
+                        <div class="source-icon">💻</div>
+                        <h4>Upload from Device</h4>
+                        <p>Upload a video file</p>
+                    </div>
+                </div>
+
+                <!-- Instagram Input -->
+                <div id="ig-section" class="glass-card" style="padding:24px;margin-bottom:20px;">
+                    <div class="form-group" style="margin-bottom:0;">
+                        <label class="form-label" for="ig-url">Instagram Reel URL</label>
+                        <div class="form-input-icon">
+                            <span class="icon">🔗</span>
+                            <input type="url" id="ig-url" class="form-input" placeholder="https://www.instagram.com/reel/...">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Device Upload -->
+                <div id="device-section" class="hidden" style="margin-bottom:20px;">
+                    <div class="dropzone" id="dropzone">
+                        <div class="drop-icon">📁</div>
+                        <h4>Drop video here or click to browse</h4>
+                        <p>MP4, MOV, AVI, MKV supported · Max 600MB</p>
+                    </div>
+                    <input type="file" id="video-file" accept=".mp4,.mov,.avi,.mkv,.webm,.m4v" style="display:none;">
+                </div>
+
+                <!-- Editing Toggle -->
+                <div class="glass-card" style="padding:20px;margin-bottom:20px;">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="editing-enabled">
+                        <span>🎬 Enable Video Editing</span>
+                        <span class="badge badge-info" style="margin-left:auto;">+4 tokens</span>
+                    </label>
+                </div>
+
+                <!-- Editing Options -->
+                <div id="editing-options" class="editing-panel glass-card hidden">
+                    <h3>🎵 Editing Options</h3>
+                    <div class="form-group">
+                        <label class="form-label" for="music-url">Background Music (YouTube URL)</label>
+                        <input type="url" id="music-url" class="form-input" placeholder="https://youtube.com/watch?v=...">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="music-volume">Music Volume: <span id="vol-display">30%</span></label>
+                        <input type="range" id="music-volume" min="0" max="1" step="0.1" value="0.3"
+                               style="width:100%;accent-color:var(--accent-violet);"
+                               oninput="document.getElementById('vol-display').textContent=Math.round(this.value*100)+'%'">
+                    </div>
+                </div>
+
+                <!-- Cost Preview -->
+                <div class="cost-preview">
+                    <span class="cost-label">Estimated cost:</span>
+                    <span class="cost-value">8 tokens</span>
+                </div>
+
+                <!-- Start Button -->
+                <button id="start-upload-btn" class="btn btn-primary btn-block btn-lg" {% if not yt_connected %}disabled style="opacity:0.5;"{% endif %}>
+                    🚀 Start Processing
+                </button>
+
+                <!-- Progress -->
+                <div id="progress-area" class="progress-area hidden">
+                    <div class="glass-card" style="padding:28px;">
+                        <div class="progress-bar-track">
+                            <div class="progress-bar-fill" style="width:0%"></div>
+                        </div>
+                        <div class="progress-status">
+                            <div class="progress-message">Starting...</div>
+                            <div class="progress-percent">0%</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Result -->
+                <div id="result-area" class="hidden">
+                    <div class="result-card glass-card">
+                        <div class="result-icon">🎉</div>
+                        <h3>Upload Complete!</h3>
+                        <p class="mt-1">
+                            <a href="#" class="yt-link" target="_blank">View on YouTube →</a>
+                        </p>
+                        <button class="btn btn-secondary mt-2" onclick="location.reload()">Upload Another</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

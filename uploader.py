@@ -13,7 +13,8 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # ✅ FIX: Allow insecure transport for local OAuth (development only)
-os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
+if os.getenv('ENVIRONMENT') != 'production':
+    os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 
 def get_credentials(token_path='token.json'):
     """Get or refresh YouTube API credentials for specific user"""

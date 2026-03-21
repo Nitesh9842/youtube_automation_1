@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block page_id %}dashboard{% endblock %}
+
+{% block body %}
+<div class="app-layout">
+    <!-- Sidebar -->
+    {% include 'partials/sidebar.html' %}
+    <div class="sidebar-overlay" onclick="this.classList.remove('active'); document.querySelector('.sidebar').classList.remove('open');"></div>
+
+    <!-- Main -->
+    <div class="main-content">
+        <div class="topbar">
+            <div class="topbar-left">
+                <button class="mobile-sidebar-btn">☰</button>
+                <h1 class="topbar-title">Dashboard</h1>
+            </div>
+            <div class="topbar-right">
+                <div class="token-widget">
+                    <span class="token-icon">🪙</span>
+                    <span class="token-count">{{ stats.tokens_balance if stats else 0 }}</span>
+                    <span style="color:var(--text-muted)">tokens</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="page-content">
+            <!-- Stats -->
+            <div class="stats-grid">
+                <div class="stat-card glass-card">
+                    <div class="stat-header">
+                        <span class="stat-label">Tokens Left</span>
+                        <div class="stat-icon" style="background:rgba(139,92,246,0.15);color:var(--accent-violet);">🪙</div>
+                    </div>
+                    <div class="stat-value">{{ stats.tokens_balance if stats else 0 }}</div>
+                    <div class="stat-change up">{{ stats.plan|capitalize if stats else 'Free' }} plan</div>
+                </div>
+                <div class="stat-card glass-card">
+                    <div class="stat-header">
+                        <span class="stat-label">Uploads Today</span>
+                        <div class="stat-icon" style="background:rgba(6,182,212,0.15);color:var(--accent-cyan);">📤</div>
+                    </div>
+                    <div class="stat-value">{{ stats.uploads_today if stats else 0 }}</div>
+                    <div class="stat-change up">{{ stats.tokens_today if stats else 0 }} tokens used</div>
+                </div>
+                <div class="stat-card glass-card">
+                    <div class="stat-header">
+                        <span class="stat-label">Total Uploads</span>
+                        <div class="stat-icon" style="background:rgba(16,185,129,0.15);color:var(--accent-emerald);">🎬</div>
+                    </div>
+                    <div class="stat-value">{{ stats.total_uploads if stats else 0 }}</div>
+                    <div class="stat-change up">{{ stats.success_rate if stats else 100 }}% success</div>
+                </div>
+                <div class="stat-card glass-card">
+                    <div class="stat-header">
+                        <span class="stat-label">Tokens Used</span>
+                        <div class="stat-icon" style="background:rgba(245,158,11,0.15);color:var(--accent-amber);">⚡</div>
+                    </div>
+                    <div class="stat-value">{{ stats.total_tokens_used if stats else 0 }}</div>
+                    <div class="stat-change">All time</div>
+                </div>
+            </div>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+                <!-- Usage Chart -->
+                <div class="chart-container glass-card">
+                    <div class="chart-header">
+                        <h3>Token Usage (7 Days)</h3>
+                    </div>
+                    <div class="chart-canvas-wrapper">
+                        <canvas id="usage-chart" data-usage='{{ stats.daily_usage | tojson if stats and stats.daily_usage else "[]" }}'></canvas>
+                    </div>
+                </div>
+
+                <!-- YouTube Connection -->
+                <div class="glass-card" style="padding:24px;">
+                    <h3 style="font-size:1rem;margin-bottom:16px;">YouTube Channel</h3>
+                    {% if yt_connected and channel %}
+                    <div class="yt-connection">
+                        {% if channel.thumbnail %}
+                        <img src="{{ channel.thumbnail }}" alt="Channel" class="yt-avatar">
+                        {% else %}
+                        <div class="sidebar-avatar">{{ channel.title[0] if channel.title else 'Y' }}</div>
+                        {% endif %}
+                        <div class="yt-info">
+                            <div class="yt-name">{{ channel.title }}</div>
+                            <div class="yt-stats">{{ channel.subscriberCount }} subscribers · {{ channel.videoCount }} videos</div>
+                        </div>
+                        <span class="badge badge-success">Connected</span>
+                    </div>
+                    {% else %}
+                    <div class="empty-state" style="padding:20px;">
+                        <div class="empty-icon">📺</div>
+                        <h4>Connect YouTube</h4>
+                        <p>Link your channel to start uploading</p>
+                        <button class="btn btn-primary btn-sm mt-2" onclick="connectYouTube()">Connect Channel</button>
+                    </div>
+                    {% endif %}
+
+                    <div style="margin-top:20px;">
+                        <a href="/upload" class="btn btn-primary btn-block">🚀 New Upload</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Uploads -->
+            <div class="uploads-list glass-card mt-3">
+                <h3>Recent Uploads</h3>
+                {% if recent_uploads %}
+                    {% for item in recent_uploads %}
+                    <div class="upload-item">
+                        <div class="upload-icon">📹</div>
+                        <div class="upload-info">
+                            <div class="upload-title">{{ item.details or 'Video Upload' }}</div>
+                            <div class="upload-meta">{{ item.created_at }} · {{ item.tokens_used }} tokens</div>
+                        </div>
+                        <span class="badge badge-success">Done</span>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="empty-state">
+                        <div class="empty-icon">📁</div>
+                        <h4>No uploads yet</h4>
+                        <p>Start uploading videos to see them here</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

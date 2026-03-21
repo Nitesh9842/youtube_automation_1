@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}Log In{% endblock %}
+{% block page_id %}login{% endblock %}
+
+{% block body %}
+<div class="auth-page">
+    <div class="auth-bg"></div>
+    <div class="auth-card glass-card">
+        <div class="auth-header">
+            <a href="/" class="nav-logo" style="justify-content:center;margin-bottom:20px;">
+                <span class="logo-icon">▶</span>
+                <span>YouTube<span class="text-gradient">Auto</span></span>
+            </a>
+            <h1>Welcome Back</h1>
+            <p>Sign in to your account</p>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div class="flash-messages">
+            {% for category, message in messages %}
+            <div class="flash-message {{ category }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+
+        <form class="auth-form" action="/login" method="POST">
+            <div class="form-group">
+                <label class="form-label" for="email">Email Address</label>
+                <div class="form-input-icon">
+                    <span class="icon">✉</span>
+                    <input type="email" id="email" name="email" class="form-input" placeholder="you@example.com" required autocomplete="email">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="password">Password</label>
+                <div class="form-input-icon">
+                    <span class="icon">🔒</span>
+                    <input type="password" id="password" name="password" class="form-input" placeholder="••••••••" required autocomplete="current-password">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="checkbox-label">
+                    <input type="checkbox" name="remember" value="1">
+                    Remember me
+                </label>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block btn-lg" id="login-btn">Sign In</button>
+        </form>
+
+        <div class="auth-footer">
+            Don't have an account? <a href="/register">Create one free →</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

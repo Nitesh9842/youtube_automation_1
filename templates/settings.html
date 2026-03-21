@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+{% block title %}Settings{% endblock %}
+{% block page_id %}settings{% endblock %}
+
+{% block body %}
+<div class="app-layout">
+    {% include 'partials/sidebar.html' %}
+    <div class="sidebar-overlay"></div>
+
+    <div class="main-content">
+        <div class="topbar">
+            <div class="topbar-left">
+                <button class="mobile-sidebar-btn">☰</button>
+                <h1 class="topbar-title">Settings</h1>
+            </div>
+            <div class="topbar-right">
+                <div class="token-widget">
+                    <span class="token-icon">🪙</span>
+                    <span class="token-count">{{ user.tokens_balance if user else 0 }}</span>
+                    <span style="color:var(--text-muted)">tokens</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="page-content">
+            <div class="settings-section">
+
+                <!-- Profile -->
+                <div class="settings-card glass-card">
+                    <h3>👤 Profile</h3>
+                    <p class="settings-desc">Update your display name</p>
+                    <form id="profile-form">
+                        <div class="form-group">
+                            <label class="form-label" for="settings-username">Username</label>
+                            <input type="text" id="settings-username" class="form-input" value="{{ user.username if user else '' }}" minlength="3" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-input" value="{{ user.email if user else '' }}" disabled style="opacity:0.5;">
+                        </div>
+                        <div style="display:flex;gap:12px;align-items:center;">
+                            <button type="submit" class="btn btn-primary btn-sm">Save Changes</button>
+                            <span class="badge badge-{{ user.plan if user else 'free' }}">{{ (user.plan if user else 'free')|upper }}</span>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- YouTube Connection -->
+                <div class="settings-card glass-card">
+                    <h3>📺 YouTube Connection</h3>
+                    <p class="settings-desc">Manage your YouTube channel connection</p>
+                    {% if yt_connected and channel %}
+                    <div class="yt-connection">
+                        {% if channel.thumbnail %}
+                        <img src="{{ channel.thumbnail }}" alt="Channel" class="yt-avatar">
+                        {% else %}
+                        <div class="sidebar-avatar">{{ channel.title[0] if channel.title else 'Y' }}</div>
+                        {% endif %}
+                        <div class="yt-info">
+                            <div class="yt-name">{{ channel.title }}</div>
+                            <div class="yt-stats">{{ channel.subscriberCount }} subscribers · {{ channel.videoCount }} videos</div>
+                        </div>
+                        <span class="badge badge-success">Connected</span>
+                    </div>
+                    <div class="mt-2">
+                        <button class="btn btn-danger btn-sm" onclick="disconnectYouTube()">Disconnect</button>
+                    </div>
+                    {% else %}
+                    <div style="padding:16px 0;">
+                        <p class="text-muted" style="font-size:0.9rem;margin-bottom:12px;">No YouTube channel connected</p>
+                        <button class="btn btn-primary btn-sm" onclick="connectYouTube()">🔗 Connect YouTube</button>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- Change Password -->
+                <div class="settings-card glass-card">
+                    <h3>🔒 Change Password</h3>
+                    <p class="settings-desc">Update your account password</p>
+                    <form id="password-form">
+                        <div class="form-group">
+                            <label class="form-label" for="current-pw">Current Password</label>
+                            <input type="password" id="current-pw" class="form-input" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="new-pw">New Password</label>
+                            <input type="password" id="new-pw" class="form-input" required minlength="6">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="confirm-pw">Confirm New Password</label>
+                            <input type="password" id="confirm-pw" class="form-input" required minlength="6">
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-sm">Update Password</button>
+                    </form>
+                </div>
+
+                <!-- Account Info -->
+                <div class="settings-card glass-card">
+                    <h3>📋 Account Info</h3>
+                    <p class="settings-desc">Your account details</p>
+                    <div style="display:grid;gap:12px;">
+                        <div style="display:flex;justify-content:space-between;font-size:0.9rem;">
+                            <span class="text-muted">Plan</span>
+                            <span style="font-weight:600;">{{ (user.plan if user else 'free')|capitalize }}</span>
+                        </div>
+                        <div style="display:flex;justify-content:space-between;font-size:0.9rem;">
+                            <span class="text-muted">Tokens Balance</span>
+                            <span style="font-weight:600;">{{ user.tokens_balance if user else 0 }}</span>
+                        </div>
+                        <div style="display:flex;justify-content:space-between;font-size:0.9rem;">
+                            <span class="text-muted">Total Uploads</span>
+                            <span style="font-weight:600;">{{ user.total_uploads if user else 0 }}</span>
+                        </div>
+                        <div style="display:flex;justify-content:space-between;font-size:0.9rem;">
+                            <span class="text-muted">Member Since</span>
+                            <span style="font-weight:600;">{{ user.created_at[:10] if user and user.created_at else 'N/A' }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

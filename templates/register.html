@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}Create Account{% endblock %}
+{% block page_id %}register{% endblock %}
+
+{% block body %}
+<div class="auth-page">
+    <div class="auth-bg"></div>
+    <div class="auth-card glass-card">
+        <div class="auth-header">
+            <a href="/" class="nav-logo" style="justify-content:center;margin-bottom:20px;">
+                <span class="logo-icon">▶</span>
+                <span>YouTube<span class="text-gradient">Auto</span></span>
+            </a>
+            <h1>Create Account</h1>
+            <p>Start with 50 free tokens</p>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div class="flash-messages">
+            {% for category, message in messages %}
+            <div class="flash-message {{ category }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+
+        <form class="auth-form" action="/register" method="POST">
+            <div class="form-group">
+                <label class="form-label" for="username">Username</label>
+                <div class="form-input-icon">
+                    <span class="icon">👤</span>
+                    <input type="text" id="username" name="username" class="form-input" placeholder="coolcreator" required minlength="3" pattern="[a-zA-Z0-9_]+" autocomplete="username">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="email">Email Address</label>
+                <div class="form-input-icon">
+                    <span class="icon">✉</span>
+                    <input type="email" id="email" name="email" class="form-input" placeholder="you@example.com" required autocomplete="email">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="password">Password</label>
+                <div class="form-input-icon">
+                    <span class="icon">🔒</span>
+                    <input type="password" id="password" name="password" class="form-input" placeholder="Min 6 characters" required minlength="6" autocomplete="new-password">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="confirm_password">Confirm Password</label>
+                <div class="form-input-icon">
+                    <span class="icon">🔒</span>
+                    <input type="password" id="confirm_password" name="confirm_password" class="form-input" placeholder="Repeat password" required minlength="6" autocomplete="new-password">
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block btn-lg" id="register-btn">Create Account</button>
+        </form>
+
+        <div class="auth-footer">
+            Already have an account? <a href="/login">Sign in →</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+{% block title %}Plans & Pricing{% endblock %}
+{% block page_id %}pricing{% endblock %}
+
+{% block body %}
+{% if current_user.is_authenticated %}
+<div class="app-layout">
+    {% include 'partials/sidebar.html' %}
+    <div class="sidebar-overlay"></div>
+
+    <div class="main-content">
+        <div class="topbar">
+            <div class="topbar-left">
+                <button class="mobile-sidebar-btn">☰</button>
+                <h1 class="topbar-title">Plans & Tokens</h1>
+            </div>
+            <div class="topbar-right">
+                <div class="token-widget">
+                    <span class="token-icon">🪙</span>
+                    <span class="token-count">{{ current_user.tokens_balance }}</span>
+                    <span style="color:var(--text-muted)">tokens</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="page-content">
+            <!-- Current Plan -->
+            <div class="glass-card" style="padding:24px;margin-bottom:28px;">
+                <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+                    <div>
+                        <h3 style="font-size:1.05rem;">Current Plan</h3>
+                        <p class="text-muted" style="font-size:0.88rem;">You are on the <strong style="color:var(--text-primary);">{{ current_user.plan|capitalize }}</strong> plan</p>
+                    </div>
+                    <span class="badge badge-{{ current_user.plan }}">{{ current_user.plan|upper }}</span>
+                </div>
+            </div>
+
+            <!-- Plans -->
+            <h3 style="margin-bottom:20px;">Upgrade Plan</h3>
+            <div class="pricing-grid" style="max-width:100%;">
+                {% for key, plan in plans.items() %}
+                <div class="pricing-card glass-card card-glow {% if plan.get('popular') %}popular{% endif %}">
+                    {% if plan.get('popular') %}
+                    <div class="popular-badge">Most Popular</div>
+                    {% endif %}
+                    <div class="pricing-name">{{ plan.name }}</div>
+                    <div class="pricing-price">{{ plan.price_display.split('/')[0] }}</div>
+                    <div class="pricing-period">{% if plan.price_cents > 0 %}per month{% else %}forever free{% endif %}</div>
+                    <ul class="pricing-features">
+                        {% for feature in plan.features %}
+                        <li>{{ feature }}</li>
+                        {% endfor %}
+                    </ul>
+                    {% if key == current_user.plan %}
+                    <button class="btn btn-secondary btn-block" disabled>Current Plan</button>
+                    {% elif key == 'free' %}
+                    <button class="btn btn-secondary btn-block" disabled>—</button>
+                    {% else %}
+                    <button class="btn btn-primary btn-block" onclick="purchasePlan('{{ key }}')">Upgrade to {{ plan.name }}</button>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Token Packs -->
+            <h3 style="margin-top:40px;margin-bottom:12px;">Buy Token Packs</h3>
+            <p class="text-muted mb-3" style="font-size:0.9rem;">Need more tokens? Purchase a one-time top-up pack.</p>
+            <div class="packs-grid" style="max-width:100%;">
+                {% for pack in token_packs %}
+                <div class="pack-card glass-card card-glow" onclick="purchasePack('{{ pack.id }}')">
+                    <div class="pack-tokens">{{ pack.tokens }}</div>
+                    <div style="font-size:0.8rem;color:var(--text-muted);">tokens</div>
+                    <div class="pack-price">{{ pack.price_display }}</div>
+                    {% if pack.savings %}
+                    <div class="pack-savings">{{ pack.savings }}</div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Token Cost Reference -->
+            <div class="glass-card mt-4" style="padding:24px;">
+                <h3 style="font-size:1rem;margin-bottom:16px;">Token Cost Reference</h3>
+                <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;">
+                    <div style="display:flex;align-items:center;gap:10px;padding:10px;background:var(--bg-glass);border-radius:var(--radius-sm);">
+                        <span>📤</span>
+                        <div>
+                            <div style="font-size:0.85rem;font-weight:600;">Upload</div>
+                            <div style="font-size:0.78rem;color:var(--text-muted);">5 tokens</div>
+                        </div>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:10px;padding:10px;background:var(--bg-glass);border-radius:var(--radius-sm);">
+                        <span>🤖</span>
+                        <div>
+                            <div style="font-size:0.85rem;font-weight:600;">AI Analysis</div>
+                            <div style="font-size:0.78rem;color:var(--text-muted);">3 tokens</div>
+                        </div>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:10px;padding:10px;background:var(--bg-glass);border-radius:var(--radius-sm);">
+                        <span>🎬</span>
+                        <div>
+                            <div style="font-size:0.85rem;font-weight:600;">Video Edit</div>
+                            <div style="font-size:0.78rem;color:var(--text-muted);">4 tokens</div>
+                        </div>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:10px;padding:10px;background:var(--bg-glass);border-radius:var(--radius-sm);">
+                        <span>📥</span>
+                        <div>
+                            <div style="font-size:0.85rem;font-weight:600;">Download</div>
+                            <div style="font-size:0.78rem;color:var(--text-muted);">2 tokens</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% else %}
+<!-- Public pricing page — redirect via landing -->
+<script>window.location.href = '/#pricing';</script>
+{% endif %}
+{% endblock %}

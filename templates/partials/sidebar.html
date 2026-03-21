@@ -1,0 +1,43 @@
+<!-- Sidebar partial — included by dashboard, upload, settings, pricing -->
+<aside class="sidebar">
+    <div class="sidebar-header">
+        <a href="/" class="nav-logo">
+            <span class="logo-icon">▶</span>
+            <span>YT<span class="text-gradient">Auto</span></span>
+        </a>
+    </div>
+
+    <nav class="sidebar-nav">
+        <div class="sidebar-nav-group">
+            <div class="sidebar-nav-label">Main</div>
+            <a href="/dashboard" class="sidebar-link {% if request.path == '/dashboard' %}active{% endif %}">
+                <span class="link-icon">📊</span> Dashboard
+            </a>
+            <a href="/upload" class="sidebar-link {% if request.path == '/upload' %}active{% endif %}">
+                <span class="link-icon">📤</span> Upload Video
+            </a>
+        </div>
+        <div class="sidebar-nav-group">
+            <div class="sidebar-nav-label">Account</div>
+            <a href="/pricing" class="sidebar-link {% if request.path == '/pricing' %}active{% endif %}">
+                <span class="link-icon">💎</span> Plans & Tokens
+            </a>
+            <a href="/settings" class="sidebar-link {% if request.path == '/settings' %}active{% endif %}">
+                <span class="link-icon">⚙️</span> Settings
+            </a>
+        </div>
+    </nav>
+
+    <div class="sidebar-footer">
+        <div class="sidebar-user">
+            <div class="sidebar-avatar">{{ current_user.username[0]|upper if current_user.is_authenticated else '?' }}</div>
+            <div class="sidebar-user-info">
+                <div class="sidebar-username">{{ current_user.username if current_user.is_authenticated else 'Guest' }}</div>
+                <div class="sidebar-plan">{{ current_user.plan if current_user.is_authenticated else 'free' }} plan</div>
+            </div>
+        </div>
+        <form action="/logout" method="POST" style="margin-top:8px;">
+            <button type="submit" class="btn btn-ghost btn-sm btn-block" style="justify-content:flex-start;">🚪 Sign Out</button>
+        </form>
+    </div>
+</aside>
