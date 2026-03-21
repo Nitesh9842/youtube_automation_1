@@ -271,5 +271,3 @@ def get_recent_uploads(user_id, limit=10):
         return [dict(r) for r in rows]
 
 
-# Initialize on import
-init_db()

@@ -27,4 +27,4 @@ ENV PORT=5000
 EXPOSE 5000
 
 # Run with Gunicorn
-CMD ["sh", "-c", "gunicorn wsgi:app --bind 0.0.0.0:${PORT} --workers 2 --timeout 120"]
+CMD ["sh", "-c", "gunicorn wsgi:app --bind 0.0.0.0:${PORT} --workers 2 --timeout 120 --preload"]
