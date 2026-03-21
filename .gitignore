@@ -1,0 +1,51 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
+
+# Environment variables
+.env
+
+# Database
+database.db
+*.db-journal
+*.db-wal
+*.db-shm
+
+# User data (sensitive — never commit)
+user_tokens/
+downloads/
+temp_audio/
+
+# Google OAuth credentials (sensitive)
+client_secret.json
+token*.json
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Flask session files
+flask_session/
+
+# Logs
+*.log

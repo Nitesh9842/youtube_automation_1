@@ -631,6 +631,9 @@ def health():
 
 
 if __name__ == '__main__':
+    port = int(os.getenv('PORT', 5000))
+    is_prod = os.getenv('ENVIRONMENT') == 'production'
+    host = '0.0.0.0' if is_prod else '127.0.0.1'
     print('Starting YouTube Automation Platform')
-    print('   -> http://127.0.0.1:5000')
-    app.run(debug=True, host='127.0.0.1', port=5000)
+    print(f'   -> http://{host}:{port}')
+    app.run(debug=not is_prod, host=host, port=port)
