@@ -15,6 +15,7 @@ import logging
 import secrets
 from dotenv import load_dotenv
 from werkzeug.middleware.proxy_fix import ProxyFix
+from flask_session import Session
 from flask_login import login_required, current_user
 
 load_dotenv()
@@ -60,6 +61,9 @@ app.config.update(
     MAX_CONTENT_LENGTH=600 * 1024 * 1024,
 )
 
+# Initialize server-side sessions (prevents session sharing between users)
+Session(app)
+
 # Register Blueprints
 app.register_blueprint(auth_bp)
 app.register_blueprint(payments_bp)
@@ -77,6 +81,20 @@ CLIENT_SECRET = os.path.join(BASE_DIR, 'client_secret.json')
 
 os.makedirs(DOWNLOAD_DIR, exist_ok=True)
 os.makedirs(TOKENS_DIR, exist_ok=True)
+
+# On Render, secret files are at /etc/secrets/<filename>
+# Copy it to the app directory if the local file doesn't exist
+if not os.path.exists(CLIENT_SECRET):
+    _render_secret = '/etc/secrets/client_secret.json'
+    _cs_env = os.getenv('CLIENT_SECRET_JSON')
+    if os.path.exists(_render_secret):
+        import shutil
+        shutil.copy2(_render_secret, CLIENT_SECRET)
+        logger.info("Copied client_secret.json from Render secret file")
+    elif _cs_env:
+        with open(CLIENT_SECRET, 'w') as _f:
+            _f.write(_cs_env)
+        logger.info("Created client_secret.json from CLIENT_SECRET_JSON env var")
 
 GROQ_API_KEY = os.getenv('GROQ_API_KEY')
 RAPIDAPI_KEY = os.getenv('RAPIDAPI_KEY')
@@ -559,6 +577,9 @@ def start_upload():
     task_id = str(uuid.uuid4())
     tasks[task_id] = Task(task_id)
 
+    # Capture user ID now — current_user is unavailable inside background threads
+    user_id = current_user.id
+
     if source == 'instagram':
         url = data.get('url', '').strip()
         if not url:
@@ -567,14 +588,22 @@ def start_upload():
             return jsonify({'success': False, 'error': 'RAPIDAPI_KEY not set in .env'})
 
         def ig_flow():
+            vpath = None
             try:
                 set_task(task_id, 'downloading', 'Downloading from Instagram...', 10)
                 vpath = download_reel_with_audio(url, DOWNLOAD_DIR)
                 if not vpath or not os.path.exists(vpath):
                     raise RuntimeError('Download failed')
-                run_upload(task_id, vpath, True, editing, tp, current_user.id)
+                run_upload(task_id, vpath, True, editing, tp, user_id)
             except Exception as e:
                 set_task(task_id, 'failed', str(e), error=str(e))
+                # Clean up downloaded file if run_upload never got to handle it
+                if vpath and os.path.exists(vpath):
+                    try:
+                        os.remove(vpath)
+                        logger.info(f"Cleaned up leftover download: {vpath}")
+                    except Exception:
+                        pass
 
         threading.Thread(target=ig_flow, daemon=True).start()
 
@@ -584,7 +613,7 @@ def start_upload():
             return jsonify({'success': False, 'error': 'Video file not found'})
         threading.Thread(
             target=run_upload,
-            args=(task_id, vpath, True, editing, tp, current_user.id),
+            args=(task_id, vpath, True, editing, tp, user_id),
             daemon=True
         ).start()
     else:
