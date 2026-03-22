@@ -31,6 +31,7 @@ from uploader import upload_to_youtube, check_authentication, get_channel_info
 from ai_genrator import AIMetadataGenerator
 from video_editor import VideoEditor
 from models import init_db, get_user_stats, get_recent_uploads, get_user_by_id, increment_uploads
+from models import init_db, get_user_stats, get_recent_uploads, get_user_by_id, increment_uploads, update_youtube_credentials
 from auth import auth_bp, init_login_manager
 from payments import payments_bp
 from token_system import (
@@ -75,12 +76,11 @@ init_login_manager(app)
 init_db()
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DOWNLOAD_DIR = os.path.join(BASE_DIR, 'downloads')
-TOKENS_DIR = os.path.join(BASE_DIR, 'user_tokens')
 CLIENT_SECRET = os.path.join(BASE_DIR, 'client_secret.json')
 
 os.makedirs(DOWNLOAD_DIR, exist_ok=True)
-os.makedirs(TOKENS_DIR, exist_ok=True)
 
 # On Render, secret files are at /etc/secrets/<filename>
 # Copy it to the app directory if the local file doesn't exist
@@ -125,31 +125,6 @@ def set_task(task_id, status, message, progress=None, **kw):
     for k, v in kw.items():
         setattr(t, k, v)
     logger.info(f"[{task_id[:8]}] {status} {progress or ''}% - {message}")
-
-
-def token_path():
-    """Get YouTube token path bound to the authenticated user ID for security."""
-    if current_user.is_authenticated:
-        # Bind token to user ID — prevents token hijacking between users
-        user_id = current_user.id
-    elif 'uid' in session:
-        user_id = session['uid']
-    else:
-        session['uid'] = str(uuid.uuid4())
-        user_id = session['uid']
-    return os.path.join(TOKENS_DIR, f'token_{user_id}.json')
-
-
-def _secure_write_token(path, content):
-    """Write token file with restricted permissions."""
-    import stat
-    with open(path, 'w') as f:
-        f.write(content)
-    try:
-        # Restrict token file to owner-only read/write (Windows best-effort)
-        os.chmod(path, stat.S_IRUSR | stat.S_IWUSR)
-    except Exception:
-        pass  # Windows may not fully support POSIX permissions
 
 
 def get_redirect_uri():
@@ -199,9 +174,8 @@ def pricing():
 def dashboard():
     stats = get_user_stats(current_user.id)
     recent = get_recent_uploads(current_user.id)
-    tp = token_path()
-    yt_connected = check_authentication(tp)
-    channel = get_channel_info(tp) if yt_connected else None
+    yt_connected = check_authentication(current_user.id)
+    channel = get_channel_info(current_user.id) if yt_connected else None
     return render_template('dashboard.html',
                            stats=stats,
                            recent_uploads=recent,
@@ -212,9 +186,8 @@ def dashboard():
 @app.route('/upload')
 @login_required
 def upload_page():
-    tp = token_path()
-    yt_connected = check_authentication(tp)
-    channel = get_channel_info(tp) if yt_connected else None
+    yt_connected = check_authentication(current_user.id)
+    channel = get_channel_info(current_user.id) if yt_connected else None
     user = get_user_by_id(current_user.id)
     return render_template('upload.html',
                            yt_connected=yt_connected,
@@ -226,9 +199,8 @@ def upload_page():
 @app.route('/settings')
 @login_required
 def settings():
-    tp = token_path()
-    yt_connected = check_authentication(tp)
-    channel = get_channel_info(tp) if yt_connected else None
+    yt_connected = check_authentication(current_user.id)
+    channel = get_channel_info(current_user.id) if yt_connected else None
     user = get_user_by_id(current_user.id)
     return render_template('settings.html',
                            yt_connected=yt_connected,
@@ -381,15 +353,11 @@ def auth_callback():
             </div>
         </body></html>''', 500
 
-    # Save token bound to the original authenticated user
-    oauth_user_id = session.get('oauth_user_id')
-    if oauth_user_id:
-        tok = os.path.join(TOKENS_DIR, f'token_{oauth_user_id}.json')
-    else:
-        tok = token_path()
+    # Save token bound to the original authenticated user directly into database
+    oauth_user_id = session.get('oauth_user_id') or current_user.id
 
-    _secure_write_token(tok, flow.credentials.to_json())
-    logger.info(f"YouTube token saved for user {oauth_user_id}")
+    update_youtube_credentials(oauth_user_id, flow.credentials.to_json())
+    logger.info(f"YouTube token saved to database for user {oauth_user_id}")
 
     # Clean up ALL OAuth session data
     for key in ['oauth_state', 'oauth_data', 'oauth_user_id', 'oauth_timestamp']:
@@ -409,29 +377,18 @@ def auth_callback():
 @app.route('/check-auth')
 @login_required
 def check_auth():
-    tp = token_path()
-    ok = check_authentication(tp)
-    ch = get_channel_info(tp) if ok else None
+    ok = check_authentication(current_user.id)
+    ch = get_channel_info(current_user.id) if ok else None
     return jsonify({'authenticated': ok, 'channel': ch})
 
 
 @app.route('/youtube/logout', methods=['POST'])
 @login_required
 def youtube_logout():
+    from uploader import logout_youtube
     try:
-        tp = token_path()
-        if os.path.exists(tp):
-            try:
-                from google.oauth2.credentials import Credentials
-                import requests as req
-                creds = Credentials.from_authorized_user_file(tp)
-                req.post('https://oauth2.googleapis.com/revoke',
-                         params={'token': creds.token},
-                         headers={'content-type': 'application/x-www-form-urlencoded'})
-            except Exception:
-                pass
-            os.remove(tp)
-        return jsonify({'success': True})
+        success = logout_youtube(current_user.id)
+        return jsonify({'success': success})
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)})
 
@@ -439,7 +396,7 @@ def youtube_logout():
 # ─── Upload Pipeline ─────────────────────────────────────────────────────────
 
 def run_upload(task_id: str, video_path: str, is_temp: bool,
-               editing: Optional[dict], tok: str, user_id: int = None):
+               editing: Optional[dict], user_id: int):
     edited_path = None
     music_path = None
     final_path = video_path
@@ -485,7 +442,7 @@ def run_upload(task_id: str, video_path: str, is_temp: bool,
             description=meta['description'],
             tags=meta.get('tags', []),
             privacy_status='public',
-            token_path=tok,
+            user_id=user_id,
         )
         yt_url = f'https://www.youtube.com/watch?v={video_id}'
         set_task(task_id, 'done', 'Upload complete!', 100, yt_url=yt_url, metadata=meta)
@@ -547,8 +504,7 @@ def upload_music():
 @app.route('/start-upload', methods=['POST'])
 @login_required
 def start_upload():
-    tp = token_path()
-    if not check_authentication(tp):
+    if not check_authentication(current_user.id):
         return jsonify({'success': False, 'error': 'Not signed in to YouTube'}), 401
 
     data = request.get_json(silent=True) or {}
@@ -594,7 +550,7 @@ def start_upload():
                 vpath = download_reel_with_audio(url, DOWNLOAD_DIR)
                 if not vpath or not os.path.exists(vpath):
                     raise RuntimeError('Download failed')
-                run_upload(task_id, vpath, True, editing, tp, user_id)
+                run_upload(task_id, vpath, True, editing, user_id)
             except Exception as e:
                 set_task(task_id, 'failed', str(e), error=str(e))
                 # Clean up downloaded file if run_upload never got to handle it
@@ -613,7 +569,7 @@ def start_upload():
             return jsonify({'success': False, 'error': 'Video file not found'})
         threading.Thread(
             target=run_upload,
-            args=(task_id, vpath, True, editing, tp, user_id),
+            args=(task_id, vpath, True, editing, user_id),
             daemon=True
         ).start()
     else:

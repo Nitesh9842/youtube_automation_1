@@ -46,7 +46,7 @@
         }
         try {
             const resp = await fetch(url, config);
-            if (resp.status === 401) {
+            if (resp.status === 401 && !url.includes('/login') && !url.includes('/register')) {
                 window.location.href = '/login';
                 return null;
             }

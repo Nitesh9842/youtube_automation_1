@@ -94,21 +94,25 @@ def login():
 
     # POST — handle login
     data = request.form if request.form else (request.get_json(silent=True) or {})
-    email = data.get('email', '').strip()
+    login_id = data.get('login_id') or data.get('email')
+    login_id = (login_id or '').strip()
     password = data.get('password', '')
     remember = data.get('remember', False)
 
-    if not email or not password:
+    if not login_id or not password:
         if request.is_json:
-            return jsonify({'success': False, 'error': 'Email and password are required'}), 400
-        flash('Email and password are required', 'error')
+            return jsonify({'success': False, 'error': 'Email/Username and password are required'}), 400
+        flash('Email/Username and password are required', 'error')
         return render_template('login.html'), 400
 
-    user_dict = get_user_by_email(email)
+    user_dict = get_user_by_email(login_id)
+    if not user_dict:
+        user_dict = get_user_by_username(login_id)
+
     if not user_dict or not _check_password(password, user_dict['password_hash']):
         if request.is_json:
-            return jsonify({'success': False, 'error': 'Invalid email or password'}), 401
-        flash('Invalid email or password', 'error')
+            return jsonify({'success': False, 'error': 'Invalid credentials'}), 401
+        flash('Invalid credentials', 'error')
         return render_template('login.html'), 401
 
     user = User(user_dict)

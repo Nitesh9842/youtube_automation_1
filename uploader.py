@@ -16,19 +16,21 @@ logger = logging.getLogger(__name__)
 if os.getenv('ENVIRONMENT') != 'production':
     os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 
-def get_credentials(token_path='token.json'):
-    """Get or refresh YouTube API credentials for specific user"""
-    creds = None
+def get_credentials(user_id):
+    """Get or refresh YouTube API credentials for specific user from the database."""
+    from models import get_youtube_credentials, update_youtube_credentials
+    import json
     
-    # The file token.json stores the user's access and refresh tokens.
-    if os.path.exists(token_path):
+    creds = None
+    creds_json = get_youtube_credentials(user_id)
+    
+    if creds_json:
         try:
-            creds = Credentials.from_authorized_user_file(token_path, 
+            creds = Credentials.from_authorized_user_info(json.loads(creds_json), 
                 ["https://www.googleapis.com/auth/youtube.upload"])
         except Exception as e:
-            logger.error(f"Failed to load credentials: {e}")
-            if os.path.exists(token_path):
-                os.remove(token_path)
+            logger.error(f"Failed to load credentials from DB: {e}")
+            update_youtube_credentials(user_id, None)
             return None
     
     # If there are no (valid) credentials available, let the user log in.
@@ -37,14 +39,12 @@ def get_credentials(token_path='token.json'):
             try:
                 logger.info("Refreshing expired credentials...")
                 creds.refresh(Request())
-                # Save the refreshed credentials
-                with open(token_path, 'w') as token:
-                    token.write(creds.to_json())
+                # Save the refreshed credentials back to DB
+                update_youtube_credentials(user_id, creds.to_json())
                 logger.info("✅ Credentials refreshed successfully")
             except Exception as e:
                 logger.error(f"Token refresh failed: {e}")
-                if os.path.exists(token_path):
-                    os.remove(token_path)
+                update_youtube_credentials(user_id, None)
                 return None
         else:
             return None
@@ -103,23 +103,23 @@ def authenticate_youtube(token_path='token.json'):
         logger.error(f"Authentication failed: {str(e)}")
         raise Exception(f"Authentication failed: {str(e)}")
 
-def check_authentication(token_path='token.json'):
+def check_authentication(user_id):
     """Check if valid YouTube authentication exists for specific user"""
     try:
-        creds = get_credentials(token_path)
+        creds = get_credentials(user_id)
         return creds is not None and creds.valid
     except Exception:
         return False
 
-def get_youtube_service(token_path='token.json'):
+def get_youtube_service(user_id):
     """Get authenticated YouTube service for specific user"""
-    creds = get_credentials(token_path)
+    creds = get_credentials(user_id)
     if not creds:
-        raise Exception("Not authenticated. Please run authentication first.")
+        raise Exception("Not authenticated. Please connect YouTube first.")
     
     return googleapiclient.discovery.build("youtube", "v3", credentials=creds)
 
-def upload_to_youtube(video_path, title, description, tags, privacy_status="public", category_id="22", token_path='token.json'):
+def upload_to_youtube(video_path, title, description, tags, privacy_status="public", category_id="22", user_id=None):
     """Upload video to YouTube with proper error handling for specific user"""
     try:
         # Verify file exists and is accessible
@@ -135,7 +135,7 @@ def upload_to_youtube(video_path, title, description, tags, privacy_status="publ
         print(f"Privacy status: {privacy_status}")
         
         # ✅ Get YouTube service for specific user
-        youtube = get_youtube_service(token_path)
+        youtube = get_youtube_service(user_id)
 
         # Prepare video metadata
         video_metadata = {
@@ -195,10 +195,10 @@ def upload_to_youtube(video_path, title, description, tags, privacy_status="publ
         print(f"❌ Upload failed: {str(e)}")
         raise Exception(f"Failed to upload video: {str(e)}")
 
-def get_channel_info(token_path='token.json'):
+def get_channel_info(user_id):
     """Get information about the authenticated YouTube channel for specific user"""
     try:
-        youtube = get_youtube_service(token_path)
+        youtube = get_youtube_service(user_id)
         
         # Call the channels.list method to get the channel info
         request = youtube.channels().list(
@@ -228,11 +228,15 @@ def get_channel_info(token_path='token.json'):
         print(f"Error getting channel info: {e}")
         return None
 
-def logout_youtube(token_path='token.json'):
+def logout_youtube(user_id):
     """Revoke credentials and log out from YouTube for specific user"""
+    from models import get_youtube_credentials, update_youtube_credentials
+    import json
+    
     try:
-        if os.path.exists(token_path):
-            creds = Credentials.from_authorized_user_file(token_path)
+        creds_json = get_youtube_credentials(user_id)
+        if creds_json:
+            creds = Credentials.from_authorized_user_info(json.loads(creds_json))
             
             # Revoke the token
             import google.oauth2.credentials
@@ -251,8 +255,8 @@ def logout_youtube(token_path='token.json'):
             except Exception as e:
                 print(f"Error revoking token: {e}")
             
-            # Remove the token file
-            os.remove(token_path)
+            # Remove the token from database
+            update_youtube_credentials(user_id, None)
             return True
     except Exception as e:
         print(f"Error during logout: {e}")
@@ -275,12 +279,14 @@ def main():
         return
     
     try:
+        # Note: For CLI usage without an active web app context, passing `user_id=1` manually as an example.
         video_id = upload_to_youtube(
             video_path=args.video_path,
             title=args.title,
             description=args.description,
             tags=args.tags,
-            privacy_status=args.privacy
+            privacy_status=args.privacy,
+            user_id=1
         )
         print(f"Video uploaded successfully! Video ID: {video_id}")
     except Exception as e:

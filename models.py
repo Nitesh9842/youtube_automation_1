@@ -47,6 +47,7 @@ def init_db():
                 avatar_url      TEXT DEFAULT '',
                 last_refill     TEXT DEFAULT (datetime('now')),
                 stripe_customer_id TEXT DEFAULT '',
+                youtube_credentials TEXT DEFAULT '',
                 created_at      TEXT DEFAULT (datetime('now'))
             );
 
@@ -76,6 +77,12 @@ def init_db():
             CREATE INDEX IF NOT EXISTS idx_usage_user ON usage_log(user_id);
             CREATE INDEX IF NOT EXISTS idx_transactions_user ON transactions(user_id);
         """)
+
+        # Backward compatibility for existing databases
+        try:
+            conn.execute("ALTER TABLE users ADD COLUMN youtube_credentials TEXT DEFAULT ''")
+        except sqlite3.OperationalError:
+            pass
 
 
 # ─── User Operations ─────────────────────────────────────────────────────────
@@ -125,6 +132,26 @@ def update_user(user_id, **fields):
     vals = list(fields.values()) + [user_id]
     with get_db() as conn:
         conn.execute(f"UPDATE users SET {sets} WHERE id = ?", vals)
+
+
+def get_youtube_credentials(user_id):
+    """Fetch YouTube credentials JSON string for a user."""
+    with get_db() as conn:
+        row = conn.execute(
+            "SELECT youtube_credentials FROM users WHERE id = ?", (user_id,)
+        ).fetchone()
+        if row and row['youtube_credentials']:
+            return row['youtube_credentials']
+        return None
+
+
+def update_youtube_credentials(user_id, credentials_json):
+    """Update YouTube credentials JSON string for a user. Use empty string or None to revoke."""
+    with get_db() as conn:
+        conn.execute(
+            "UPDATE users SET youtube_credentials = ? WHERE id = ?",
+            (credentials_json or '', user_id)
+        )
 
 
 # ─── Token Operations ────────────────────────────────────────────────────────
