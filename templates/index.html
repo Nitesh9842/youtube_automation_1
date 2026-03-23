@@ -7,7 +7,7 @@
 <nav class="landing-nav" id="landing-nav">
     <div class="nav-inner">
         <a href="/" class="nav-logo">
-            <span class="logo-icon">▶</span>
+            <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Youtube Auto AI Logo" class="nav-logo-img">
             <span>YouTube<span class="text-gradient">Auto</span></span>
         </a>
         <ul class="nav-links" id="nav-links">
@@ -189,6 +189,10 @@
 <footer class="landing-footer">
     <div class="container">
         <p>© 2026 YouTubeAuto — AI-Powered Video Platform. All rights reserved.</p>
+        <div style="margin-top: 10px; display: flex; justify-content: center; gap: 20px;">
+            <a href="/privacy" style="font-size: 0.85rem; color: var(--text-muted);">Privacy Policy</a>
+            <a href="/terms" style="font-size: 0.85rem; color: var(--text-muted);">Terms of Service</a>
+        </div>
     </div>
 </footer>
 {% endblock %}

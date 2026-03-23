@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Terms of Service{% endblock %}
+{% block page_id %}terms{% endblock %}
+
+{% block body %}
+<div class="container" style="padding: 100px 24px;">
+    <h1 style="margin-bottom: 24px;">Terms of Service</h1>
+    <p>Last updated: {{ current_year }}</p>
+
+    <h2 class="mt-4 mb-2">1. Agreement to Terms</h2>
+    <p>By using Youtube Auto AI, you agree to these Terms of Service. If you do not agree, do not use our application.</p>
+
+    <h2 class="mt-4 mb-2">2. Description of Service</h2>
+    <p>Youtube Auto AI provides automation tools to process and upload videos to YouTube. We utilize the YouTube API to provide this functionality.</p>
+
+    <h2 class="mt-4 mb-2">3. YouTube Services</h2>
+    <p>By utilizing our services, you also agree to be bound by the <a href="https://www.youtube.com/t/terms" target="_blank">YouTube Terms of Service</a>.</p>
+
+    <h2 class="mt-4 mb-2">4. User Accounts</h2>
+    <p>You are responsible for safeguarding your password and any Google credentials authorized to our service.</p>
+
+    <h2 class="mt-4 mb-2">5. Intellectual Property</h2>
+    <p>You retain all rights to the videos you upload. We claim no ownership over your generated content.</p>
+
+    <h2 class="mt-4 mb-2">6. Limitation of Liability</h2>
+    <p>We shall not be held liable for any suspended YouTube accounts, lost revenues, or technical failures regarding your video uploads. Use the automation tools at your own risk.</p>
+
+    <h2 class="mt-4 mb-2">7. Contact</h2>
+    <p>For support, please contact: <strong>niteshsain9842@gmail.com</strong></p>
+
+    <div class="mt-4">
+        <a href="/" class="btn btn-secondary">← Back to Home</a>
+    </div>
+</div>
+{% endblock %}

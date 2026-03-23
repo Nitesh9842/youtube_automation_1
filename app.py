@@ -167,6 +167,18 @@ def pricing():
                            token_packs=get_token_packs())
 
 
+@app.route('/privacy')
+def privacy():
+    from datetime import datetime
+    return render_template('privacy.html', current_year=datetime.now().year)
+
+
+@app.route('/terms')
+def terms():
+    from datetime import datetime
+    return render_template('terms.html', current_year=datetime.now().year)
+
+
 # ─── Protected Pages ─────────────────────────────────────────────────────────
 
 @app.route('/dashboard')

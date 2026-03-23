@@ -249,6 +249,24 @@ img { max-width: 100%; display: block; }
 }
 .form-input::placeholder { color: var(--text-muted); }
 
+.auth-divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 24px 0;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+.auth-divider::before, .auth-divider::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid var(--border-subtle);
+}
+.auth-divider span {
+    padding: 0 16px;
+}
+
 .form-input-icon {
     position: relative;
 }
@@ -376,6 +394,16 @@ select.form-input {
     font-size: 1.35rem;
     font-weight: 800;
     color: var(--text-primary);
+}
+.nav-logo-img {
+    height: 38px;
+    width: auto;
+    border-radius: var(--radius-sm);
+    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+    transition: transform var(--transition-base);
+}
+.nav-logo:hover .nav-logo-img {
+    transform: scale(1.05);
 }
 .nav-logo .logo-icon {
     width: 36px;

@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Privacy Policy{% endblock %}
+{% block page_id %}privacy{% endblock %}
+
+{% block body %}
+<div class="container" style="padding: 100px 24px;">
+    <h1 style="margin-bottom: 24px;">Privacy Policy</h1>
+    <p>Last updated: {{ current_year }}</p>
+
+    <h2 class="mt-4 mb-2">1. Introduction</h2>
+    <p>Welcome to Youtube Auto AI ("we", "our", or "us"). We are committed to protecting your personal information and your right to privacy. This Privacy Policy explains what information we collect, how we use it, and what rights you have in relation to it.</p>
+
+    <h2 class="mt-4 mb-2">2. YouTube API Services</h2>
+    <p>Our application uses YouTube API Services. By using our application, you are agreeing to be bound by the <a href="https://www.youtube.com/t/terms" target="_blank">YouTube Terms of Service</a>.</p>
+    <p>In addition to our normal procedure for deleting stored data, users can revoke our application's access to their data via the Google security settings page at <a href="https://security.google.com/settings/security/permissions" target="_blank">https://security.google.com/settings/security/permissions</a>.</p>
+    <p>Please review the <a href="http://www.google.com/policies/privacy" target="_blank">Google Privacy Policy</a> carefully.</p>
+
+    <h2 class="mt-4 mb-2">3. Information We Collect</h2>
+    <ul>
+        <li><strong>Personal Information:</strong> We collect your email address, username, and encrypted password.</li>
+        <li><strong>OAuth Tokens:</strong> When you connect your YouTube account, we store Google OAuth Access and Refresh Tokens to act on your behalf.</li>
+        <li><strong>Uploaded Content:</strong> Videos and metadata uploaded via our platform.</li>
+    </ul>
+
+    <h2 class="mt-4 mb-2">4. How We Use Your Information</h2>
+    <p>We use your Google/YouTube tokens strictly for the purpose of uploading your videos to your authorized YouTube channel.</p>
+
+    <h2 class="mt-4 mb-2">5. Data Retention & Deletion</h2>
+    <p>You can ask us to delete your account and associated YouTube OAuth tokens at any time by contacting us.</p>
+
+    <h2 class="mt-4 mb-2">6. Contact Us</h2>
+    <p>If you have questions or comments about this notice, you may email us at <strong>niteshsain9842@gmail.com</strong>.</p>
+    <div class="mt-4">
+        <a href="/" class="btn btn-secondary">← Back to Home</a>
+    </div>
+</div>
+{% endblock %}

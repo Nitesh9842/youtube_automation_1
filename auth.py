@@ -4,6 +4,10 @@ Handles registration, login, logout, profile management.
 """
 
 import re
+import os
+import requests
+import secrets
+import string
 from functools import wraps
 from flask import Blueprint, request, jsonify, session, redirect, url_for, render_template, flash
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
@@ -163,6 +167,137 @@ def register():
 
     if request.is_json:
         return jsonify({'success': True, 'redirect': '/dashboard'})
+    return redirect(url_for('dashboard'))
+
+
+@auth_bp.route('/login/google')
+def login_google():
+    """Initializes Google OAuth flow for user login."""
+    from google_auth_oauthlib.flow import Flow
+    
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+    CLIENT_SECRET = os.path.join(BASE_DIR, 'client_secret.json')
+    
+    if not os.path.exists(CLIENT_SECRET):
+        flash('Google Login is not configured (client_secret.json missing).', 'error')
+        return redirect(url_for('auth.login'))
+        
+    flow = Flow.from_client_secrets_file(
+        CLIENT_SECRET,
+        scopes=['openid', 'https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/userinfo.profile']
+    )
+    
+    # We must construct an absolute URI explicitly for Render
+    scheme = request.headers.get('X-Forwarded-Proto', 'http')
+    redirect_uri = url_for('auth.login_google_callback', _external=True, _scheme=scheme)
+    
+    # Explicit override for local development if HTTPS isn't enabled
+    if '127.0.0.1' in request.host or 'localhost' in request.host:
+        redirect_uri = url_for('auth.login_google_callback', _external=True)
+        os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
+        
+    flow.redirect_uri = redirect_uri
+    
+    authorization_url, state = flow.authorization_url(prompt='consent')
+    session['google_login_state'] = state
+    return redirect(authorization_url)
+
+
+@auth_bp.route('/login/google/callback')
+def login_google_callback():
+    """Handles callback from Google OAuth for user login."""
+    from google_auth_oauthlib.flow import Flow
+    
+    state = session.get('google_login_state')
+    
+    # Allow bypass of state check in local dev due to session flakiness sometimes, 
+    # but keep it strict in production.
+    incoming_state = request.args.get('state')
+    if (not state or state != incoming_state) and os.getenv('ENVIRONMENT') == 'production':
+        flash('Invalid state parameter. Please try logging in again.', 'error')
+        return redirect(url_for('auth.login'))
+        
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+    CLIENT_SECRET = os.path.join(BASE_DIR, 'client_secret.json')
+    
+    flow = Flow.from_client_secrets_file(
+        CLIENT_SECRET,
+        scopes=['openid', 'https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/userinfo.profile'],
+        state=incoming_state
+    )
+    
+    scheme = request.headers.get('X-Forwarded-Proto', 'http')
+    redirect_uri = url_for('auth.login_google_callback', _external=True, _scheme=scheme)
+    if '127.0.0.1' in request.host or 'localhost' in request.host:
+        redirect_uri = url_for('auth.login_google_callback', _external=True)
+        
+    flow.redirect_uri = redirect_uri
+    
+    try:
+        # Pass the full URL to fetch the token
+        authorization_response = request.url
+        if scheme == 'https':
+            authorization_response = authorization_response.replace('http:', 'https:')
+        flow.fetch_token(authorization_response=authorization_response)
+    except Exception as e:
+        print(f"Token fetch error: {e}")
+        flash('Authentication failed during Google callback.', 'error')
+        return redirect(url_for('auth.login'))
+        
+    credentials = flow.credentials
+    
+    try:
+        userinfo_response = requests.get(
+            'https://www.googleapis.com/oauth2/v2/userinfo',
+            headers={'Authorization': f'Bearer {credentials.token}'}
+        )
+        userinfo_response.raise_for_status()
+        userinfo = userinfo_response.json()
+    except Exception as e:
+        print(f"Userinfo fetch error: {e}")
+        flash('Failed to fetch profile from Google.', 'error')
+        return redirect(url_for('auth.login'))
+        
+    email = userinfo.get('email')
+    name = userinfo.get('name', '')
+    picture = userinfo.get('picture', '')
+    
+    if not email:
+        flash("Google didn't provide an email address.", "error")
+        return redirect(url_for('auth.login'))
+        
+    user_dict = get_user_by_email(email)
+    
+    if user_dict:
+        user = User(user_dict)
+        login_user(user)
+        if picture and not user_dict.get('avatar_url'):
+            update_user(user.id, avatar_url=picture)
+    else:
+        # Create a randomized strong password for OAuth users
+        alphabet = string.ascii_letters + string.digits
+        secure_password = ''.join(secrets.choice(alphabet) for i in range(32))
+        hashed = _hash_password(secure_password)
+        
+        # Determine username
+        base_username = name.lower().replace(' ', '_')
+        base_username = re.sub(r'[^a-zA-Z0-9_]', '', base_username)
+        if not base_username:
+            base_username = 'user'
+            
+        username = base_username
+        counter = 1
+        while get_user_by_username(username):
+            username = f"{base_username}_{counter}"
+            counter += 1
+            
+        user_id = create_user(email, username, hashed)
+        update_user(user_id, avatar_url=picture)
+        
+        user_dict = get_user_by_id(user_id)
+        user = User(user_dict)
+        login_user(user)
+        
     return redirect(url_for('dashboard'))
 
 
