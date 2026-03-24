@@ -26,6 +26,9 @@ if os.getenv('OAUTHLIB_INSECURE_TRANSPORT'):
 elif os.getenv('ENVIRONMENT') != 'production':
     os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 
+# Google sometimes returns more scopes than requested
+os.environ['OAUTHLIB_RELAX_TOKEN_SCOPE'] = '1'
+
 from downloader import download_reel_with_audio
 from uploader import upload_to_youtube, check_authentication, get_channel_info
 from ai_genrator import AIMetadataGenerator
@@ -133,6 +136,13 @@ def get_redirect_uri():
         return explicit.strip().rstrip('/')
     scheme = 'https' if os.getenv('ENVIRONMENT') == 'production' else request.scheme
     return url_for('auth_callback', _external=True, _scheme=scheme)
+
+
+@app.context_processor
+def inject_globals():
+    return {
+        'google_site_verification': os.getenv('GOOGLE_SITE_VERIFICATION')
+    }
 
 
 @app.before_request
