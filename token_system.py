@@ -1,5 +1,5 @@
 """
-Token system for YouTube Automation platform.
+Token system for AutoTube AI platform.
 Defines plans, costs, and token management logic.
 """
 

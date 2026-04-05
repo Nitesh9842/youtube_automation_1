@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════════════════════════════
-   YouTube Automation Platform — Client-Side Application
+   AutoTube AI Platform — Client-Side Application
    ═══════════════════════════════════════════════════════════════════════════ */
 
 (function() {
@@ -354,13 +354,46 @@
 
                 // Editing options
                 if (editingToggle && editingToggle.checked) {
-                    const musicUrl = document.getElementById('music-url');
-                    const musicVol = document.getElementById('music-volume');
                     payload.editing = {
                         enabled: true,
-                        music_url: musicUrl ? musicUrl.value : '',
-                        music_volume: musicVol ? parseFloat(musicVol.value) : 0.3,
+                        music_volume: document.getElementById('music-volume') ? parseFloat(document.getElementById('music-volume').value) : 0.3,
+                        text_overlays: []
                     };
+                    
+                    const musicFileInput = document.getElementById('music-file');
+                    if (musicFileInput && musicFileInput.files.length > 0) {
+                        startBtn.disabled = true;
+                        startBtn.innerHTML = '<span class="spinner"></span> Uploading Music...';
+                        const mFormData = new FormData();
+                        mFormData.append('music', musicFileInput.files[0]);
+                        try {
+                            const mResp = await fetch('/upload-music', { method: 'POST', body: mFormData });
+                            const mData = await mResp.json();
+                            if (mData.success && mData.filepath) {
+                                payload.editing.music_file = mData.filepath;
+                            } else {
+                                toast.show(mData.error || 'Music upload failed', 'error');
+                                startBtn.disabled = false;
+                                startBtn.innerHTML = '🚀 Start Processing';
+                                return;
+                            }
+                        } catch(e) {
+                            toast.show('Music upload failed', 'error');
+                            startBtn.disabled = false;
+                            startBtn.innerHTML = '🚀 Start Processing';
+                            return;
+                        }
+                    }
+                    
+                    const overlayText = document.getElementById('overlay-text');
+                    if (overlayText && overlayText.value.trim() !== '') {
+                        payload.editing.text_overlays.push({
+                            text: overlayText.value.trim(),
+                            position: document.getElementById('overlay-position') ? document.getElementById('overlay-position').value : 'top',
+                            fontsize: document.getElementById('overlay-size') ? parseInt(document.getElementById('overlay-size').value) : 60,
+                            fontcolor: document.getElementById('overlay-color') ? document.getElementById('overlay-color').value : '#ffffff'
+                        });
+                    }
                 }
 
                 startBtn.disabled = true;

@@ -79,17 +79,47 @@
                 </div>
 
                 <!-- Editing Options -->
-                <div id="editing-options" class="editing-panel glass-card hidden">
-                    <h3>🎵 Editing Options</h3>
-                    <div class="form-group">
-                        <label class="form-label" for="music-url">Background Music (YouTube URL)</label>
-                        <input type="url" id="music-url" class="form-input" placeholder="https://youtube.com/watch?v=...">
+                <div id="editing-options" class="editing-panel glass-card hidden" style="display:flex; flex-direction:column; gap:20px;">
+                    <div>
+                        <h3 style="margin-bottom:12px;">🎵 Background Music</h3>
+                        <div class="form-group">
+                            <label class="form-label" for="music-file">Upload Music File (.mp3, .wav, .m4a)</label>
+                            <input type="file" id="music-file" class="form-input" accept=".mp3,.wav,.m4a,.aac" style="padding:10px;">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="music-volume">Music Volume: <span id="vol-display">30%</span></label>
+                            <input type="range" id="music-volume" min="0" max="1" step="0.1" value="0.3"
+                                   style="width:100%;accent-color:var(--accent-violet);"
+                                   oninput="document.getElementById('vol-display').textContent=Math.round(this.value*100)+'%'">
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label class="form-label" for="music-volume">Music Volume: <span id="vol-display">30%</span></label>
-                        <input type="range" id="music-volume" min="0" max="1" step="0.1" value="0.3"
-                               style="width:100%;accent-color:var(--accent-violet);"
-                               oninput="document.getElementById('vol-display').textContent=Math.round(this.value*100)+'%'">
+                    <div style="height:1px; background:rgba(255,255,255,0.1); margin:4px 0;"></div>
+                    <div>
+                        <h3 style="margin-bottom:12px;">📝 Text Overlay (Optional)</h3>
+                        <div class="form-group">
+                            <label class="form-label" for="overlay-text">Text Content</label>
+                            <input type="text" id="overlay-text" class="form-input" placeholder="E.g., Subscribe for more!">
+                        </div>
+                        <div style="display:flex; gap:16px; flex-wrap:wrap;">
+                            <div class="form-group" style="flex:1; min-width:150px;">
+                                <label class="form-label" for="overlay-position">Position</label>
+                                <select id="overlay-position" class="form-input" style="appearance:none; background-color:rgba(255,255,255,0.05); color:white;">
+                                    <option value="top" style="color:black;">Top Center</option>
+                                    <option value="center" style="color:black;">Middle Center</option>
+                                    <option value="bottom" style="color:black;">Bottom Center</option>
+                                    <option value="top-left" style="color:black;">Top Left</option>
+                                    <option value="top-right" style="color:black;">Top Right</option>
+                                </select>
+                            </div>
+                            <div class="form-group" style="width:100px;">
+                                <label class="form-label" for="overlay-size">Size</label>
+                                <input type="number" id="overlay-size" class="form-input" value="60" min="10" max="200">
+                            </div>
+                            <div class="form-group" style="width:80px;">
+                                <label class="form-label" for="overlay-color">Color</label>
+                                <input type="color" id="overlay-color" class="form-input" value="#ffffff" style="height:48px; padding:4px; cursor:pointer;">
+                            </div>
+                        </div>
                     </div>
                 </div>
 

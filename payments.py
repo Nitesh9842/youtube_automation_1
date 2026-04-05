@@ -1,5 +1,5 @@
 """
-Payments Blueprint for YouTube Automation platform.
+Payments Blueprint for AutoTube AI platform.
 Stripe integration for plan subscriptions and token top-ups.
 """
 
@@ -178,7 +178,7 @@ def stripe_webhook():
     if event['type'] == 'checkout.session.completed':
         session_data = event['data']['object']
         meta = session_data.get('metadata', {})
-        user_id = int(meta.get('user_id', 0))
+        user_id = meta.get('user_id', '')
         tokens = int(meta.get('tokens', 0))
 
         if user_id and tokens:

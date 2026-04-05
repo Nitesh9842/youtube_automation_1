@@ -25,7 +25,7 @@ except ImportError as e:
     YT_DLP_AVAILABLE = False
 
 try:
-    from PIL import Image, ImageDraw, ImageFont
+    from PIL import Image, ImageDraw, ImageFont, ImageColor
     import numpy as np
     PIL_AVAILABLE = True
     logger.info("✅ PIL (Pillow) loaded successfully")
@@ -182,22 +182,31 @@ class VideoEditor:
             logger.error(f"❌ Failed to download YouTube audio: {str(e)}")
             raise Exception(f"Failed to download music: {str(e)}")
     
-    def create_text_overlay_image(self, text, video_width, video_height, position='top', fontsize=50):
+    def create_text_overlay_image(self, text, video_width, video_height, position='top', fontsize=50, fontcolor=(255, 255, 255, 255)):
         """Create a transparent PNG with text overlay using PIL"""
         if not PIL_AVAILABLE:
             raise ImportError("PIL (Pillow) is required. Install with: pip install Pillow")
         
         try:
+            # Parse font color
+            if isinstance(fontcolor, str):
+                try:
+                    rgb = ImageColor.getrgb(fontcolor)
+                    fontcolor = (rgb[0], rgb[1], rgb[2], 255)
+                except Exception as e:
+                    logger.warning(f"Invalid color '{fontcolor}', defaulting to white")
+                    fontcolor = (255, 255, 255, 255)
+            
             # Create transparent image
             img = Image.new('RGBA', (video_width, video_height), (0, 0, 0, 0))
             draw = ImageDraw.Draw(img)
             
             # Load font
             try:
-                font = ImageFont.truetype("arial.ttf", fontsize)
+                font = ImageFont.truetype("arial.ttf", int(fontsize))
             except:
                 try:
-                    font = ImageFont.truetype("C:/Windows/Fonts/arial.ttf", fontsize)
+                    font = ImageFont.truetype("C:/Windows/Fonts/arial.ttf", int(fontsize))
                 except:
                     font = ImageFont.load_default()
             
@@ -216,6 +225,12 @@ class VideoEditor:
             elif position == 'center':
                 x = (video_width - text_width) // 2
                 y = (video_height - text_height) // 2
+            elif position == 'top-left':
+                x = 50
+                y = 50
+            elif position == 'top-right':
+                x = video_width - text_width - 50
+                y = 50
             else:
                 x = (video_width - text_width) // 2
                 y = 50
@@ -227,7 +242,7 @@ class VideoEditor:
                     draw.text((x + adj_x, y + adj_y), text, font=font, fill=(0, 0, 0, 255))
             
             # Draw main text
-            draw.text((x, y), text, font=font, fill=(255, 255, 255, 255))
+            draw.text((x, y), text, font=font, fill=fontcolor)
             
             # Save to temp file
             temp_text_path = os.path.join(self.temp_folder, 'text_overlay.png')
@@ -289,12 +304,14 @@ class VideoEditor:
                 for i, overlay in enumerate(text_overlays):
                     text = overlay.get('text', 'Subscribe!')
                     position = overlay.get('position', 'top')
+                    fontsize = overlay.get('fontsize', 50)
+                    fontcolor = overlay.get('fontcolor', '#ffffff')
                     
-                    logger.info(f"  Adding text {i+1}: '{text}' at {position}")
+                    logger.info(f"  Adding text {i+1}: '{text}' at {position} (size: {fontsize}, color: {fontcolor})")
                     
                     # Create text overlay image
                     text_img_path = self.create_text_overlay_image(
-                        text, video_width, video_height, position
+                        text, video_width, video_height, position, fontsize, fontcolor
                     )
                     
                     if text_img_path and os.path.exists(text_img_path):

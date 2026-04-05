@@ -1,5 +1,5 @@
 """
-YouTube Automation — Main Flask Application
+AutoTube AI — Main Flask Application
 Full web platform with auth, payments, token system, and video pipeline.
 """
 
@@ -33,7 +33,6 @@ from downloader import download_reel_with_audio
 from uploader import upload_to_youtube, check_authentication, get_channel_info
 from ai_genrator import AIMetadataGenerator
 from video_editor import VideoEditor
-from models import init_db, get_user_stats, get_recent_uploads, get_user_by_id, increment_uploads
 from models import init_db, get_user_stats, get_recent_uploads, get_user_by_id, increment_uploads, update_youtube_credentials
 from auth import auth_bp, init_login_manager
 from payments import payments_bp
@@ -75,7 +74,7 @@ app.register_blueprint(payments_bp)
 # Initialize Flask-Login
 init_login_manager(app)
 
-# Initialize database
+# Initialize database (Firestore — no-op, but kept for compatibility)
 init_db()
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -440,8 +439,11 @@ def run_upload(task_id: str, video_path: str, is_temp: bool,
                 )
                 final_path = edited_path
             except Exception as e:
-                logger.warning(f'Editing failed ({e}), using original.')
-                edited_path = None
+                logger.error(f'Editing failed ({e})')
+                set_task(task_id, 'failed', f'Video editing failed: {str(e)}', error=str(e))
+                if user_id:
+                    increment_uploads(user_id, success=False)
+                return
 
         set_task(task_id, 'analyzing', 'AI analyzing video and generating metadata...', 55)
         try:
@@ -641,6 +643,6 @@ if __name__ == '__main__':
     port = int(os.getenv('PORT', 5000))
     is_prod = os.getenv('ENVIRONMENT') == 'production'
     host = '0.0.0.0' if is_prod else '127.0.0.1'
-    print('Starting YouTube Automation Platform')
+    print('Starting AutoTube AI Platform')
     print(f'   -> http://{host}:{port}')
     app.run(debug=not is_prod, host=host, port=port)

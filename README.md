@@ -1,4 +1,4 @@
-# 🎬 YouTube Automation Platform
+# 🎬 AutoTube AI Platform
 
 A full-stack web application that automates the process of downloading, editing, and uploading videos to YouTube — powered by AI-generated metadata.
 

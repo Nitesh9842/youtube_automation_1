@@ -1,5 +1,5 @@
 """
-Authentication Blueprint for YouTube Automation platform.
+Authentication Blueprint for AutoTube AI platform.
 Handles registration, login, logout, profile management.
 """
 
@@ -42,7 +42,7 @@ def init_login_manager(app):
 
     @login_manager.user_loader
     def load_user(user_id):
-        user_dict = get_user_by_id(int(user_id))
+        user_dict = get_user_by_id(str(user_id))
         if user_dict:
             return User(user_dict)
         return None
