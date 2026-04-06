@@ -198,8 +198,6 @@ def get_transactions(user_id, limit=20):
     docs = (
         db.collection(TRANSACTIONS_COL)
         .where(filter=FieldFilter('user_id', '==', str(user_id)))
-        .order_by('created_at', direction='DESCENDING')
-        .limit(limit)
         .stream()
     )
     results = []
@@ -207,7 +205,9 @@ def get_transactions(user_id, limit=20):
         d = doc.to_dict()
         d['id'] = doc.id
         results.append(d)
-    return results
+    
+    results.sort(key=lambda x: x.get('created_at', ''), reverse=True)
+    return results[:limit]
 
 
 # ─── Usage / Stats ────────────────────────────────────────────────────────────
@@ -217,8 +217,6 @@ def get_usage_log(user_id, limit=50):
     docs = (
         db.collection(USAGE_LOG_COL)
         .where(filter=FieldFilter('user_id', '==', str(user_id)))
-        .order_by('created_at', direction='DESCENDING')
-        .limit(limit)
         .stream()
     )
     results = []
@@ -226,7 +224,9 @@ def get_usage_log(user_id, limit=50):
         d = doc.to_dict()
         d['id'] = doc.id
         results.append(d)
-    return results
+        
+    results.sort(key=lambda x: x.get('created_at', ''), reverse=True)
+    return results[:limit]
 
 
 def get_user_stats(user_id):
@@ -236,38 +236,33 @@ def get_user_stats(user_id):
         return None
 
     today = datetime.utcnow().strftime('%Y-%m-%d')
+    week_ago = (datetime.utcnow() - timedelta(days=7)).strftime('%Y-%m-%d')
 
-    # Fetch today's usage logs
-    all_logs = (
+    # Fetch all logs for this user to avoid composite index requirements
+    all_logs_stream = (
         db.collection(USAGE_LOG_COL)
         .where(filter=FieldFilter('user_id', '==', str(user_id)))
-        .where(filter=FieldFilter('created_at', '>=', today))
         .stream()
     )
 
     today_uploads = 0
     tokens_today = 0
-    for doc in all_logs:
-        d = doc.to_dict()
-        if d.get('action') == 'upload':
-            today_uploads += 1
-        tokens_today += d.get('tokens_used', 0)
-
-    # Last 7 days usage
-    week_ago = (datetime.utcnow() - timedelta(days=7)).strftime('%Y-%m-%d')
-    week_logs = (
-        db.collection(USAGE_LOG_COL)
-        .where(filter=FieldFilter('user_id', '==', str(user_id)))
-        .where(filter=FieldFilter('created_at', '>=', week_ago))
-        .order_by('created_at')
-        .stream()
-    )
-
     daily_map = {}
-    for doc in week_logs:
+
+    for doc in all_logs_stream:
         d = doc.to_dict()
-        day = d.get('created_at', '')[:10]
-        daily_map[day] = daily_map.get(day, 0) + d.get('tokens_used', 0)
+        created_at = d.get('created_at', '')
+        
+        # Today stats
+        if created_at >= today:
+            if d.get('action') == 'upload':
+                today_uploads += 1
+            tokens_today += d.get('tokens_used', 0)
+            
+        # Week stats
+        if created_at >= week_ago:
+            day = created_at[:10]
+            daily_map[day] = daily_map.get(day, 0) + d.get('tokens_used', 0)
 
     daily_usage = [{'day': k, 'tokens': v} for k, v in sorted(daily_map.items())]
 
@@ -292,14 +287,14 @@ def get_recent_uploads(user_id, limit=10):
     docs = (
         db.collection(USAGE_LOG_COL)
         .where(filter=FieldFilter('user_id', '==', str(user_id)))
-        .where(filter=FieldFilter('action', '==', 'upload'))
-        .order_by('created_at', direction='DESCENDING')
-        .limit(limit)
         .stream()
     )
     results = []
     for doc in docs:
         d = doc.to_dict()
-        d['id'] = doc.id
-        results.append(d)
-    return results
+        if d.get('action') == 'upload':
+            d['id'] = doc.id
+            results.append(d)
+            
+    results.sort(key=lambda x: x.get('created_at', ''), reverse=True)
+    return results[:limit]
