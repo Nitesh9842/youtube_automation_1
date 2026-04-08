@@ -75,18 +75,29 @@
                 <!-- YouTube Connection -->
                 <div class="glass-card" style="padding:24px;">
                     <h3 style="font-size:1rem;margin-bottom:16px;">YouTube Channel</h3>
-                    {% if yt_connected and channel %}
+                    {% if yt_connected %}
                     <div class="yt-connection">
-                        {% if channel.thumbnail %}
-                        <img src="{{ channel.thumbnail }}" alt="Channel" class="yt-avatar">
+                        {% if channel %}
+                            {% if channel.thumbnail %}
+                            <img src="{{ channel.thumbnail }}" alt="Channel" class="yt-avatar">
+                            {% else %}
+                            <div class="sidebar-avatar">{{ channel.title[0] if channel.title else 'Y' }}</div>
+                            {% endif %}
+                            <div class="yt-info">
+                                <div class="yt-name">{{ channel.title }}</div>
+                                <div class="yt-stats">{{ channel.subscriberCount }} subscribers · {{ channel.videoCount }} videos</div>
+                            </div>
                         {% else %}
-                        <div class="sidebar-avatar">{{ channel.title[0] if channel.title else 'Y' }}</div>
+                            <div class="sidebar-avatar" style="background:var(--accent-violet);">Y</div>
+                            <div class="yt-info">
+                                <div class="yt-name">Authenticated to YouTube</div>
+                                <div class="yt-stats">Channel info unavailable</div>
+                            </div>
                         {% endif %}
-                        <div class="yt-info">
-                            <div class="yt-name">{{ channel.title }}</div>
-                            <div class="yt-stats">{{ channel.subscriberCount }} subscribers · {{ channel.videoCount }} videos</div>
-                        </div>
-                        <span class="badge badge-success">Connected</span>
+                        <span class="badge badge-success">YouTube Connected</span>
+                    </div>
+                    <div class="mt-2" style="text-align: right;">
+                        <button class="btn btn-danger btn-sm" onclick="disconnectYouTube()">Disconnect</button>
                     </div>
                     {% else %}
                     <div class="empty-state" style="padding:20px;">

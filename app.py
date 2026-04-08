@@ -188,6 +188,30 @@ def terms():
     return render_template('terms.html', current_year=datetime.now().year)
 
 
+@app.route('/robots.txt')
+def robots_txt():
+    from flask import Response
+    content = "User-agent: *\nAllow: /\nSitemap: https://autotubeai.me/sitemap.xml\n"
+    return Response(content, mimetype="text/plain")
+
+
+@app.route('/sitemap.xml')
+def sitemap_xml():
+    from flask import Response
+    pages = [
+        {'loc': 'https://autotubeai.me/', 'priority': '1.0'},
+        {'loc': 'https://autotubeai.me/pricing', 'priority': '0.8'},
+        {'loc': 'https://autotubeai.me/privacy', 'priority': '0.5'},
+        {'loc': 'https://autotubeai.me/terms', 'priority': '0.5'}
+    ]
+    xml_content = '<?xml version="1.0" encoding="UTF-8"?>\n'
+    xml_content += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+    for page in pages:
+        xml_content += f"  <url>\n    <loc>{page['loc']}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>{page['priority']}</priority>\n  </url>\n"
+    xml_content += '</urlset>'
+    return Response(xml_content, mimetype="application/xml")
+
+
 # ─── Protected Pages ─────────────────────────────────────────────────────────
 
 @app.route('/dashboard')

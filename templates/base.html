@@ -3,12 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="AI-powered YouTube automation platform. Upload, edit, and publish videos with AI-generated metadata.">
-    <title>{% block title %}AutoTube AI{% endblock %} — AI Video Platform</title>
+    
+    <!-- SEO & Metadata -->
+    <meta name="description" content="{% block meta_description %}AI-powered YouTube automation platform. Upload, edit, and publish videos with AI-generated metadata.{% endblock %}">
+    <meta name="keywords" content="YouTube Automation, AI Video Editor, AutoTube AI, YouTube Upload Bot, Video Metadata Generator">
+    <title>{% block title %}AutoTube AI{% endblock %}</title>
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="{% block canonical_url %}https://autotubeai.me{{ request.path }}{% endblock %}">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{% block og_url %}https://autotubeai.me{{ request.path }}{% endblock %}">
+    <meta property="og:title" content="{% block og_title %}AutoTube AI — AI Video Platform{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}AI-powered YouTube automation platform. Upload, edit, and publish videos with AI-generated metadata.{% endblock %}">
+    <meta property="og:image" content="https://autotubeai.me/static/img/logo.png">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://autotubeai.me{{ request.path }}">
+    <meta property="twitter:title" content="{% block twitter_title %}AutoTube AI — AI Video Platform{% endblock %}">
+    <meta property="twitter:description" content="{% block twitter_description %}AI-powered YouTube automation platform. Upload, edit, and publish videos with AI-generated metadata.{% endblock %}">
+    <meta property="twitter:image" content="https://autotubeai.me/static/img/logo.png">
+
     {% if google_site_verification %}
     <meta name="google-site-verification" content="{{ google_site_verification }}" />
     {% endif %}
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%238b5cf6'/><text x='16' y='22' font-size='18' text-anchor='middle' fill='white'>▶</text></svg>">
+    
+    <!-- Icons & Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='img/logo.png') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='img/logo.png') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     {% block head %}{% endblock %}
 </head>

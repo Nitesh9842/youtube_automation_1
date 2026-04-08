@@ -1,6 +1,32 @@
 {% extends "base.html" %}
-{% block title %}Home{% endblock %}
+{% block title %}AutoTube AI | YouTube Automation & AI Video Editor{% endblock %}
+{% block meta_description %}Automate your YouTube channel with AutoTube AI. Effortlessly generate titles, tags, and metadata using AI, edit videos, and auto-publish. Start for free!{% endblock %}
+{% block og_title %}AutoTube AI | YouTube Automation & AI Video Editor{% endblock %}
+{% block og_description %}Automate your YouTube channel with AutoTube AI. Effortlessly generate titles, tags, and metadata using AI, edit videos, and auto-publish. Start for free!{% endblock %}
+{% block twitter_title %}AutoTube AI | YouTube Automation & AI Video Editor{% endblock %}
+{% block twitter_description %}Automate your YouTube channel with AutoTube AI. Effortlessly generate titles, tags, and metadata using AI, edit videos, and auto-publish. Start for free!{% endblock %}
 {% block page_id %}landing{% endblock %}
+{% block head %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "AutoTube AI",
+  "operatingSystem": "Web",
+  "applicationCategory": "BusinessApplication",
+  "description": "AI-powered YouTube automation platform. Upload, edit, and publish videos with AI-generated metadata.",
+  "url": "https://autotubeai.me"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "AutoTube AI",
+  "url": "https://autotubeai.me"
+}
+</script>
+{% endblock %}
 
 {% block body %}
 <!-- Navigation -->
@@ -30,7 +56,7 @@
             <a href="/register" class="btn btn-primary btn-sm">Get Started Free</a>
             {% endif %}
         </div>
-        <button class="mobile-menu-btn" onclick="document.getElementById('nav-links').classList.toggle('open')">☰</button>
+        <button class="mobile-menu-btn">☰</button>
     </div>
 </nav>
 

@@ -49,17 +49,25 @@
                 <div class="settings-card glass-card">
                     <h3>📺 YouTube Connection</h3>
                     <p class="settings-desc">Manage your YouTube channel connection</p>
-                    {% if yt_connected and channel %}
+                    {% if yt_connected %}
                     <div class="yt-connection">
-                        {% if channel.thumbnail %}
-                        <img src="{{ channel.thumbnail }}" alt="Channel" class="yt-avatar">
+                        {% if channel %}
+                            {% if channel.thumbnail %}
+                            <img src="{{ channel.thumbnail }}" alt="Channel" class="yt-avatar">
+                            {% else %}
+                            <div class="sidebar-avatar">{{ channel.title[0] if channel.title else 'Y' }}</div>
+                            {% endif %}
+                            <div class="yt-info">
+                                <div class="yt-name">{{ channel.title }}</div>
+                                <div class="yt-stats">{{ channel.subscriberCount }} subscribers · {{ channel.videoCount }} videos</div>
+                            </div>
                         {% else %}
-                        <div class="sidebar-avatar">{{ channel.title[0] if channel.title else 'Y' }}</div>
+                            <div class="sidebar-avatar" style="background:var(--accent-violet);">Y</div>
+                            <div class="yt-info">
+                                <div class="yt-name">Authenticated to YouTube</div>
+                                <div class="yt-stats">Channel info unavailable</div>
+                            </div>
                         {% endif %}
-                        <div class="yt-info">
-                            <div class="yt-name">{{ channel.title }}</div>
-                            <div class="yt-stats">{{ channel.subscriberCount }} subscribers · {{ channel.videoCount }} videos</div>
-                        </div>
                         <span class="badge badge-success">Connected</span>
                     </div>
                     <div class="mt-2">
