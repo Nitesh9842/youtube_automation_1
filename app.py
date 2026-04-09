@@ -201,6 +201,9 @@ def sitemap_xml():
     pages = [
         {'loc': 'https://autotubeai.me/', 'priority': '1.0'},
         {'loc': 'https://autotubeai.me/pricing', 'priority': '0.8'},
+        {'loc': 'https://autotubeai.me/register', 'priority': '0.8'},
+        {'loc': 'https://autotubeai.me/login', 'priority': '0.8'},
+        {'loc': 'https://autotubeai.me/dashboard', 'priority': '0.5'},
         {'loc': 'https://autotubeai.me/privacy', 'priority': '0.5'},
         {'loc': 'https://autotubeai.me/terms', 'priority': '0.5'}
     ]

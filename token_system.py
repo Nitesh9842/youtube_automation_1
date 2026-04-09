@@ -14,11 +14,11 @@ PLANS = {
         'price_cents': 0,
         'price_display': '$0',
         'tokens_monthly': 50,
-        'daily_refill': 10,
-        'max_tokens': 100,
+        'daily_refill': 0,
+        'max_tokens': 50,
         'features': [
-            '50 tokens on signup',
-            '10 tokens daily refill',
+            '50 tokens free trial (one-time)',
+            'No daily refill',
             'AI video analysis',
             'Basic video editing',
             'YouTube auto-upload',
@@ -115,6 +115,11 @@ def refill_daily_tokens(user_id):
         return False
 
     plan = PLANS.get(user['plan'], PLANS['free'])
+
+    # Free plan gets no daily refill — only one-time signup tokens
+    if plan['daily_refill'] <= 0:
+        return False
+
     last_refill = user.get('last_refill', '')
 
     if last_refill:
