@@ -191,7 +191,7 @@ def terms():
 @app.route('/robots.txt')
 def robots_txt():
     from flask import Response
-    content = "User-agent: *\nAllow: /\nSitemap: https://autotubeai.me/sitemap.xml\n"
+    content = "User-agent: *\nDisallow:\n\nSitemap: https://autotubeai.me/sitemap.xml\n"
     return Response(content, mimetype="text/plain")
 
 

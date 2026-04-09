@@ -1,10 +1,10 @@
 {% extends "base.html" %}
-{% block title %}AutoTube AI | YouTube Automation & AI Video Editor{% endblock %}
-{% block meta_description %}Automate your YouTube channel with AutoTube AI. Effortlessly generate titles, tags, and metadata using AI, edit videos, and auto-publish. Start for free!{% endblock %}
-{% block og_title %}AutoTube AI | YouTube Automation & AI Video Editor{% endblock %}
-{% block og_description %}Automate your YouTube channel with AutoTube AI. Effortlessly generate titles, tags, and metadata using AI, edit videos, and auto-publish. Start for free!{% endblock %}
-{% block twitter_title %}AutoTube AI | YouTube Automation & AI Video Editor{% endblock %}
-{% block twitter_description %}Automate your YouTube channel with AutoTube AI. Effortlessly generate titles, tags, and metadata using AI, edit videos, and auto-publish. Start for free!{% endblock %}
+{% block title %}AutoTube AI — Insta Reel to YouTube Auto Upload with AI Metadata & Edits{% endblock %}
+{% block meta_description %}Auto upload Instagram Reels to YouTube with AI-generated metadata, titles, tags & descriptions. YouTube automation to manage channel uploads, direct Insta to YouTube with AI edits — all in one click.{% endblock %}
+{% block og_title %}AutoTube AI — Insta Reel to YouTube Auto Upload with AI Metadata & Edits{% endblock %}
+{% block og_description %}Auto upload Instagram Reels to YouTube with AI-generated metadata. YouTube automation to manage channel uploads, direct Insta to YouTube with AI edits — all in one click.{% endblock %}
+{% block twitter_title %}AutoTube AI — Insta Reel to YouTube Auto Upload with AI Metadata & Edits{% endblock %}
+{% block twitter_description %}Auto upload Instagram Reels to YouTube with AI-generated metadata. YouTube automation to manage channel uploads, direct Insta to YouTube with AI edits — all in one click.{% endblock %}
 {% block page_id %}landing{% endblock %}
 {% block head %}
 <script type="application/ld+json">
@@ -14,8 +14,9 @@
   "name": "AutoTube AI",
   "operatingSystem": "Web",
   "applicationCategory": "BusinessApplication",
-  "description": "AI-powered YouTube automation platform. Upload, edit, and publish videos with AI-generated metadata.",
-  "url": "https://autotubeai.me"
+  "description": "Insta Reel to YouTube auto upload with AI-generated metadata, titles, tags & descriptions. YouTube automation platform to manage channel uploads and direct Insta to YouTube with AI edits.",
+  "url": "https://autotubeai.me",
+  "keywords": "insta reel to youtube, auto upload youtube, youtube automation, AI metadata generator, manage channel uploads, instagram to youtube with AI edits"
 }
 </script>
 <script type="application/ld+json">
@@ -65,29 +66,29 @@
     <div class="hero-bg"></div>
     <div class="hero-particles"></div>
     <div class="hero-content">
-        <div class="hero-badge">✨ AI-Powered Video Automation</div>
-        <h1>Upload Videos to YouTube <br><span class="text-gradient">On Autopilot</span></h1>
-        <p>Download reels, edit with AI-generated metadata, add music, and auto-upload to YouTube — all in one click. The smartest way to grow your channel.</p>
+        <div class="hero-badge">✨ Insta Reel to YouTube — Auto Upload with AI</div>
+        <h1>Auto Upload Insta Reels to YouTube <br><span class="text-gradient">With AI Metadata & Edits</span></h1>
+        <p>Direct Instagram Reel to YouTube auto upload with AI-generated metadata — titles, tags, descriptions. Manage channel uploads, add AI edits, background music, and auto-publish. The #1 YouTube automation platform.</p>
         <div class="hero-actions">
             {% if current_user.is_authenticated %}
             <a href="/dashboard" class="btn btn-primary btn-lg">Go to Dashboard →</a>
             {% else %}
             <a href="/register" class="btn btn-primary btn-lg">Start Free — 50 Tokens</a>
-            <a href="#how-it-works" class="btn btn-secondary btn-lg">See How It Works</a>
+            <a href="#use-cases" class="btn btn-secondary btn-lg">See What You Can Do</a>
             {% endif %}
         </div>
         <div class="hero-stats">
             <div class="hero-stat">
                 <div class="number">10K+</div>
-                <div class="label">Videos Uploaded</div>
+                <div class="label">Videos Auto Uploaded</div>
             </div>
             <div class="hero-stat">
                 <div class="number">98%</div>
-                <div class="label">Success Rate</div>
+                <div class="label">Upload Success Rate</div>
             </div>
             <div class="hero-stat">
                 <div class="number">24/7</div>
-                <div class="label">AI Processing</div>
+                <div class="label">AI Metadata Processing</div>
             </div>
         </div>
     </div>
@@ -97,66 +98,108 @@
 <section class="section" id="features">
     <div class="container">
         <div class="section-header">
-            <h2>Powerful <span class="text-gradient">Features</span></h2>
-            <p>Everything you need to automate your YouTube workflow, powered by cutting-edge AI.</p>
+            <h2>YouTube Automation <span class="text-gradient">Features</span></h2>
+            <p>Everything you need to auto upload Insta Reels to YouTube with AI metadata, edits, and channel management.</p>
         </div>
         <div class="features-grid">
             <div class="feature-card glass-card card-glow">
                 <div class="feature-icon violet">🤖</div>
-                <h3>AI Video Analysis</h3>
-                <p>Our AI extracts frames, analyzes content, and generates viral-ready titles, descriptions, and tags automatically.</p>
+                <h3>AI Metadata Generator</h3>
+                <p>Auto-generate SEO-optimized titles, descriptions, tags, and hashtags using AI. Every upload gets viral-ready metadata — no manual work needed.</p>
             </div>
             <div class="feature-card glass-card card-glow">
                 <div class="feature-icon cyan">🎬</div>
-                <h3>Smart Video Editing</h3>
-                <p>Add background music from YouTube, text overlays, and professional effects — all processed server-side with FFmpeg.</p>
+                <h3>AI Video Edits</h3>
+                <p>Direct Insta to YouTube with AI edits — add background music, text overlays, and professional effects automatically before upload.</p>
             </div>
             <div class="feature-card glass-card card-glow">
                 <div class="feature-icon emerald">📤</div>
-                <h3>Auto YouTube Upload</h3>
-                <p>Connect your YouTube channel and upload videos directly. Set privacy, category, and let AI handle the metadata.</p>
+                <h3>Auto Upload to YouTube</h3>
+                <p>One-click auto upload with metadata. Connect your channel, set privacy, and let AI handle titles, tags, and descriptions for every video.</p>
             </div>
             <div class="feature-card glass-card card-glow">
                 <div class="feature-icon rose">📱</div>
-                <h3>Instagram Import</h3>
-                <p>Paste any Instagram Reel URL and we'll download, process, and re-upload it to your YouTube Shorts channel.</p>
+                <h3>Insta Reel to YouTube</h3>
+                <p>Paste any Instagram Reel URL → auto download, AI edit, generate metadata, and upload directly to your YouTube Shorts. Insta to YouTube in seconds.</p>
             </div>
             <div class="feature-card glass-card card-glow">
-                <div class="feature-icon amber">🪙</div>
-                <h3>Token System</h3>
-                <p>Flexible token-based pricing. Get free tokens daily, upgrade for more, or buy token packs as needed.</p>
+                <div class="feature-icon amber">🔧</div>
+                <h3>Manage Channel Uploads</h3>
+                <p>YouTube automation to manage channel uploads from one dashboard. Track uploads, monitor success rate, and control your content pipeline.</p>
             </div>
             <div class="feature-card glass-card card-glow">
                 <div class="feature-icon blue">📊</div>
-                <h3>Analytics Dashboard</h3>
-                <p>Track your uploads, token usage, and success rate with a beautiful real-time dashboard.</p>
+                <h3>Upload Analytics & Tokens</h3>
+                <p>Real-time dashboard to track auto uploads, AI metadata quality, token usage, and channel growth — all in one place.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Use Cases -->
+<section class="section" id="use-cases" style="background: var(--bg-secondary);">
+    <div class="container">
+        <div class="section-header">
+            <h2>What You Can <span class="text-gradient">Do</span></h2>
+            <p>See how creators use AutoTube AI for YouTube automation and Instagram to YouTube workflows.</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card glass-card card-glow">
+                <div class="feature-icon rose">📱➜🎬</div>
+                <h3>Insta Reel to YouTube Auto Upload</h3>
+                <p>Paste your Instagram Reel link and AutoTube AI will auto download, apply AI edits, generate metadata (title, tags, description), and upload directly to YouTube Shorts — fully automated.</p>
+            </div>
+            <div class="feature-card glass-card card-glow">
+                <div class="feature-icon violet">🏷️</div>
+                <h3>Auto Upload with AI Metadata</h3>
+                <p>Every video uploaded through AutoTube AI gets AI-generated metadata — SEO-optimized titles, keyword-rich tags, engaging descriptions, and trending hashtags. No more manual metadata entry.</p>
+            </div>
+            <div class="feature-card glass-card card-glow">
+                <div class="feature-icon emerald">📋</div>
+                <h3>YouTube Automation & Manage Channel Uploads</h3>
+                <p>Manage all your channel uploads from a single dashboard. Track which videos are processing, uploaded, or failed. Full YouTube automation to manage your content pipeline efficiently.</p>
+            </div>
+            <div class="feature-card glass-card card-glow">
+                <div class="feature-icon cyan">✂️</div>
+                <h3>Direct Insta to YouTube with AI Edits</h3>
+                <p>Don't just repost — enhance. AutoTube AI applies smart edits like background music, text overlays, and effects to your Instagram content before uploading to YouTube. Direct Insta to YouTube with AI edits.</p>
+            </div>
+            <div class="feature-card glass-card card-glow">
+                <div class="feature-icon amber">🎯</div>
+                <h3>Bulk Upload Shorts to YouTube</h3>
+                <p>Upload multiple videos from your device and let AI auto-generate unique metadata for each. Perfect for creators who want to batch upload Shorts with optimized tags and titles.</p>
+            </div>
+            <div class="feature-card glass-card card-glow">
+                <div class="feature-icon blue">📈</div>
+                <h3>Grow Your YouTube Channel Faster</h3>
+                <p>With AI-powered metadata, smart video edits, and automated uploads, your content reaches more viewers. YouTube automation that actually helps you grow — not just upload.</p>
             </div>
         </div>
     </div>
 </section>
 
 <!-- How It Works -->
-<section class="section" id="how-it-works" style="background: var(--bg-secondary);">
+<section class="section" id="how-it-works">
     <div class="container">
         <div class="section-header">
-            <h2>How It <span class="text-gradient">Works</span></h2>
-            <p>Three simple steps to automate your video workflow.</p>
+            <h2>How Auto Upload <span class="text-gradient">Works</span></h2>
+            <p>Three simple steps — Insta Reel to YouTube auto upload with AI metadata & edits.</p>
         </div>
         <div class="steps-grid">
             <div class="step-card glass-card">
                 <div class="step-number">1</div>
-                <h3>Upload or Import</h3>
-                <p>Upload a video from your device or paste an Instagram Reel URL to import content.</p>
+                <h3>Paste Insta Reel or Upload Video</h3>
+                <p>Paste any Instagram Reel URL or upload a video from your device. AutoTube AI handles the rest.</p>
             </div>
             <div class="step-card glass-card">
                 <div class="step-number">2</div>
-                <h3>AI Processes It</h3>
-                <p>AI analyzes your video, generates SEO-optimized metadata, edits with effects and music.</p>
+                <h3>AI Generates Metadata & Edits</h3>
+                <p>AI auto-generates optimized titles, tags, descriptions, and applies smart edits like music and text overlays.</p>
             </div>
             <div class="step-card glass-card">
                 <div class="step-number">3</div>
-                <h3>Auto-Publish</h3>
-                <p>Video is uploaded to your YouTube channel with the perfect title, description, and tags.</p>
+                <h3>Auto Upload to YouTube</h3>
+                <p>Your video is auto uploaded to YouTube with AI-generated metadata. Manage channel uploads from your dashboard.</p>
             </div>
         </div>
     </div>
@@ -201,12 +244,12 @@
 <!-- CTA -->
 <section class="cta-section">
     <div class="container" style="position:relative;">
-        <h2>Ready to <span class="text-gradient">Automate</span> Your Channel?</h2>
-        <p>Join thousands of creators who save hours every week with AI-powered video automation.</p>
+        <h2>Ready for <span class="text-gradient">YouTube Automation</span>?</h2>
+        <p>Auto upload Insta Reels to YouTube with AI metadata & edits. Manage channel uploads, grow faster — start free today.</p>
         {% if current_user.is_authenticated %}
-        <a href="/upload" class="btn btn-primary btn-lg">Upload Now →</a>
+        <a href="/upload" class="btn btn-primary btn-lg">Auto Upload Now →</a>
         {% else %}
-        <a href="/register" class="btn btn-primary btn-lg">Create Free Account →</a>
+        <a href="/register" class="btn btn-primary btn-lg">Start Free — Auto Upload Today →</a>
         {% endif %}
     </div>
 </section>
