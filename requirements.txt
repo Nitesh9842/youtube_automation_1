@@ -36,8 +36,8 @@ python-dotenv==1.0.1
 # Session Management
 Flask-Session==0.8.0
 
-# Payments (optional — app works without it)
-stripe==7.0.0
+# Payments (Razorpay)
+razorpay>=1.4.0
 
 # Build Tools
 setuptools>=75.1.0

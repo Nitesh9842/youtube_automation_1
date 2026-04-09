@@ -73,7 +73,7 @@
             {% if current_user.is_authenticated %}
             <a href="/dashboard" class="btn btn-primary btn-lg">Go to Dashboard →</a>
             {% else %}
-            <a href="/register" class="btn btn-primary btn-lg">Start Free — 50 Tokens</a>
+            <a href="/register" class="btn btn-primary btn-lg">Start Free — 40 Tokens</a>
             <a href="#use-cases" class="btn btn-secondary btn-lg">See What You Can Do</a>
             {% endif %}
         </div>
@@ -210,36 +210,102 @@
     <div class="container">
         <div class="section-header">
             <h2>Simple <span class="text-gradient">Pricing</span></h2>
-            <p>Start free, upgrade when you need more power.</p>
+            <p>Start free with 40 tokens. Upgrade when you need more power.</p>
         </div>
+
+        <!-- Billing Toggle -->
+        <div style="display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:32px;">
+            <span id="lp-label-monthly" style="font-size:0.95rem;font-weight:600;color:var(--text-primary);transition:color 0.3s;">Monthly</span>
+            <label style="position:relative;display:inline-block;width:52px;height:28px;cursor:pointer;">
+                <input type="checkbox" id="lp-billing-toggle" style="opacity:0;width:0;height:0;">
+                <span style="position:absolute;inset:0;background:var(--bg-glass);border:1px solid rgba(255,255,255,0.1);border-radius:14px;transition:0.3s;"></span>
+                <span id="lp-toggle-knob" style="position:absolute;left:3px;top:3px;width:22px;height:22px;background:var(--primary);border-radius:50%;transition:0.3s;"></span>
+            </label>
+            <span id="lp-label-yearly" style="font-size:0.95rem;font-weight:500;color:var(--text-muted);transition:color 0.3s;">Yearly <span style="background:linear-gradient(135deg,#10b981,#059669);color:#fff;padding:2px 8px;border-radius:10px;font-size:0.72rem;margin-left:4px;">Save ₹789</span></span>
+        </div>
+
         <div class="pricing-grid">
-            {% for key, plan in plans.items() %}
-            <div class="pricing-card glass-card card-glow {% if plan.get('popular') %}popular{% endif %}">
-                {% if plan.get('popular') %}
-                <div class="popular-badge">Most Popular</div>
-                {% endif %}
-                <div class="pricing-name">{{ plan.name }}</div>
-                <div class="pricing-price">{{ plan.price_display.split('/')[0] }}</div>
-                <div class="pricing-period">{% if plan.price_cents > 0 %}per month{% else %}forever free{% endif %}</div>
+            <!-- Free -->
+            <div class="pricing-card glass-card card-glow">
+                <div class="pricing-name">Free</div>
+                <div class="pricing-price">₹0</div>
+                <div class="pricing-period">forever free</div>
                 <ul class="pricing-features">
-                    {% for feature in plan.features %}
+                    {% for feature in plans['free'].features %}
                     <li>{{ feature }}</li>
                     {% endfor %}
                 </ul>
                 {% if current_user.is_authenticated %}
-                    {% if key == 'free' %}
-                    <a href="/dashboard" class="btn btn-secondary btn-block">Current Plan</a>
-                    {% else %}
-                    <button class="btn btn-primary btn-block" onclick="purchasePlan('{{ key }}')">Upgrade to {{ plan.name }}</button>
-                    {% endif %}
+                <a href="/dashboard" class="btn btn-secondary btn-block">Current Plan</a>
                 {% else %}
-                <a href="/register" class="btn {% if plan.get('popular') %}btn-primary{% else %}btn-secondary{% endif %} btn-block">Get Started</a>
+                <a href="/register" class="btn btn-secondary btn-block">Get Started</a>
                 {% endif %}
             </div>
-            {% endfor %}
+
+            <!-- Pro Monthly -->
+            <div class="pricing-card glass-card card-glow popular" id="lp-plan-monthly" style="display:block;">
+                <div class="popular-badge">Most Popular</div>
+                <div class="pricing-name">Pro</div>
+                <div class="pricing-price">₹399</div>
+                <div class="pricing-period">per month</div>
+                <ul class="pricing-features">
+                    {% for feature in plans['pro'].features %}
+                    <li>{{ feature }}</li>
+                    {% endfor %}
+                </ul>
+                {% if current_user.is_authenticated %}
+                <button class="btn btn-primary btn-block" onclick="purchasePlan('pro')">Upgrade to Pro</button>
+                {% else %}
+                <a href="/register" class="btn btn-primary btn-block">Get Started</a>
+                {% endif %}
+            </div>
+
+            <!-- Pro Yearly -->
+            <div class="pricing-card glass-card card-glow popular" id="lp-plan-yearly" style="display:none;">
+                <div class="popular-badge" style="background:linear-gradient(135deg,#10b981,#059669);">Best Value</div>
+                <div class="pricing-name">Pro Yearly</div>
+                <div class="pricing-price">₹3,999</div>
+                <div class="pricing-period">per year <span style="font-size:0.78rem;color:#10b981;margin-left:4px;">Save ₹789</span></div>
+                <ul class="pricing-features">
+                    {% for feature in plans['pro_yearly'].features %}
+                    <li>{{ feature }}</li>
+                    {% endfor %}
+                </ul>
+                {% if current_user.is_authenticated %}
+                <button class="btn btn-primary btn-block" style="background:linear-gradient(135deg,#10b981,#059669);" onclick="purchasePlan('pro_yearly')">Upgrade to Pro Yearly</button>
+                {% else %}
+                <a href="/register" class="btn btn-primary btn-block" style="background:linear-gradient(135deg,#10b981,#059669);">Get Started</a>
+                {% endif %}
+            </div>
         </div>
     </div>
 </section>
+
+<script>
+// Landing page billing toggle
+document.addEventListener('DOMContentLoaded', function() {
+    const toggle = document.getElementById('lp-billing-toggle');
+    if (!toggle) return;
+    toggle.addEventListener('change', function() {
+        const monthly = document.getElementById('lp-plan-monthly');
+        const yearly = document.getElementById('lp-plan-yearly');
+        const lm = document.getElementById('lp-label-monthly');
+        const ly = document.getElementById('lp-label-yearly');
+        const knob = document.getElementById('lp-toggle-knob');
+        if (this.checked) {
+            monthly.style.display = 'none'; yearly.style.display = 'block';
+            lm.style.color = 'var(--text-muted)'; lm.style.fontWeight = '500';
+            ly.style.color = 'var(--text-primary)'; ly.style.fontWeight = '600';
+            knob.style.left = '27px'; knob.style.background = '#10b981';
+        } else {
+            monthly.style.display = 'block'; yearly.style.display = 'none';
+            lm.style.color = 'var(--text-primary)'; lm.style.fontWeight = '600';
+            ly.style.color = 'var(--text-muted)'; ly.style.fontWeight = '500';
+            knob.style.left = '3px'; knob.style.background = 'var(--primary)';
+        }
+    });
+});
+</script>
 
 <!-- CTA -->
 <section class="cta-section">

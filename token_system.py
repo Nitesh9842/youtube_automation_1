@@ -11,13 +11,13 @@ from datetime import datetime, timedelta
 PLANS = {
     'free': {
         'name': 'Free',
-        'price_cents': 0,
-        'price_display': '$0',
-        'tokens_monthly': 50,
+        'price_paise': 0,
+        'price_display': '₹0',
+        'tokens_monthly': 40,
         'daily_refill': 0,
-        'max_tokens': 50,
+        'max_tokens': 40,
         'features': [
-            '50 tokens free trial (one-time)',
+            '40 tokens free on signup',
             'No daily refill',
             'AI video analysis',
             'Basic video editing',
@@ -28,14 +28,14 @@ PLANS = {
     },
     'pro': {
         'name': 'Pro',
-        'price_cents': 999,
-        'price_display': '$9.99/mo',
-        'tokens_monthly': 500,
-        'daily_refill': 25,
-        'max_tokens': 1000,
+        'price_paise': 39900,
+        'price_display': '₹399/mo',
+        'tokens_monthly': 250,
+        'daily_refill': 10,
+        'max_tokens': 500,
         'features': [
-            '500 tokens monthly',
-            '25 tokens daily refill',
+            '250 tokens monthly',
+            '10 tokens daily refill',
             'Priority AI processing',
             'Advanced video editing',
             'Bulk upload support',
@@ -45,25 +45,26 @@ PLANS = {
         'badge_color': '#8b5cf6',
         'popular': True,
     },
-    'enterprise': {
-        'name': 'Enterprise',
-        'price_cents': 2999,
-        'price_display': '$29.99/mo',
-        'tokens_monthly': 2000,
-        'daily_refill': 100,
-        'max_tokens': 5000,
+    'pro_yearly': {
+        'name': 'Pro Yearly',
+        'price_paise': 399900,
+        'price_display': '₹3,999/yr',
+        'tokens_monthly': 250,
+        'daily_refill': 10,
+        'max_tokens': 500,
+        'yearly': True,
         'features': [
-            '2000 tokens monthly',
-            '100 tokens daily refill',
-            'Ultra-fast AI processing',
-            'Premium video editing',
-            'Unlimited bulk uploads',
-            'Dedicated support',
-            'Advanced analytics',
-            'API access',
-            'Custom branding',
+            '250 tokens every month',
+            '3,000 tokens/year total',
+            '10 tokens daily refill',
+            'Priority AI processing',
+            'Advanced video editing',
+            'Bulk upload support',
+            'Priority support',
+            'Analytics dashboard',
         ],
-        'badge_color': '#f59e0b',
+        'badge_color': '#10b981',
+        'savings': 'Save ₹789',
     },
 }
 
@@ -79,9 +80,9 @@ TOKEN_COSTS = {
 # ─── Token Top-Up Packs ─────────────────────────────────────────────────────
 
 TOKEN_PACKS = [
-    {'id': 'pack_50', 'tokens': 50, 'price_cents': 499, 'price_display': '$4.99', 'savings': ''},
-    {'id': 'pack_200', 'tokens': 200, 'price_cents': 1499, 'price_display': '$14.99', 'savings': 'Save 25%'},
-    {'id': 'pack_500', 'tokens': 500, 'price_cents': 2999, 'price_display': '$29.99', 'savings': 'Save 40%'},
+    {'id': 'pack_50', 'tokens': 50, 'price_paise': 9900, 'price_display': '₹99', 'savings': ''},
+    {'id': 'pack_150', 'tokens': 150, 'price_paise': 24900, 'price_display': '₹249', 'savings': 'Save 17%'},
+    {'id': 'pack_350', 'tokens': 350, 'price_paise': 49900, 'price_display': '₹499', 'savings': 'Save 29%'},
 ]
 
 

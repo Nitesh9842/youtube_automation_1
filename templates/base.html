@@ -39,6 +39,7 @@
 <body data-page="{% block page_id %}{% endblock %}">
     <div id="toast-container" class="toast-container"></div>
     {% block body %}{% endblock %}
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <script src="{{ url_for('static', filename='js/app.js') }}"></script>
     {% block scripts %}{% endblock %}
 </body>

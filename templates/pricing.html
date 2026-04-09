@@ -40,31 +40,71 @@
                 </div>
             </div>
 
+            <!-- Billing Toggle -->
+            <div style="display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:24px;">
+                <span id="label-monthly" style="font-size:0.9rem;font-weight:600;color:var(--text-primary);transition:color 0.3s;">Monthly</span>
+                <label class="billing-toggle" style="position:relative;display:inline-block;width:52px;height:28px;cursor:pointer;">
+                    <input type="checkbox" id="billing-toggle" style="opacity:0;width:0;height:0;">
+                    <span style="position:absolute;inset:0;background:var(--bg-glass);border:1px solid rgba(255,255,255,0.1);border-radius:14px;transition:0.3s;"></span>
+                    <span id="toggle-knob" style="position:absolute;left:3px;top:3px;width:22px;height:22px;background:var(--primary);border-radius:50%;transition:0.3s;"></span>
+                </label>
+                <span id="label-yearly" style="font-size:0.9rem;font-weight:500;color:var(--text-muted);transition:color 0.3s;">Yearly <span style="background:linear-gradient(135deg,#10b981,#059669);color:#fff;padding:2px 8px;border-radius:10px;font-size:0.72rem;margin-left:4px;">Save ₹789</span></span>
+            </div>
+
             <!-- Plans -->
-            <h3 style="margin-bottom:20px;">Upgrade Plan</h3>
             <div class="pricing-grid" style="max-width:100%;">
-                {% for key, plan in plans.items() %}
-                <div class="pricing-card glass-card card-glow {% if plan.get('popular') %}popular{% endif %}">
-                    {% if plan.get('popular') %}
-                    <div class="popular-badge">Most Popular</div>
-                    {% endif %}
-                    <div class="pricing-name">{{ plan.name }}</div>
-                    <div class="pricing-price">{{ plan.price_display.split('/')[0] }}</div>
-                    <div class="pricing-period">{% if plan.price_cents > 0 %}per month{% else %}forever free{% endif %}</div>
+                <!-- Free Plan -->
+                <div class="pricing-card glass-card card-glow">
+                    <div class="pricing-name">Free</div>
+                    <div class="pricing-price">₹0</div>
+                    <div class="pricing-period">forever free</div>
                     <ul class="pricing-features">
-                        {% for feature in plan.features %}
+                        {% for feature in plans['free'].features %}
                         <li>{{ feature }}</li>
                         {% endfor %}
                     </ul>
-                    {% if key == current_user.plan %}
+                    {% if current_user.plan == 'free' %}
                     <button class="btn btn-secondary btn-block" disabled>Current Plan</button>
-                    {% elif key == 'free' %}
-                    <button class="btn btn-secondary btn-block" disabled>—</button>
                     {% else %}
-                    <button class="btn btn-primary btn-block" onclick="purchasePlan('{{ key }}')">Upgrade to {{ plan.name }}</button>
+                    <button class="btn btn-secondary btn-block" disabled>—</button>
                     {% endif %}
                 </div>
-                {% endfor %}
+
+                <!-- Pro Monthly -->
+                <div class="pricing-card glass-card card-glow popular" id="plan-card-monthly" style="display:block;">
+                    <div class="popular-badge">Most Popular</div>
+                    <div class="pricing-name">Pro</div>
+                    <div class="pricing-price">₹399</div>
+                    <div class="pricing-period">per month</div>
+                    <ul class="pricing-features">
+                        {% for feature in plans['pro'].features %}
+                        <li>{{ feature }}</li>
+                        {% endfor %}
+                    </ul>
+                    {% if current_user.plan == 'pro' %}
+                    <button class="btn btn-secondary btn-block" disabled>Current Plan</button>
+                    {% else %}
+                    <button class="btn btn-primary btn-block" onclick="purchasePlan('pro')">Upgrade to Pro</button>
+                    {% endif %}
+                </div>
+
+                <!-- Pro Yearly -->
+                <div class="pricing-card glass-card card-glow popular" id="plan-card-yearly" style="display:none;">
+                    <div class="popular-badge" style="background:linear-gradient(135deg,#10b981,#059669);">Best Value</div>
+                    <div class="pricing-name">Pro Yearly</div>
+                    <div class="pricing-price">₹3,999</div>
+                    <div class="pricing-period">per year <span style="font-size:0.78rem;color:#10b981;margin-left:4px;">Save ₹789</span></div>
+                    <ul class="pricing-features">
+                        {% for feature in plans['pro_yearly'].features %}
+                        <li>{{ feature }}</li>
+                        {% endfor %}
+                    </ul>
+                    {% if current_user.plan == 'pro' %}
+                    <button class="btn btn-secondary btn-block" disabled>Current Plan</button>
+                    {% else %}
+                    <button class="btn btn-primary btn-block" style="background:linear-gradient(135deg,#10b981,#059669);" onclick="purchasePlan('pro_yearly')">Upgrade to Pro Yearly</button>
+                    {% endif %}
+                </div>
             </div>
 
             <!-- Token Packs -->
@@ -120,6 +160,40 @@
         </div>
     </div>
 </div>
+
+<script>
+// Billing toggle — switch between monthly/yearly cards
+const billingToggle = document.getElementById('billing-toggle');
+const monthlyCard = document.getElementById('plan-card-monthly');
+const yearlyCard = document.getElementById('plan-card-yearly');
+const labelMonthly = document.getElementById('label-monthly');
+const labelYearly = document.getElementById('label-yearly');
+const toggleKnob = document.getElementById('toggle-knob');
+
+if (billingToggle) {
+    billingToggle.addEventListener('change', function() {
+        if (this.checked) {
+            monthlyCard.style.display = 'none';
+            yearlyCard.style.display = 'block';
+            labelMonthly.style.color = 'var(--text-muted)';
+            labelMonthly.style.fontWeight = '500';
+            labelYearly.style.color = 'var(--text-primary)';
+            labelYearly.style.fontWeight = '600';
+            toggleKnob.style.left = '27px';
+            toggleKnob.style.background = '#10b981';
+        } else {
+            monthlyCard.style.display = 'block';
+            yearlyCard.style.display = 'none';
+            labelMonthly.style.color = 'var(--text-primary)';
+            labelMonthly.style.fontWeight = '600';
+            labelYearly.style.color = 'var(--text-muted)';
+            labelYearly.style.fontWeight = '500';
+            toggleKnob.style.left = '3px';
+            toggleKnob.style.background = 'var(--primary)';
+        }
+    });
+}
+</script>
 
 {% else %}
 <!-- Public pricing page — redirect via landing -->

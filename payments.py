@@ -1,9 +1,11 @@
 """
 Payments Blueprint for AutoTube AI platform.
-Stripe integration for plan subscriptions and token top-ups.
+Razorpay integration for plan subscriptions and token top-ups.
 """
 
 import os
+import hmac
+import hashlib
 import logging
 from flask import Blueprint, request, jsonify
 from flask_login import login_required, current_user
@@ -17,26 +19,24 @@ logger = logging.getLogger(__name__)
 
 payments_bp = Blueprint('payments', __name__)
 
-# Stripe setup (optional — works without keys in dev mode)
-STRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY', '')
-STRIPE_PUBLISHABLE_KEY = os.getenv('STRIPE_PUBLISHABLE_KEY', '')
-STRIPE_WEBHOOK_SECRET = os.getenv('STRIPE_WEBHOOK_SECRET', '')
+# Razorpay setup (optional — works without keys in dev mode)
+RAZORPAY_KEY_ID = os.getenv('RAZORPAY_KEY_ID', '')
+RAZORPAY_KEY_SECRET = os.getenv('RAZORPAY_KEY_SECRET', '')
 
-stripe = None
-if STRIPE_SECRET_KEY:
+razorpay_client = None
+if RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET:
     try:
-        import stripe as stripe_lib
-        stripe_lib.api_key = STRIPE_SECRET_KEY
-        stripe = stripe_lib
-        logger.info("✅ Stripe initialized")
+        import razorpay
+        razorpay_client = razorpay.Client(auth=(RAZORPAY_KEY_ID, RAZORPAY_KEY_SECRET))
+        logger.info("✅ Razorpay initialized")
     except ImportError:
-        logger.warning("⚠️ stripe package not installed — payments will use mock mode")
+        logger.warning("⚠️ razorpay package not installed — payments will use mock mode")
 else:
-    logger.info("ℹ️ No STRIPE_SECRET_KEY — payments in mock mode")
+    logger.info("ℹ️ No RAZORPAY_KEY_ID — payments in mock mode")
 
 
-def _stripe_available():
-    return stripe is not None and STRIPE_SECRET_KEY
+def _razorpay_available():
+    return razorpay_client is not None and RAZORPAY_KEY_ID
 
 
 # ─── Routes ──────────────────────────────────────────────────────────────────
@@ -47,29 +47,31 @@ def get_pricing():
     return jsonify({
         'plans': {k: {**v, 'key': k} for k, v in PLANS.items()},
         'token_packs': TOKEN_PACKS,
-        'stripe_available': _stripe_available(),
-        'publishable_key': STRIPE_PUBLISHABLE_KEY if _stripe_available() else '',
+        'razorpay_available': _razorpay_available(),
+        'razorpay_key_id': RAZORPAY_KEY_ID if _razorpay_available() else '',
     })
 
 
 @payments_bp.route('/api/create-checkout', methods=['POST'])
 @login_required
 def create_checkout():
-    """Create a Stripe Checkout session for plan upgrade or token pack."""
+    """Create a Razorpay Order for plan upgrade or token pack."""
     data = request.get_json(silent=True) or {}
     item_type = data.get('type', '')  # 'plan' or 'pack'
     item_id = data.get('id', '')
 
-    if not _stripe_available():
+    if not _razorpay_available():
         # Mock mode — instant "purchase"
         if item_type == 'plan' and item_id in PLANS:
             plan = PLANS[item_id]
             tokens = plan['tokens_monthly']
-            update_user(current_user.id, plan=item_id)
+            # For yearly plans, store as 'pro' plan but add extra info
+            plan_key = 'pro' if item_id in ('pro', 'pro_yearly') else item_id
+            update_user(current_user.id, plan=plan_key)
             add_tokens(current_user.id, tokens)
             create_transaction(
-                current_user.id, plan['price_cents'], tokens,
-                plan_purchased=item_id, stripe_session_id='mock_' + item_id
+                current_user.id, plan['price_paise'], tokens,
+                plan_purchased=item_id, razorpay_payment_id='mock_' + item_id
             )
             return jsonify({
                 'success': True, 'mock': True,
@@ -80,8 +82,8 @@ def create_checkout():
             if pack:
                 add_tokens(current_user.id, pack['tokens'])
                 create_transaction(
-                    current_user.id, pack['price_cents'], pack['tokens'],
-                    stripe_session_id='mock_' + item_id
+                    current_user.id, pack['price_paise'], pack['tokens'],
+                    razorpay_payment_id='mock_' + item_id
                 )
                 return jsonify({
                     'success': True, 'mock': True,
@@ -89,117 +91,139 @@ def create_checkout():
                 })
         return jsonify({'success': False, 'error': 'Invalid item'}), 400
 
-    # Real Stripe checkout
+    # Real Razorpay order
     try:
-        base_url = request.host_url.rstrip('/')
-
         if item_type == 'plan' and item_id in PLANS:
             plan = PLANS[item_id]
-            session_obj = stripe.checkout.Session.create(
-                payment_method_types=['card'],
-                line_items=[{
-                    'price_data': {
-                        'currency': 'usd',
-                        'product_data': {
-                            'name': f'YouTube Auto — {plan["name"]} Plan',
-                            'description': f'{plan["tokens_monthly"]} tokens/month',
-                        },
-                        'unit_amount': plan['price_cents'],
-                    },
-                    'quantity': 1,
-                }],
-                mode='payment',
-                success_url=f'{base_url}/pricing?success=1',
-                cancel_url=f'{base_url}/pricing?cancelled=1',
-                metadata={
+            order_data = {
+                'amount': plan['price_paise'],
+                'currency': 'INR',
+                'receipt': f'plan_{item_id}_{current_user.id}',
+                'notes': {
                     'user_id': str(current_user.id),
                     'type': 'plan',
                     'plan_id': item_id,
                     'tokens': str(plan['tokens_monthly']),
-                },
-            )
-            return jsonify({'success': True, 'checkout_url': session_obj.url})
+                }
+            }
+            order = razorpay_client.order.create(data=order_data)
+            user = get_user_by_id(current_user.id)
+            return jsonify({
+                'success': True,
+                'order_id': order['id'],
+                'amount': plan['price_paise'],
+                'currency': 'INR',
+                'razorpay_key_id': RAZORPAY_KEY_ID,
+                'plan_name': plan['name'],
+                'user_email': user.get('email', '') if user else '',
+                'user_name': user.get('username', '') if user else '',
+            })
 
         elif item_type == 'pack':
             pack = next((p for p in TOKEN_PACKS if p['id'] == item_id), None)
             if not pack:
                 return jsonify({'success': False, 'error': 'Invalid pack'}), 400
-            session_obj = stripe.checkout.Session.create(
-                payment_method_types=['card'],
-                line_items=[{
-                    'price_data': {
-                        'currency': 'usd',
-                        'product_data': {
-                            'name': f'Token Pack — {pack["tokens"]} tokens',
-                        },
-                        'unit_amount': pack['price_cents'],
-                    },
-                    'quantity': 1,
-                }],
-                mode='payment',
-                success_url=f'{base_url}/pricing?success=1',
-                cancel_url=f'{base_url}/pricing?cancelled=1',
-                metadata={
+            order_data = {
+                'amount': pack['price_paise'],
+                'currency': 'INR',
+                'receipt': f'pack_{item_id}_{current_user.id}',
+                'notes': {
                     'user_id': str(current_user.id),
                     'type': 'pack',
                     'pack_id': item_id,
                     'tokens': str(pack['tokens']),
-                },
-            )
-            return jsonify({'success': True, 'checkout_url': session_obj.url})
+                }
+            }
+            order = razorpay_client.order.create(data=order_data)
+            user = get_user_by_id(current_user.id)
+            return jsonify({
+                'success': True,
+                'order_id': order['id'],
+                'amount': pack['price_paise'],
+                'currency': 'INR',
+                'razorpay_key_id': RAZORPAY_KEY_ID,
+                'plan_name': f'{pack["tokens"]} Token Pack',
+                'user_email': user.get('email', '') if user else '',
+                'user_name': user.get('username', '') if user else '',
+            })
 
         return jsonify({'success': False, 'error': 'Invalid request'}), 400
 
     except Exception as e:
-        logger.error(f"Stripe checkout error: {e}")
+        logger.error(f"Razorpay order creation error: {e}")
         return jsonify({'success': False, 'error': str(e)}), 500
 
 
-@payments_bp.route('/api/webhook', methods=['POST'])
-def stripe_webhook():
-    """Handle Stripe webhook events."""
-    if not _stripe_available():
-        return jsonify({'received': True}), 200
+@payments_bp.route('/api/razorpay-verify', methods=['POST'])
+@login_required
+def razorpay_verify():
+    """Verify Razorpay payment signature and fulfill the order."""
+    data = request.get_json(silent=True) or {}
+    razorpay_order_id = data.get('razorpay_order_id', '')
+    razorpay_payment_id = data.get('razorpay_payment_id', '')
+    razorpay_signature = data.get('razorpay_signature', '')
+    item_type = data.get('type', '')
+    item_id = data.get('id', '')
 
-    payload = request.data
-    sig_header = request.headers.get('Stripe-Signature', '')
+    if not all([razorpay_order_id, razorpay_payment_id, razorpay_signature]):
+        return jsonify({'success': False, 'error': 'Missing payment details'}), 400
 
+    # Verify signature using HMAC SHA256
     try:
-        if STRIPE_WEBHOOK_SECRET:
-            event = stripe.Webhook.construct_event(payload, sig_header, STRIPE_WEBHOOK_SECRET)
-        else:
-            event = stripe.Event.construct_from(
-                request.get_json(silent=True), stripe.api_key
-            )
+        message = f'{razorpay_order_id}|{razorpay_payment_id}'
+        generated_signature = hmac.new(
+            RAZORPAY_KEY_SECRET.encode('utf-8'),
+            message.encode('utf-8'),
+            hashlib.sha256
+        ).hexdigest()
+
+        if generated_signature != razorpay_signature:
+            logger.warning(f"Razorpay signature mismatch for order {razorpay_order_id}")
+            return jsonify({'success': False, 'error': 'Payment verification failed'}), 400
+
     except Exception as e:
-        logger.error(f"Webhook verification failed: {e}")
-        return jsonify({'error': 'Invalid signature'}), 400
+        logger.error(f"Signature verification error: {e}")
+        return jsonify({'success': False, 'error': 'Verification error'}), 500
 
-    if event['type'] == 'checkout.session.completed':
-        session_data = event['data']['object']
-        meta = session_data.get('metadata', {})
-        user_id = meta.get('user_id', '')
-        tokens = int(meta.get('tokens', 0))
+    # Signature is valid — fulfill the order
+    try:
+        if item_type == 'plan' and item_id in PLANS:
+            plan = PLANS[item_id]
+            tokens = plan['tokens_monthly']
+            plan_key = 'pro' if item_id in ('pro', 'pro_yearly') else item_id
+            update_user(current_user.id, plan=plan_key)
+            add_tokens(current_user.id, tokens)
+            create_transaction(
+                current_user.id, plan['price_paise'], tokens,
+                plan_purchased=item_id,
+                razorpay_payment_id=razorpay_payment_id
+            )
+            logger.info(f"Plan upgraded: user={current_user.id}, plan={item_id}, tokens={tokens}")
+            return jsonify({
+                'success': True,
+                'message': f'Plan upgraded to {plan["name"]}! {tokens} tokens added.'
+            })
 
-        if user_id and tokens:
-            if meta.get('type') == 'plan':
-                plan_id = meta.get('plan_id', 'pro')
-                update_user(user_id, plan=plan_id)
-                add_tokens(user_id, tokens)
-                create_transaction(
-                    user_id, session_data.get('amount_total', 0), tokens,
-                    plan_purchased=plan_id,
-                    stripe_session_id=session_data.get('id', '')
-                )
-            elif meta.get('type') == 'pack':
-                add_tokens(user_id, tokens)
-                create_transaction(
-                    user_id, session_data.get('amount_total', 0), tokens,
-                    stripe_session_id=session_data.get('id', '')
-                )
-            logger.info(f"Payment completed: user={user_id}, tokens={tokens}")
+        elif item_type == 'pack':
+            pack = next((p for p in TOKEN_PACKS if p['id'] == item_id), None)
+            if not pack:
+                return jsonify({'success': False, 'error': 'Invalid pack'}), 400
+            add_tokens(current_user.id, pack['tokens'])
+            create_transaction(
+                current_user.id, pack['price_paise'], pack['tokens'],
+                razorpay_payment_id=razorpay_payment_id
+            )
+            logger.info(f"Token pack purchased: user={current_user.id}, pack={item_id}, tokens={pack['tokens']}")
+            return jsonify({
+                'success': True,
+                'message': f'{pack["tokens"]} tokens added to your account!'
+            })
 
-    return jsonify({'received': True}), 200
+        return jsonify({'success': False, 'error': 'Invalid item type'}), 400
+
+    except Exception as e:
+        logger.error(f"Order fulfillment error: {e}")
+        return jsonify({'success': False, 'error': str(e)}), 500
 
 
 @payments_bp.route('/api/billing')

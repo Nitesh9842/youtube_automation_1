@@ -38,13 +38,13 @@ def _default_user_fields():
     """Default field values for a new user document."""
     return {
         'plan': 'free',
-        'tokens_balance': 50,
+        'tokens_balance': 40,
         'total_tokens_used': 0,
         'total_uploads': 0,
         'success_uploads': 0,
         'avatar_url': '',
         'last_refill': datetime.utcnow().isoformat(),
-        'stripe_customer_id': '',
+        'razorpay_customer_id': '',
         'youtube_credentials': '',
         'created_at': datetime.utcnow().isoformat(),
     }
@@ -179,15 +179,15 @@ def increment_uploads(user_id, success=True):
 
 # ─── Transaction Operations ──────────────────────────────────────────────────
 
-def create_transaction(user_id, amount_cents, tokens_purchased,
-                       plan_purchased='', stripe_session_id=''):
+def create_transaction(user_id, amount_paise, tokens_purchased,
+                       plan_purchased='', razorpay_payment_id=''):
     """Record a payment transaction."""
     db.collection(TRANSACTIONS_COL).add({
         'user_id': str(user_id),
-        'amount_cents': amount_cents,
+        'amount_paise': amount_paise,
         'tokens_purchased': tokens_purchased,
         'plan_purchased': plan_purchased,
-        'stripe_session_id': stripe_session_id,
+        'razorpay_payment_id': razorpay_payment_id,
         'status': 'completed',
         'created_at': datetime.utcnow().isoformat(),
     })

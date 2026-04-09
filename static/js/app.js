@@ -468,7 +468,56 @@
         }
     };
 
-    // ─── Pricing / Checkout ──────────────────────────────────────────────────
+    // ─── Pricing / Checkout (Razorpay) ──────────────────────────────────────
+    function _openRazorpayCheckout(orderData, itemType, itemId) {
+        const options = {
+            key: orderData.razorpay_key_id,
+            amount: orderData.amount,
+            currency: orderData.currency || 'INR',
+            name: 'AutoTube AI',
+            description: orderData.plan_name || 'Token Purchase',
+            order_id: orderData.order_id,
+            prefill: {
+                email: orderData.user_email || '',
+                name: orderData.user_name || '',
+            },
+            theme: {
+                color: '#8b5cf6',
+                backdrop_color: 'rgba(10, 10, 26, 0.85)',
+            },
+            handler: async function(response) {
+                // Payment successful — verify on server
+                const verifyData = await api('/api/razorpay-verify', {
+                    method: 'POST',
+                    body: {
+                        razorpay_order_id: response.razorpay_order_id,
+                        razorpay_payment_id: response.razorpay_payment_id,
+                        razorpay_signature: response.razorpay_signature,
+                        type: itemType,
+                        id: itemId,
+                    }
+                });
+                if (verifyData && verifyData.success) {
+                    toast.show(verifyData.message || 'Payment successful!', 'success');
+                    setTimeout(() => location.reload(), 1500);
+                } else {
+                    toast.show(verifyData?.error || 'Payment verification failed', 'error');
+                }
+            },
+            modal: {
+                ondismiss: function() {
+                    toast.show('Payment cancelled.', 'info');
+                }
+            }
+        };
+
+        const rzp = new Razorpay(options);
+        rzp.on('payment.failed', function(response) {
+            toast.show('Payment failed: ' + (response.error?.description || 'Unknown error'), 'error');
+        });
+        rzp.open();
+    }
+
     window.purchasePlan = async function(planId) {
         const data = await api('/api/create-checkout', {
             method: 'POST',
@@ -478,8 +527,8 @@
         if (data.mock) {
             toast.show(data.message, 'success');
             setTimeout(() => location.reload(), 1500);
-        } else if (data.checkout_url) {
-            window.location.href = data.checkout_url;
+        } else if (data.order_id) {
+            _openRazorpayCheckout(data, 'plan', planId);
         } else {
             toast.show(data.error || 'Checkout failed', 'error');
         }
@@ -494,8 +543,8 @@
         if (data.mock) {
             toast.show(data.message, 'success');
             setTimeout(() => location.reload(), 1500);
-        } else if (data.checkout_url) {
-            window.location.href = data.checkout_url;
+        } else if (data.order_id) {
+            _openRazorpayCheckout(data, 'pack', packId);
         } else {
             toast.show(data.error || 'Checkout failed', 'error');
         }
@@ -578,16 +627,13 @@
         if (page === 'pricing' && document.querySelector('.sidebar')) { initSidebar(); updateTokenWidget(); }
         if (page === 'login' || page === 'register') initAuthForms();
 
-        // Check for success/cancel in URL (Stripe redirect)
+        // Check for success in URL (Razorpay redirect fallback)
         const params = new URLSearchParams(window.location.search);
         if (params.get('success') === '1') {
             toast.show('Payment successful! Tokens have been added.', 'success');
             history.replaceState({}, '', window.location.pathname);
         }
-        if (params.get('cancelled') === '1') {
-            toast.show('Payment cancelled.', 'info');
-            history.replaceState({}, '', window.location.pathname);
-        }
     });
 
 })();
+
