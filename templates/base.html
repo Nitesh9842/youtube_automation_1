@@ -3,10 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#06060f">
+    <meta name="color-scheme" content="dark">
     
+    <!-- Preconnect for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
     <!-- SEO & Metadata -->
     <meta name="description" content="{% block meta_description %}AI-powered YouTube automation platform. Upload, edit, and publish videos with AI-generated metadata.{% endblock %}">
-    <meta name="keywords" content="Insta Reel to YouTube, Auto Upload YouTube, YouTube Automation, AI Video Editor, AutoTube AI, Manage Channel Uploads, Instagram to YouTube AI Edits, YouTube Upload Bot, Video Metadata Generator, AI Metadata">
+    <meta name="keywords" content="Insta Reel to YouTube, Auto Upload YouTube, YouTube Automation, AI Video Editor, AutoTube AI, Manage Channel Uploads, Instagram to YouTube AI Edits, YouTube Automation Tool, AI Video Uploader, Video Metadata Generator, AI Metadata, Instagram Reels to YouTube Shorts">
+    <meta name="robots" content="index, follow">
+    <meta name="author" content="AutoTube AI">
     <title>{% block title %}AutoTube AI{% endblock %}</title>
     
     <!-- Canonical URL -->
@@ -14,10 +22,12 @@
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
+    <meta property="og:site_name" content="AutoTube AI">
     <meta property="og:url" content="{% block og_url %}https://autotubeai.me{{ request.path }}{% endblock %}">
     <meta property="og:title" content="{% block og_title %}AutoTube AI — Insta Reel to YouTube Auto Upload with AI Edits{% endblock %}">
     <meta property="og:description" content="{% block og_description %}AI-powered YouTube automation platform. Upload, edit, and publish videos with AI-generated metadata.{% endblock %}">
     <meta property="og:image" content="https://autotubeai.me/static/img/logo.png">
+    <meta property="og:locale" content="en_US">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
@@ -31,7 +41,9 @@
     {% endif %}
     
     <!-- Icons & Favicon -->
-    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='img/logo.png') }}">
+    <link rel="icon" href="/favicon.ico" sizes="48x48">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='img/logo_120.png') }}">
+    <link rel="icon" type="image/png" sizes="192x192" href="{{ url_for('static', filename='img/logo.png') }}">
     <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='img/logo.png') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     {% block head %}{% endblock %}

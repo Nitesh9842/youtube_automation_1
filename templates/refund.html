@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% block title %}Refund Policy — AutoTube AI{% endblock %}
+{% block meta_description %}Read AutoTube AI's refund policy. We offer a 7-day refund for Pro subscriptions. Learn about eligibility, how to request a refund, and our processing timeline.{% endblock %}
+{% block og_title %}Refund Policy — AutoTube AI{% endblock %}
+{% block og_description %}AutoTube AI offers a 7-day refund for Pro subscriptions. Read our complete refund policy.{% endblock %}
+{% block twitter_title %}Refund Policy — AutoTube AI{% endblock %}
+{% block twitter_description %}AutoTube AI offers a 7-day refund for Pro subscriptions. Read our complete refund policy.{% endblock %}
+{% block page_id %}refund{% endblock %}
+
+{% block body %}
+<!-- Navigation -->
+<nav class="landing-nav scrolled" id="landing-nav">
+    <div class="nav-inner">
+        <a href="/" class="nav-logo">
+            <img src="{{ url_for('static', filename='img/logo.png') }}" alt="AutoTube AI Logo" class="nav-logo-img">
+            <span>Auto<span class="text-gradient">Tube AI</span></span>
+        </a>
+        <ul class="nav-links" id="nav-links">
+            <li><a href="/#features">Features</a></li>
+            <li><a href="/#how-it-works">How It Works</a></li>
+            <li><a href="/#pricing">Pricing</a></li>
+            {% if current_user.is_authenticated %}
+            <li class="mobile-nav-action"><a href="/dashboard" class="btn btn-primary btn-sm btn-block">Dashboard</a></li>
+            {% else %}
+            <li class="mobile-nav-action"><a href="/login" class="btn btn-ghost btn-sm btn-block">Log In</a></li>
+            <li class="mobile-nav-action"><a href="/register" class="btn btn-primary btn-sm btn-block">Get Started Free</a></li>
+            {% endif %}
+        </ul>
+        <div class="nav-actions">
+            {% if current_user.is_authenticated %}
+            <a href="/dashboard" class="btn btn-primary btn-sm">Dashboard</a>
+            {% else %}
+            <a href="/login" class="btn btn-ghost btn-sm">Log In</a>
+            <a href="/register" class="btn btn-primary btn-sm">Get Started Free</a>
+            {% endif %}
+        </div>
+        <button class="mobile-menu-btn">☰</button>
+    </div>
+</nav>
+
+<div class="container" style="padding: 120px 24px 80px; max-width: 800px;">
+    <h1 style="margin-bottom: 8px;">Refund Policy</h1>
+    <p style="color: var(--text-muted); margin-bottom: 40px;">Last updated: {{ current_year }}</p>
+
+    <div class="glass-card" style="padding: 32px; margin-bottom: 24px;">
+        <h2 class="mt-2 mb-2" style="font-size: 1.3rem;">1. Refund Eligibility</h2>
+        <p style="color: var(--text-secondary); line-height: 1.7;">We offer a <strong style="color: var(--accent-emerald);">7-day refund window</strong> from the date of purchase for all Pro subscriptions (monthly and yearly). If you are not satisfied with AutoTube AI, you may request a full refund within this period — no questions asked.</p>
+    </div>
+
+    <div class="glass-card" style="padding: 32px; margin-bottom: 24px;">
+        <h2 class="mt-2 mb-2" style="font-size: 1.3rem;">2. Conditions</h2>
+        <ul style="color: var(--text-secondary); line-height: 1.8; padding-left: 20px;">
+            <li>Refund requests must be made within <strong>7 days</strong> of the original purchase date.</li>
+            <li>If you have used more than <strong>50% of your monthly tokens</strong> before requesting a refund, we may issue a partial refund at our discretion.</li>
+            <li>Free plan users are not eligible for refunds as no payment is made.</li>
+            <li>Token pack purchases (one-time top-ups) are <strong>non-refundable</strong> once tokens have been used.</li>
+            <li>Refunds for yearly plans follow the same 7-day window from the initial purchase date.</li>
+        </ul>
+    </div>
+
+    <div class="glass-card" style="padding: 32px; margin-bottom: 24px;">
+        <h2 class="mt-2 mb-2" style="font-size: 1.3rem;">3. How to Request a Refund</h2>
+        <p style="color: var(--text-secondary); line-height: 1.7; margin-bottom: 16px;">To request a refund, please email us with the following details:</p>
+        <ul style="color: var(--text-secondary); line-height: 1.8; padding-left: 20px;">
+            <li><strong>Email:</strong> <a href="mailto:niteshsain9842@gmail.com" style="color: var(--accent-violet-light);">niteshsain9842@gmail.com</a></li>
+            <li><strong>Subject:</strong> "Refund Request — [Your Username]"</li>
+            <li><strong>Include:</strong> Your registered email, payment ID, and reason for refund (optional).</li>
+        </ul>
+    </div>
+
+    <div class="glass-card" style="padding: 32px; margin-bottom: 24px;">
+        <h2 class="mt-2 mb-2" style="font-size: 1.3rem;">4. Processing Timeline</h2>
+        <p style="color: var(--text-secondary); line-height: 1.7;">Once approved, refunds are processed within <strong>5–7 business days</strong>. The amount will be credited back to the original payment method (Razorpay/UPI/card). You will receive a confirmation email once the refund is initiated.</p>
+    </div>
+
+    <div class="glass-card" style="padding: 32px; margin-bottom: 24px;">
+        <h2 class="mt-2 mb-2" style="font-size: 1.3rem;">5. Cancellation</h2>
+        <p style="color: var(--text-secondary); line-height: 1.7;">You can cancel your subscription at any time from your account settings. Upon cancellation, you will continue to have access to Pro features until the end of your current billing period. No further charges will be made.</p>
+    </div>
+
+    <div class="glass-card" style="padding: 32px;">
+        <h2 class="mt-2 mb-2" style="font-size: 1.3rem;">6. Contact</h2>
+        <p style="color: var(--text-secondary); line-height: 1.7;">If you have questions about this refund policy, please reach out at <a href="mailto:niteshsain9842@gmail.com" style="color: var(--accent-violet-light);">niteshsain9842@gmail.com</a> or visit our <a href="/contact" style="color: var(--accent-violet-light);">Contact page</a>.</p>
+    </div>
+
+    <div class="mt-4">
+        <a href="/" class="btn btn-secondary">← Back to Home</a>
+    </div>
+</div>
+
+<!-- Footer -->
+{% include "partials/footer.html" %}
+{% endblock %}

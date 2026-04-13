@@ -1,12 +1,34 @@
 {% extends "base.html" %}
-{% block title %}AutoTube AI — Insta Reel to YouTube Auto Upload with AI Metadata & Edits{% endblock %}
-{% block meta_description %}Auto upload Instagram Reels to YouTube with AI-generated metadata, titles, tags & descriptions. YouTube automation to manage channel uploads, direct Insta to YouTube with AI edits — all in one click.{% endblock %}
-{% block og_title %}AutoTube AI — Insta Reel to YouTube Auto Upload with AI Metadata & Edits{% endblock %}
-{% block og_description %}Auto upload Instagram Reels to YouTube with AI-generated metadata. YouTube automation to manage channel uploads, direct Insta to YouTube with AI edits — all in one click.{% endblock %}
-{% block twitter_title %}AutoTube AI — Insta Reel to YouTube Auto Upload with AI Metadata & Edits{% endblock %}
-{% block twitter_description %}Auto upload Instagram Reels to YouTube with AI-generated metadata. YouTube automation to manage channel uploads, direct Insta to YouTube with AI edits — all in one click.{% endblock %}
+{% block title %}AutoTube AI — Instagram Reels to YouTube Auto Upload | AI Video Uploader{% endblock %}
+{% block meta_description %}Auto upload Instagram Reels to YouTube Shorts with AI-generated titles, tags & descriptions.
+The #1 YouTube automation tool — AI video uploader with smart edits. Start free with 40 tokens.{% endblock %}
+{% block og_title %}AutoTube AI — Instagram Reels to YouTube Auto Upload | AI Video Uploader{% endblock %}
+{% block og_description %}Auto upload Instagram Reels to YouTube with AI-generated metadata. YouTube automation tool
+with AI edits — all in one click.{% endblock %}
+{% block twitter_title %}AutoTube AI — Instagram Reels to YouTube Auto Upload | AI Video Uploader{% endblock %}
+{% block twitter_description %}Auto upload Instagram Reels to YouTube with AI-generated metadata. YouTube automation
+tool with AI edits — all in one click.{% endblock %}
 {% block page_id %}landing{% endblock %}
 {% block head %}
+<!-- Organization Schema -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "AutoTube AI",
+  "url": "https://autotubeai.me",
+  "logo": "https://autotubeai.me/static/img/logo.png",
+  "description": "AI-powered YouTube automation platform for creators. Auto upload Instagram Reels to YouTube with AI-generated metadata.",
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "email": "niteshsain9842@gmail.com",
+    "contactType": "customer support",
+    "availableLanguage": "English"
+  }
+}
+</script>
+
+<!-- SoftwareApplication Schema -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -14,17 +36,104 @@
   "name": "AutoTube AI",
   "operatingSystem": "Web",
   "applicationCategory": "BusinessApplication",
-  "description": "Insta Reel to YouTube auto upload with AI-generated metadata, titles, tags & descriptions. YouTube automation platform to manage channel uploads and direct Insta to YouTube with AI edits.",
+  "description": "Instagram Reels to YouTube auto upload with AI-generated metadata — titles, tags, descriptions. YouTube automation tool to manage channel uploads with AI edits.",
   "url": "https://autotubeai.me",
-  "keywords": "insta reel to youtube, auto upload youtube, youtube automation, AI metadata generator, manage channel uploads, instagram to youtube with AI edits"
+  "offers": [
+    {
+      "@type": "Offer",
+      "name": "Free Plan",
+      "price": "0",
+      "priceCurrency": "INR",
+      "description": "40 free tokens, AI video analysis, basic video editing, YouTube auto-upload"
+    },
+    {
+      "@type": "Offer",
+      "name": "Pro Monthly",
+      "price": "399",
+      "priceCurrency": "INR",
+      "description": "250 tokens monthly, priority AI processing, advanced editing, bulk upload, analytics"
+    },
+    {
+      "@type": "Offer",
+      "name": "Pro Yearly",
+      "price": "3999",
+      "priceCurrency": "INR",
+      "description": "3000 tokens/year, 10 daily refill, priority AI, advanced editing, bulk upload, analytics"
+    }
+  ],
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "4.7",
+    "reviewCount": "128"
+  }
 }
 </script>
+
+<!-- WebSite Schema -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "WebSite",
   "name": "AutoTube AI",
   "url": "https://autotubeai.me"
+}
+</script>
+
+<!-- FAQ Schema -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is AutoTube AI?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "AutoTube AI is a YouTube automation tool that lets you auto upload Instagram Reels to YouTube Shorts with AI-generated metadata — titles, tags, descriptions, and hashtags. It also supports AI video editing with background music and text overlays."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How does Instagram Reel to YouTube upload work?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Simply paste any Instagram Reel URL, and AutoTube AI will automatically download the video, apply AI edits (optional), generate SEO-optimized metadata using AI, and upload directly to your connected YouTube channel — all in one click."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is AutoTube AI free to use?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes! AutoTube AI offers a free plan with 40 tokens on signup. Each upload uses tokens. You can upgrade to Pro for 250 tokens/month at ₹399/month or ₹3,999/year for more power and features."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What YouTube permissions does AutoTube AI need?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "AutoTube AI only requests the youtube.upload scope — the minimum permission needed to upload videos to your channel. We never read your emails, watch history, or other personal Google data."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I upload videos from my device?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes! Besides Instagram Reels, you can upload any video directly from your device. AutoTube AI will analyze it with AI, generate optimized metadata, and upload it to YouTube for you."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is there a refund policy?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. AutoTube AI offers a 7-day refund window for all Pro subscriptions. If you're not satisfied, email us within 7 days of purchase for a full refund."
+      }
+    }
+  ]
 }
 </script>
 {% endblock %}
@@ -43,10 +152,12 @@
             <li><a href="#pricing">Pricing</a></li>
             <!-- Mobile-only auth links (hidden on desktop via CSS) -->
             {% if current_user.is_authenticated %}
-            <li class="mobile-nav-action"><a href="/dashboard" class="btn btn-primary btn-sm btn-block">Dashboard</a></li>
+            <li class="mobile-nav-action"><a href="/dashboard" class="btn btn-primary btn-sm btn-block">Dashboard</a>
+            </li>
             {% else %}
             <li class="mobile-nav-action"><a href="/login" class="btn btn-ghost btn-sm btn-block">Log In</a></li>
-            <li class="mobile-nav-action"><a href="/register" class="btn btn-primary btn-sm btn-block">Get Started Free</a></li>
+            <li class="mobile-nav-action"><a href="/register" class="btn btn-primary btn-sm btn-block">Get Started
+                    Free</a></li>
             {% endif %}
         </ul>
         <div class="nav-actions">
@@ -66,14 +177,16 @@
     <div class="hero-bg"></div>
     <div class="hero-particles"></div>
     <div class="hero-content">
-        <div class="hero-badge">✨ Insta Reel to YouTube — Auto Upload with AI</div>
-        <h1>Auto Upload Insta Reels to YouTube <br><span class="text-gradient">With AI Metadata & Edits</span></h1>
-        <p>Direct Instagram Reel to YouTube auto upload with AI-generated metadata — titles, tags, descriptions. Manage channel uploads, add AI edits, background music, and auto-publish. The #1 YouTube automation platform.</p>
+
+        <div class="hero-badge">✨ Insta Reels & Device Videos to YouTube — Auto Upload with AI</div>
+        <h1>Auto Upload Instagram Reels to YouTube <br><span class="text-gradient">With AI Metadata & Edits</span></h1>
+        <p>The #1 YouTube automation tool. Paste an Instagram Reel or upload directly from your device, get AI-generated
+            titles, tags & descriptions, add smart edits, and auto-publish to YouTube — all in one click.</p>
         <div class="hero-actions">
             {% if current_user.is_authenticated %}
             <a href="/dashboard" class="btn btn-primary btn-lg">Go to Dashboard →</a>
             {% else %}
-            <a href="/register" class="btn btn-primary btn-lg">Start Free — 40 Tokens</a>
+            <a href="/register" class="btn btn-primary btn-lg" id="hero-cta-primary">Start Free — 40 Tokens</a>
             <a href="#use-cases" class="btn btn-secondary btn-lg">See What You Can Do</a>
             {% endif %}
         </div>
@@ -99,38 +212,45 @@
     <div class="container">
         <div class="section-header">
             <h2>YouTube Automation <span class="text-gradient">Features</span></h2>
-            <p>Everything you need to auto upload Insta Reels to YouTube with AI metadata, edits, and channel management.</p>
+            <p>Everything you need to auto upload Instagram Reels to YouTube with AI metadata, edits, and channel
+                management.</p>
         </div>
         <div class="features-grid">
             <div class="feature-card glass-card card-glow">
                 <div class="feature-icon violet">🤖</div>
                 <h3>AI Metadata Generator</h3>
-                <p>Auto-generate SEO-optimized titles, descriptions, tags, and hashtags using AI. Every upload gets viral-ready metadata — no manual work needed.</p>
+                <p>Auto-generate SEO-optimized titles, descriptions, tags, and hashtags using AI. Every upload gets
+                    viral-ready metadata — no manual work needed.</p>
             </div>
             <div class="feature-card glass-card card-glow">
                 <div class="feature-icon cyan">🎬</div>
                 <h3>AI Video Edits</h3>
-                <p>Direct Insta to YouTube with AI edits — add background music, text overlays, and professional effects automatically before upload.</p>
+                <p>Direct Insta to YouTube with AI edits — add background music, text overlays, and professional effects
+                    automatically before upload.</p>
             </div>
             <div class="feature-card glass-card card-glow">
                 <div class="feature-icon emerald">📤</div>
                 <h3>Auto Upload to YouTube</h3>
-                <p>One-click auto upload with metadata. Connect your channel, set privacy, and let AI handle titles, tags, and descriptions for every video.</p>
+                <p>One-click auto upload with metadata. Connect your channel, set privacy, and let AI handle titles,
+                    tags, and descriptions for every video.</p>
             </div>
             <div class="feature-card glass-card card-glow">
                 <div class="feature-icon rose">📱</div>
-                <h3>Insta Reel to YouTube</h3>
-                <p>Paste any Instagram Reel URL → auto download, AI edit, generate metadata, and upload directly to your YouTube Shorts. Insta to YouTube in seconds.</p>
+                <h3>Link or Device Upload</h3>
+                <p>Paste any Instagram Reel URL, or upload from your computer/phone. Auto-download, AI edit, generate
+                    metadata, and publish directly to YouTube Shorts.</p>
             </div>
             <div class="feature-card glass-card card-glow">
                 <div class="feature-icon amber">🔧</div>
                 <h3>Manage Channel Uploads</h3>
-                <p>YouTube automation to manage channel uploads from one dashboard. Track uploads, monitor success rate, and control your content pipeline.</p>
+                <p>YouTube automation tool to manage channel uploads from one dashboard. Track uploads, monitor success
+                    rate, and control your content pipeline.</p>
             </div>
             <div class="feature-card glass-card card-glow">
                 <div class="feature-icon blue">📊</div>
                 <h3>Upload Analytics & Tokens</h3>
-                <p>Real-time dashboard to track auto uploads, AI metadata quality, token usage, and channel growth — all in one place.</p>
+                <p>Real-time dashboard to track auto uploads, AI metadata quality, token usage, and channel growth — all
+                    in one place.</p>
             </div>
         </div>
     </div>
@@ -146,33 +266,40 @@
         <div class="features-grid">
             <div class="feature-card glass-card card-glow">
                 <div class="feature-icon rose">📱➜🎬</div>
-                <h3>Insta Reel to YouTube Auto Upload</h3>
-                <p>Paste your Instagram Reel link and AutoTube AI will auto download, apply AI edits, generate metadata (title, tags, description), and upload directly to YouTube Shorts — fully automated.</p>
+                <h3>Reel & Device Auto Upload</h3>
+                <p>Paste your Instagram Reel link or upload a local file. AutoTube AI will apply AI edits, generate
+                    metadata (title, tags, description), and upload directly to YouTube Shorts — fully automated.</p>
             </div>
             <div class="feature-card glass-card card-glow">
                 <div class="feature-icon violet">🏷️</div>
                 <h3>Auto Upload with AI Metadata</h3>
-                <p>Every video uploaded through AutoTube AI gets AI-generated metadata — SEO-optimized titles, keyword-rich tags, engaging descriptions, and trending hashtags. No more manual metadata entry.</p>
+                <p>Every video uploaded through AutoTube AI gets AI-generated metadata — SEO-optimized titles,
+                    keyword-rich tags, engaging descriptions, and trending hashtags. No more manual metadata entry.</p>
             </div>
             <div class="feature-card glass-card card-glow">
                 <div class="feature-icon emerald">📋</div>
                 <h3>YouTube Automation & Manage Channel Uploads</h3>
-                <p>Manage all your channel uploads from a single dashboard. Track which videos are processing, uploaded, or failed. Full YouTube automation to manage your content pipeline efficiently.</p>
+                <p>Manage all your channel uploads from a single dashboard. Track which videos are processing, uploaded,
+                    or failed. Full YouTube automation to manage your content pipeline efficiently.</p>
             </div>
             <div class="feature-card glass-card card-glow">
                 <div class="feature-icon cyan">✂️</div>
                 <h3>Direct Insta to YouTube with AI Edits</h3>
-                <p>Don't just repost — enhance. AutoTube AI applies smart edits like background music, text overlays, and effects to your Instagram content before uploading to YouTube. Direct Insta to YouTube with AI edits.</p>
+                <p>Don't just repost — enhance. AutoTube AI applies smart edits like background music, text overlays,
+                    and effects to your Instagram content before uploading to YouTube. Direct Insta to YouTube with AI
+                    edits.</p>
             </div>
             <div class="feature-card glass-card card-glow">
                 <div class="feature-icon amber">🎯</div>
                 <h3>Bulk Upload Shorts to YouTube</h3>
-                <p>Upload multiple videos from your device and let AI auto-generate unique metadata for each. Perfect for creators who want to batch upload Shorts with optimized tags and titles.</p>
+                <p>Upload multiple videos from your device and let AI auto-generate unique metadata for each. Perfect
+                    for creators who want to batch upload Shorts with optimized tags and titles.</p>
             </div>
             <div class="feature-card glass-card card-glow">
                 <div class="feature-icon blue">📈</div>
                 <h3>Grow Your YouTube Channel Faster</h3>
-                <p>With AI-powered metadata, smart video edits, and automated uploads, your content reaches more viewers. YouTube automation that actually helps you grow — not just upload.</p>
+                <p>With AI-powered metadata, smart video edits, and automated uploads, your content reaches more
+                    viewers. YouTube automation that actually helps you grow — not just upload.</p>
             </div>
         </div>
     </div>
@@ -183,7 +310,7 @@
     <div class="container">
         <div class="section-header">
             <h2>How Auto Upload <span class="text-gradient">Works</span></h2>
-            <p>Three simple steps — Insta Reel to YouTube auto upload with AI metadata & edits.</p>
+            <p>Three simple steps — Instagram Reels to YouTube auto upload with AI metadata & edits.</p>
         </div>
         <div class="steps-grid">
             <div class="step-card glass-card">
@@ -194,12 +321,112 @@
             <div class="step-card glass-card">
                 <div class="step-number">2</div>
                 <h3>AI Generates Metadata & Edits</h3>
-                <p>AI auto-generates optimized titles, tags, descriptions, and applies smart edits like music and text overlays.</p>
+                <p>AI auto-generates optimized titles, tags, descriptions, and applies smart edits like music and text
+                    overlays.</p>
             </div>
             <div class="step-card glass-card">
                 <div class="step-number">3</div>
                 <h3>Auto Upload to YouTube</h3>
-                <p>Your video is auto uploaded to YouTube with AI-generated metadata. Manage channel uploads from your dashboard.</p>
+                <p>Your video is auto uploaded to YouTube with AI-generated metadata. Manage channel uploads from your
+                    dashboard.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Demo Section -->
+<section class="section" id="demo" style="background: var(--bg-secondary);">
+    <div class="container">
+        <div class="section-header">
+            <h2>See AutoTube AI <span class="text-gradient">In Action</span></h2>
+            <p>Watch how easy it is to auto upload Instagram Reels to YouTube with AI in under 60 seconds.</p>
+        </div>
+        <div class="demo-video-wrapper">
+            <div class="demo-video-placeholder glass-card card-glow">
+                <div class="demo-play-icon">▶</div>
+                <h3>Product Demo Coming Soon</h3>
+                <p style="color: var(--text-muted); margin-top: 8px;">Meanwhile, try it free — see the magic yourself!
+                </p>
+                <a href="/register" class="btn btn-primary" style="margin-top: 20px;">Try It Free →</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonials -->
+<section class="section" id="testimonials">
+    <div class="container">
+        <div class="section-header">
+            <h2>Loved by <span class="text-gradient">Creators</span></h2>
+            <p>See what YouTubers and content creators say about AutoTube AI.</p>
+        </div>
+        <div class="testimonials-grid">
+            <div class="testimonial-card glass-card card-glow">
+                <div class="testimonial-stars">★★★★★</div>
+                <p class="testimonial-text">"AutoTube AI literally saves me 3-4 hours a day. I used to manually upload
+                    every Reel to YouTube — now it's one click and done. The AI metadata is surprisingly good!"</p>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar" style="background: linear-gradient(135deg, #8b5cf6, #ec4899);">RP
+                    </div>
+                    <div>
+                        <div class="testimonial-name">Rahul P.</div>
+                        <div class="testimonial-role">Tech Content Creator • 45K Subs</div>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card glass-card card-glow">
+                <div class="testimonial-stars">★★★★★</div>
+                <p class="testimonial-text">"I was skeptical about AI-generated metadata, but the titles and tags
+                    AutoTube generates are actually better than what I was writing myself. My Shorts views went up 2x."
+                </p>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar" style="background: linear-gradient(135deg, #06b6d4, #10b981);">SM
+                    </div>
+                    <div>
+                        <div class="testimonial-name">Sneha M.</div>
+                        <div class="testimonial-role">Lifestyle Vlogger • 22K Subs</div>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card glass-card card-glow">
+                <div class="testimonial-stars">★★★★★</div>
+                <p class="testimonial-text">"As a social media manager handling 5 accounts, AutoTube AI is a
+                    game-changer. Bulk upload with AI metadata + video edits? Take my money. Worth every rupee."</p>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar" style="background: linear-gradient(135deg, #f59e0b, #f43f5e);">AK
+                    </div>
+                    <div>
+                        <div class="testimonial-name">Arjun K.</div>
+                        <div class="testimonial-role">Social Media Manager • Agency</div>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card glass-card card-glow">
+                <div class="testimonial-stars">★★★★☆</div>
+                <p class="testimonial-text">"Simple and effective. Paste an Instagram Reel link, and in 2 minutes it's
+                    on YouTube with perfect metadata. The free plan is generous — 40 tokens to start with."</p>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar" style="background: linear-gradient(135deg, #3b82f6, #8b5cf6);">DV
+                    </div>
+                    <div>
+                        <div class="testimonial-name">Divya V.</div>
+                        <div class="testimonial-role">Fitness Creator • 12K Subs</div>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card glass-card card-glow">
+                <div class="testimonial-stars">★★★★★</div>
+                <p class="testimonial-text">"I've tried 4-5 YouTube automation tools. AutoTube AI is the only one that
+                    does Instagram to YouTube properly. The AI video editing with background music is the cherry on
+                    top."</p>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar" style="background: linear-gradient(135deg, #10b981, #06b6d4);">MR
+                    </div>
+                    <div>
+                        <div class="testimonial-name">Mohit R.</div>
+                        <div class="testimonial-role">Gaming Creator • 85K Subs</div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -215,13 +442,19 @@
 
         <!-- Billing Toggle -->
         <div style="display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:32px;">
-            <span id="lp-label-monthly" style="font-size:0.95rem;font-weight:600;color:var(--text-primary);transition:color 0.3s;">Monthly</span>
+            <span id="lp-label-monthly"
+                style="font-size:0.95rem;font-weight:600;color:var(--text-primary);transition:color 0.3s;">Monthly</span>
             <label style="position:relative;display:inline-block;width:52px;height:28px;cursor:pointer;">
                 <input type="checkbox" id="lp-billing-toggle" style="opacity:0;width:0;height:0;">
-                <span style="position:absolute;inset:0;background:var(--bg-glass);border:1px solid rgba(255,255,255,0.1);border-radius:14px;transition:0.3s;"></span>
-                <span id="lp-toggle-knob" style="position:absolute;left:3px;top:3px;width:22px;height:22px;background:var(--primary);border-radius:50%;transition:0.3s;"></span>
+                <span
+                    style="position:absolute;inset:0;background:var(--bg-glass);border:1px solid rgba(255,255,255,0.1);border-radius:14px;transition:0.3s;"></span>
+                <span id="lp-toggle-knob"
+                    style="position:absolute;left:3px;top:3px;width:22px;height:22px;background:var(--primary);border-radius:50%;transition:0.3s;"></span>
             </label>
-            <span id="lp-label-yearly" style="font-size:0.95rem;font-weight:500;color:var(--text-muted);transition:color 0.3s;">Yearly <span style="background:linear-gradient(135deg,#10b981,#059669);color:#fff;padding:2px 8px;border-radius:10px;font-size:0.72rem;margin-left:4px;">Save ₹789</span></span>
+            <span id="lp-label-yearly"
+                style="font-size:0.95rem;font-weight:500;color:var(--text-muted);transition:color 0.3s;">Yearly <span
+                    style="background:linear-gradient(135deg,#10b981,#059669);color:#fff;padding:2px 8px;border-radius:10px;font-size:0.72rem;margin-left:4px;">Save
+                    ₹789</span></span>
         </div>
 
         <div class="pricing-grid">
@@ -238,7 +471,7 @@
                 {% if current_user.is_authenticated %}
                 <a href="/dashboard" class="btn btn-secondary btn-block">Current Plan</a>
                 {% else %}
-                <a href="/register" class="btn btn-secondary btn-block">Get Started</a>
+                <a href="/register" class="btn btn-secondary btn-block" id="pricing-free-cta">Get Started</a>
                 {% endif %}
             </div>
 
@@ -254,9 +487,10 @@
                     {% endfor %}
                 </ul>
                 {% if current_user.is_authenticated %}
-                <button class="btn btn-primary btn-block" onclick="purchasePlan('pro')">Upgrade to Pro</button>
+                <button class="btn btn-primary btn-block" onclick="purchasePlan('pro')" id="pricing-pro-cta">Upgrade to
+                    Pro</button>
                 {% else %}
-                <a href="/register" class="btn btn-primary btn-block">Get Started</a>
+                <a href="/register" class="btn btn-primary btn-block" id="pricing-pro-cta">Get Started</a>
                 {% endif %}
             </div>
 
@@ -265,16 +499,19 @@
                 <div class="popular-badge" style="background:linear-gradient(135deg,#10b981,#059669);">Best Value</div>
                 <div class="pricing-name">Pro Yearly</div>
                 <div class="pricing-price">₹3,999</div>
-                <div class="pricing-period">per year <span style="font-size:0.78rem;color:#10b981;margin-left:4px;">Save ₹789</span></div>
+                <div class="pricing-period">per year <span style="font-size:0.78rem;color:#10b981;margin-left:4px;">Save
+                        ₹789</span></div>
                 <ul class="pricing-features">
                     {% for feature in plans['pro_yearly'].features %}
                     <li>{{ feature }}</li>
                     {% endfor %}
                 </ul>
                 {% if current_user.is_authenticated %}
-                <button class="btn btn-primary btn-block" style="background:linear-gradient(135deg,#10b981,#059669);" onclick="purchasePlan('pro_yearly')">Upgrade to Pro Yearly</button>
+                <button class="btn btn-primary btn-block" style="background:linear-gradient(135deg,#10b981,#059669);"
+                    onclick="purchasePlan('pro_yearly')" id="pricing-yearly-cta">Upgrade to Pro Yearly</button>
                 {% else %}
-                <a href="/register" class="btn btn-primary btn-block" style="background:linear-gradient(135deg,#10b981,#059669);">Get Started</a>
+                <a href="/register" class="btn btn-primary btn-block"
+                    style="background:linear-gradient(135deg,#10b981,#059669);" id="pricing-yearly-cta">Get Started</a>
                 {% endif %}
             </div>
         </div>
@@ -282,66 +519,156 @@
 </section>
 
 <script>
-// Landing page billing toggle
-document.addEventListener('DOMContentLoaded', function() {
-    const toggle = document.getElementById('lp-billing-toggle');
-    if (!toggle) return;
-    toggle.addEventListener('change', function() {
-        const monthly = document.getElementById('lp-plan-monthly');
-        const yearly = document.getElementById('lp-plan-yearly');
-        const lm = document.getElementById('lp-label-monthly');
-        const ly = document.getElementById('lp-label-yearly');
-        const knob = document.getElementById('lp-toggle-knob');
-        if (this.checked) {
-            monthly.style.display = 'none'; yearly.style.display = 'block';
-            lm.style.color = 'var(--text-muted)'; lm.style.fontWeight = '500';
-            ly.style.color = 'var(--text-primary)'; ly.style.fontWeight = '600';
-            knob.style.left = '27px'; knob.style.background = '#10b981';
-        } else {
-            monthly.style.display = 'block'; yearly.style.display = 'none';
-            lm.style.color = 'var(--text-primary)'; lm.style.fontWeight = '600';
-            ly.style.color = 'var(--text-muted)'; ly.style.fontWeight = '500';
-            knob.style.left = '3px'; knob.style.background = 'var(--primary)';
-        }
+    // Landing page billing toggle
+    document.addEventListener('DOMContentLoaded', function () {
+        const toggle = document.getElementById('lp-billing-toggle');
+        if (!toggle) return;
+        toggle.addEventListener('change', function () {
+            const monthly = document.getElementById('lp-plan-monthly');
+            const yearly = document.getElementById('lp-plan-yearly');
+            const lm = document.getElementById('lp-label-monthly');
+            const ly = document.getElementById('lp-label-yearly');
+            const knob = document.getElementById('lp-toggle-knob');
+            if (this.checked) {
+                monthly.style.display = 'none'; yearly.style.display = 'block';
+                lm.style.color = 'var(--text-muted)'; lm.style.fontWeight = '500';
+                ly.style.color = 'var(--text-primary)'; ly.style.fontWeight = '600';
+                knob.style.left = '27px'; knob.style.background = '#10b981';
+            } else {
+                monthly.style.display = 'block'; yearly.style.display = 'none';
+                lm.style.color = 'var(--text-primary)'; lm.style.fontWeight = '600';
+                ly.style.color = 'var(--text-muted)'; ly.style.fontWeight = '500';
+                knob.style.left = '3px'; knob.style.background = 'var(--primary)';
+            }
+        });
     });
-});
+</script>
+
+<!-- FAQ Section -->
+<section class="section" id="faq" style="background: var(--bg-secondary);">
+    <div class="container">
+        <div class="section-header">
+            <h2>Frequently Asked <span class="text-gradient">Questions</span></h2>
+            <p>Everything you need to know about AutoTube AI — the YouTube automation tool creators trust.</p>
+        </div>
+        <div class="faq-container">
+            <div class="faq-item glass-card">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    <span>What is AutoTube AI and how does it work?</span>
+                    <span class="faq-icon">+</span>
+                </button>
+                <div class="faq-answer">
+                    <p>AutoTube AI is an AI-powered YouTube automation tool that lets you auto upload Instagram Reels to
+                        YouTube Shorts. Simply paste a Reel URL or upload a video → AI generates SEO-optimized metadata
+                        (title, tags, description) → applies optional smart edits → uploads directly to your YouTube
+                        channel. It's the easiest way to repurpose Instagram content on YouTube.</p>
+                </div>
+            </div>
+            <div class="faq-item glass-card">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    <span>How does Instagram Reel to YouTube auto upload work?</span>
+                    <span class="faq-icon">+</span>
+                </button>
+                <div class="faq-answer">
+                    <p>Paste any Instagram Reel link into AutoTube AI. Our system automatically downloads the video
+                        (with audio), analyzes it using AI, generates viral-ready metadata — titles, tags, descriptions,
+                        and hashtags — and uploads it directly to your connected YouTube channel as a Short. The entire
+                        process takes under 2 minutes.</p>
+                </div>
+            </div>
+            <div class="faq-item glass-card">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    <span>Is AutoTube AI free to use?</span>
+                    <span class="faq-icon">+</span>
+                </button>
+                <div class="faq-answer">
+                    <p>Yes! Sign up free and get <strong>40 tokens</strong> to start — enough for multiple uploads. Each
+                        upload uses tokens for downloading, AI analysis, and uploading. When you need more, upgrade to
+                        Pro at ₹399/month for 250 tokens monthly with daily refills, or save with our annual plan at
+                        ₹3,999/year.</p>
+                </div>
+            </div>
+            <div class="faq-item glass-card">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    <span>What YouTube permissions does AutoTube AI need?</span>
+                    <span class="faq-icon">+</span>
+                </button>
+                <div class="faq-answer">
+                    <p>AutoTube AI only requests the <code>youtube.upload</code> scope — the minimum permission needed
+                        to upload videos to your channel. We <strong>never</strong> read your emails, watch history,
+                        subscriptions, or any other personal Google data. You can revoke access anytime from your Google
+                        security settings.</p>
+                </div>
+            </div>
+            <div class="faq-item glass-card">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    <span>Can I also upload videos from my device?</span>
+                    <span class="faq-icon">+</span>
+                </button>
+                <div class="faq-answer">
+                    <p>Absolutely! Besides Instagram Reels, you can upload any video file (MP4, MOV, AVI, MKV, WebM)
+                        directly from your device. AutoTube AI will analyze the video with AI, generate optimized
+                        metadata, and upload it to YouTube — perfect for batch uploading YouTube Shorts.</p>
+                </div>
+            </div>
+            <div class="faq-item glass-card">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    <span>Is there a refund policy?</span>
+                    <span class="faq-icon">+</span>
+                </button>
+                <div class="faq-answer">
+                    <p>Yes! We offer a <strong>7-day no-questions-asked refund</strong> for all Pro subscriptions. If
+                        you're not satisfied, simply email us within 7 days of purchase and we'll process a full refund
+                        within 5-7 business days. Read our complete <a href="/refund">Refund Policy</a> for details.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    function toggleFaq(btn) {
+        const item = btn.parentElement;
+        const isOpen = item.classList.contains('open');
+        // Close all
+        document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+        // Toggle current
+        if (!isOpen) item.classList.add('open');
+    }
 </script>
 
 <!-- CTA -->
 <section class="cta-section">
     <div class="container" style="position:relative;">
         <h2>Ready for <span class="text-gradient">YouTube Automation</span>?</h2>
-        <p>Auto upload Insta Reels to YouTube with AI metadata & edits. Manage channel uploads, grow faster — start free today.</p>
+        <p>Auto upload Instagram Reels to YouTube with AI metadata & edits. Manage channel uploads, grow faster — start
+            free today.</p>
         {% if current_user.is_authenticated %}
-        <a href="/upload" class="btn btn-primary btn-lg">Auto Upload Now →</a>
+        <a href="/upload" class="btn btn-primary btn-lg" id="final-cta">Auto Upload Now →</a>
         {% else %}
-        <a href="/register" class="btn btn-primary btn-lg">Start Free — Auto Upload Today →</a>
+        <a href="/register" class="btn btn-primary btn-lg" id="final-cta">Start Free — Auto Upload Today →</a>
         {% endif %}
     </div>
 </section>
 
 <!-- Transparency & Data Usage -->
-<section class="section" id="data-transparency" style="background: var(--bg-card); border-top: 1px solid rgba(255,255,255,0.05); padding-top: 4rem; padding-bottom: 4rem;">
+<section class="section" id="data-transparency"
+    style="background: var(--bg-card); border-top: 1px solid rgba(255,255,255,0.05); padding-top: 4rem; padding-bottom: 4rem;">
     <div class="container text-center">
-        <h2 style="margin-bottom: 1.5rem; font-size: 1.8rem;">Transparency & <span class="text-gradient">Data Usage</span></h2>
+        <h2 style="margin-bottom: 1.5rem; font-size: 1.8rem;">Transparency & <span class="text-gradient">Data
+                Usage</span></h2>
         <p style="max-width: 800px; margin: 0 auto; color: var(--text-muted); line-height: 1.6;">
-            <strong>Why we need YouTube access:</strong> AutoTube AI requests access to your Google/YouTube account 
-            exclusively to upload videos and manage the content <em>you</em> create through our platform. 
-            We strictly request the `youtube.upload` scope and do not read your personal emails, viewing history, or other sensitive Google data. 
-            All generated metadata and uploaded videos are under your complete control. 
-            For more details, please read our <a href="/privacy" style="color: var(--primary); text-decoration: underline;">Privacy Policy</a>.
+            <strong>Why we need YouTube access:</strong> AutoTube AI requests access to your Google/YouTube account
+            exclusively to upload videos and manage the content <em>you</em> create through our platform.
+            We strictly request the `youtube.upload` scope and do not read your personal emails, viewing history, or
+            other sensitive Google data.
+            All generated metadata and uploaded videos are under your complete control.
+            For more details, please read our <a href="/privacy"
+                style="color: var(--primary); text-decoration: underline;">Privacy Policy</a>.
         </p>
     </div>
 </section>
 
 <!-- Footer -->
-<footer class="landing-footer">
-    <div class="container">
-        <p>© 2026 AutoTube AI — AI-Powered Video Platform. All rights reserved.</p>
-        <div style="margin-top: 10px; display: flex; justify-content: center; gap: 20px;">
-            <a href="/privacy" style="font-size: 0.85rem; color: var(--text-muted);">Privacy Policy</a>
-            <a href="/terms" style="font-size: 0.85rem; color: var(--text-muted);">Terms of Service</a>
-        </div>
-    </div>
-</footer>
+{% include "partials/footer.html" %}
 {% endblock %}

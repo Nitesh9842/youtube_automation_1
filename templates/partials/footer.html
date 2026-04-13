@@ -1,0 +1,67 @@
+<!-- Revamped Multi-Column Footer -->
+<footer class="site-footer" id="site-footer">
+    <div class="container">
+        <div class="footer-grid">
+            <!-- Brand Column -->
+            <div class="footer-col footer-brand-col">
+                <a href="/" class="nav-logo" style="margin-bottom: 16px; display: inline-flex;">
+                    <img src="{{ url_for('static', filename='img/logo.png') }}" alt="AutoTube AI Logo" class="nav-logo-img" style="height: 32px;">
+                    <span>Auto<span class="text-gradient">Tube AI</span></span>
+                </a>
+                <p style="color: var(--text-muted); font-size: 0.88rem; line-height: 1.6; margin-bottom: 16px;">
+                    AI-powered YouTube automation platform. Auto upload Instagram Reels to YouTube with AI-generated metadata, edits, and more.
+                </p>
+                <div class="footer-social">
+                    <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" aria-label="Twitter" class="footer-social-link">𝕏</a>
+                    <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" aria-label="YouTube" class="footer-social-link">▶</a>
+                    <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram" class="footer-social-link">📷</a>
+                </div>
+            </div>
+
+            <!-- Product Column -->
+            <div class="footer-col">
+                <h4 class="footer-heading">Product</h4>
+                <ul class="footer-links">
+                    <li><a href="/#features">Features</a></li>
+                    <li><a href="/#how-it-works">How It Works</a></li>
+                    <li><a href="/#pricing">Pricing</a></li>
+                    <li><a href="/#faq">FAQ</a></li>
+                </ul>
+            </div>
+
+            <!-- Company Column -->
+            <div class="footer-col">
+                <h4 class="footer-heading">Company</h4>
+                <ul class="footer-links">
+                    <li><a href="/about">About Us</a></li>
+                    <li><a href="/contact">Contact</a></li>
+                    <li><a href="/register">Get Started</a></li>
+                </ul>
+            </div>
+
+            <!-- Legal Column -->
+            <div class="footer-col">
+                <h4 class="footer-heading">Legal</h4>
+                <ul class="footer-links">
+                    <li><a href="/privacy">Privacy Policy</a></li>
+                    <li><a href="/terms">Terms of Service</a></li>
+                    <li><a href="/refund">Refund Policy</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Disclaimer -->
+        <div class="footer-disclaimer">
+            <p>
+                <strong>Disclaimer:</strong> AutoTube AI is an independent platform and is <strong>not affiliated with, endorsed by, or connected to Instagram, YouTube, or Google</strong> in any way. 
+                All product names, logos, and brands are property of their respective owners. Use this tool at your own risk. 
+                Automated uploading may be subject to platform-specific terms of service — please ensure compliance with YouTube's and Instagram's policies.
+            </p>
+        </div>
+
+        <!-- Bottom Bar -->
+        <div class="footer-bottom">
+            <p>© {{ current_year if current_year is defined else "2026" }} AutoTube AI — AI-Powered Video Platform. All rights reserved.</p>
+        </div>
+    </div>
+</footer>

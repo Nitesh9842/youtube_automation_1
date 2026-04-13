@@ -772,7 +772,241 @@ select.form-input {
     position: relative;
 }
 
-/* ─── Footer ────────────────────────────────────────────────────────────── */
+/* ─── Demo Video Section ────────────────────────────────────────────────── */
+.demo-video-wrapper {
+    max-width: 720px;
+    margin: 0 auto;
+}
+.demo-video-placeholder {
+    padding: 80px 40px;
+    text-align: center;
+    border: 2px dashed rgba(139, 92, 246, 0.25);
+    border-radius: var(--radius-xl);
+    background: linear-gradient(135deg, rgba(139,92,246,0.05), rgba(6,182,212,0.03));
+}
+.demo-play-icon {
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    border-radius: 50%;
+    background: var(--gradient-primary);
+    font-size: 2rem;
+    color: #fff;
+    box-shadow: 0 8px 30px rgba(139, 92, 246, 0.3);
+    transition: transform var(--transition-base);
+}
+.demo-video-placeholder:hover .demo-play-icon {
+    transform: scale(1.1);
+}
+.demo-video-placeholder h3 {
+    font-size: 1.3rem;
+    margin-bottom: 4px;
+}
+
+/* ─── Testimonials ──────────────────────────────────────────────────────── */
+.testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 24px;
+}
+.testimonial-card {
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+.testimonial-stars {
+    color: #f59e0b;
+    font-size: 1rem;
+    letter-spacing: 2px;
+}
+.testimonial-text {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    flex: 1;
+    font-style: italic;
+}
+.testimonial-text::before {
+    content: '"';
+    font-size: 1.5rem;
+    color: var(--accent-violet);
+    font-weight: 800;
+    margin-right: 2px;
+}
+.testimonial-author {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border-subtle);
+}
+.testimonial-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: #fff;
+    flex-shrink: 0;
+}
+.testimonial-name {
+    font-weight: 600;
+    font-size: 0.92rem;
+}
+.testimonial-role {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+}
+
+/* ─── FAQ Accordion ─────────────────────────────────────────────────────── */
+.faq-container {
+    max-width: 800px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+.faq-item {
+    border-radius: var(--radius-md) !important;
+    overflow: hidden;
+}
+.faq-question {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 20px 24px;
+    background: transparent;
+    border: none;
+    color: var(--text-primary);
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    text-align: left;
+    cursor: pointer;
+    transition: background var(--transition-fast);
+    gap: 16px;
+}
+.faq-question:hover {
+    background: rgba(255,255,255,0.02);
+}
+.faq-icon {
+    font-size: 1.3rem;
+    color: var(--accent-violet-light);
+    transition: transform var(--transition-base);
+    flex-shrink: 0;
+    width: 24px;
+    text-align: center;
+}
+.faq-item.open .faq-icon {
+    transform: rotate(45deg);
+}
+.faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s ease, padding 0.35s ease;
+}
+.faq-item.open .faq-answer {
+    max-height: 300px;
+}
+.faq-answer p {
+    padding: 0 24px 20px;
+    color: var(--text-secondary);
+    font-size: 0.92rem;
+    line-height: 1.7;
+}
+.faq-answer a {
+    color: var(--accent-violet-light);
+    text-decoration: underline;
+}
+
+/* ─── Revamped Footer ───────────────────────────────────────────────────── */
+.site-footer {
+    padding: 60px 0 0;
+    border-top: 1px solid var(--border-subtle);
+    background: var(--bg-secondary);
+}
+.footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 40px;
+    padding-bottom: 40px;
+}
+.footer-heading {
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-primary);
+    margin-bottom: 16px;
+}
+.footer-links {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.footer-links a {
+    color: var(--text-muted);
+    font-size: 0.88rem;
+    transition: color var(--transition-fast);
+}
+.footer-links a:hover {
+    color: var(--text-primary);
+}
+.footer-social {
+    display: flex;
+    gap: 10px;
+}
+.footer-social-link {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-sm);
+    background: var(--bg-glass);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    transition: all var(--transition-fast);
+}
+.footer-social-link:hover {
+    border-color: var(--accent-violet);
+    color: var(--accent-violet-light);
+    background: rgba(139, 92, 246, 0.1);
+}
+.footer-disclaimer {
+    padding: 24px 0;
+    border-top: 1px solid var(--border-subtle);
+}
+.footer-disclaimer p {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+}
+.footer-bottom {
+    padding: 20px 0;
+    border-top: 1px solid var(--border-subtle);
+    text-align: center;
+}
+.footer-bottom p {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+}
+
+/* ─── Old Footer (kept for backward compat) ─────────────────────────────── */
 .landing-footer {
     padding: 40px 0;
     border-top: 1px solid var(--border-subtle);
@@ -1497,8 +1731,22 @@ select.form-input {
     .cta-section { padding: 50px 0; }
     .cta-section h2 { font-size: 1.5rem; }
 
+    /* ── Testimonials ─────────────────────────────────────────────── */
+    .testimonials-grid { grid-template-columns: 1fr; gap: 16px; }
+    .testimonial-card { padding: 24px; }
+
+    /* ── FAQ ───────────────────────────────────────────────────────── */
+    .faq-question { padding: 16px 18px; font-size: 0.92rem; }
+    .faq-answer p { padding: 0 18px 16px; font-size: 0.88rem; }
+
+    /* ── Demo ──────────────────────────────────────────────────────── */
+    .demo-video-placeholder { padding: 50px 24px; }
+    .demo-play-icon { width: 64px; height: 64px; font-size: 1.5rem; }
+
     /* ── Footer ─────────────────────────────────────────────────── */
     .landing-footer { padding: 28px 0; }
+    .footer-grid { grid-template-columns: 1fr 1fr; gap: 28px; }
+    .footer-brand-col { grid-column: 1 / -1; }
 
     /* ── Sidebar ──────────────────────────────────────────────────── */
     .sidebar {
@@ -1582,6 +1830,8 @@ select.form-input {
     }
 
     .packs-grid { grid-template-columns: 1fr; }
+
+    .footer-grid { grid-template-columns: 1fr; gap: 24px; }
 
     .topbar-left { gap: 10px; }
     .topbar-title { font-size: 0.9rem; }

@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+{% block title %}About AutoTube AI — Our Mission & Story{% endblock %}
+{% block meta_description %}Learn about AutoTube AI, the AI-powered YouTube automation platform. Our mission is to help creators grow faster by automating Instagram Reel to YouTube uploads with AI-generated metadata.{% endblock %}
+{% block og_title %}About AutoTube AI — Our Mission & Story{% endblock %}
+{% block og_description %}Learn about AutoTube AI, the AI-powered YouTube automation platform helping creators grow faster.{% endblock %}
+{% block twitter_title %}About AutoTube AI — Our Mission & Story{% endblock %}
+{% block twitter_description %}Learn about AutoTube AI, the AI-powered YouTube automation platform helping creators grow faster.{% endblock %}
+{% block page_id %}about{% endblock %}
+
+{% block head %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "AboutPage",
+  "name": "About AutoTube AI",
+  "description": "Learn about AutoTube AI, the AI-powered YouTube automation platform.",
+  "url": "https://autotubeai.me/about"
+}
+</script>
+{% endblock %}
+
+{% block body %}
+<!-- Navigation -->
+<nav class="landing-nav scrolled" id="landing-nav">
+    <div class="nav-inner">
+        <a href="/" class="nav-logo">
+            <img src="{{ url_for('static', filename='img/logo.png') }}" alt="AutoTube AI Logo" class="nav-logo-img">
+            <span>Auto<span class="text-gradient">Tube AI</span></span>
+        </a>
+        <ul class="nav-links" id="nav-links">
+            <li><a href="/#features">Features</a></li>
+            <li><a href="/#how-it-works">How It Works</a></li>
+            <li><a href="/#pricing">Pricing</a></li>
+            {% if current_user.is_authenticated %}
+            <li class="mobile-nav-action"><a href="/dashboard" class="btn btn-primary btn-sm btn-block">Dashboard</a></li>
+            {% else %}
+            <li class="mobile-nav-action"><a href="/login" class="btn btn-ghost btn-sm btn-block">Log In</a></li>
+            <li class="mobile-nav-action"><a href="/register" class="btn btn-primary btn-sm btn-block">Get Started Free</a></li>
+            {% endif %}
+        </ul>
+        <div class="nav-actions">
+            {% if current_user.is_authenticated %}
+            <a href="/dashboard" class="btn btn-primary btn-sm">Dashboard</a>
+            {% else %}
+            <a href="/login" class="btn btn-ghost btn-sm">Log In</a>
+            <a href="/register" class="btn btn-primary btn-sm">Get Started Free</a>
+            {% endif %}
+        </div>
+        <button class="mobile-menu-btn">☰</button>
+    </div>
+</nav>
+
+<div class="container" style="padding: 120px 24px 80px;">
+
+    <!-- Hero -->
+    <div class="text-center" style="margin-bottom: 64px;">
+        <div class="hero-badge" style="margin-bottom: 20px;">🚀 Our Story</div>
+        <h1 style="font-size: clamp(2rem, 5vw, 3.2rem); margin-bottom: 16px;">About <span class="text-gradient">AutoTube AI</span></h1>
+        <p style="font-size: 1.1rem; color: var(--text-secondary); max-width: 640px; margin: 0 auto; line-height: 1.7;">
+            We're building the future of content creation — where AI handles the tedious work so creators can focus on what matters: creating great content.
+        </p>
+    </div>
+
+    <!-- Mission Section -->
+    <div class="about-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 32px; margin-bottom: 64px;">
+        <div class="glass-card card-glow" style="padding: 36px;">
+            <div class="feature-icon violet" style="margin-bottom: 20px;">🎯</div>
+            <h2 style="font-size: 1.5rem; margin-bottom: 12px;">Our Mission</h2>
+            <p style="color: var(--text-secondary); line-height: 1.7;">
+                To democratize YouTube growth by giving every creator — big or small — access to powerful AI tools that automate the hardest parts of content publishing. No more spending hours on metadata, editing, and uploading. We believe your time is better spent creating.
+            </p>
+        </div>
+        <div class="glass-card card-glow" style="padding: 36px;">
+            <div class="feature-icon cyan" style="margin-bottom: 20px;">💡</div>
+            <h2 style="font-size: 1.5rem; margin-bottom: 12px;">The Problem We Solve</h2>
+            <p style="color: var(--text-secondary); line-height: 1.7;">
+                Creators waste hours manually uploading Instagram Reels to YouTube, writing titles, descriptions, and tags from scratch. The process is repetitive, time-consuming, and often results in poor SEO. AutoTube AI automates this entire pipeline with artificial intelligence.
+            </p>
+        </div>
+    </div>
+
+    <!-- Values -->
+    <div class="text-center" style="margin-bottom: 40px;">
+        <h2 style="font-size: clamp(1.5rem, 3vw, 2.2rem); margin-bottom: 12px;">What We <span class="text-gradient">Stand For</span></h2>
+        <p style="color: var(--text-secondary);">The principles that guide everything we build.</p>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px; margin-bottom: 64px;">
+        <div class="glass-card" style="padding: 28px; text-align: center;">
+            <div style="font-size: 2rem; margin-bottom: 12px;">⚡</div>
+            <h3 style="font-size: 1.1rem; margin-bottom: 8px;">Speed & Simplicity</h3>
+            <p style="color: var(--text-secondary); font-size: 0.9rem;">One-click automation. No complicated setup. Paste a link and we handle everything.</p>
+        </div>
+        <div class="glass-card" style="padding: 28px; text-align: center;">
+            <div style="font-size: 2rem; margin-bottom: 12px;">🔒</div>
+            <h3 style="font-size: 1.1rem; margin-bottom: 8px;">Privacy First</h3>
+            <p style="color: var(--text-secondary); font-size: 0.9rem;">We only request the minimum YouTube permissions needed. Your data stays yours.</p>
+        </div>
+        <div class="glass-card" style="padding: 28px; text-align: center;">
+            <div style="font-size: 2rem; margin-bottom: 12px;">🤖</div>
+            <h3 style="font-size: 1.1rem; margin-bottom: 8px;">AI-Powered Quality</h3>
+            <p style="color: var(--text-secondary); font-size: 0.9rem;">Every generated title, tag, and description is optimized for YouTube's algorithm.</p>
+        </div>
+        <div class="glass-card" style="padding: 28px; text-align: center;">
+            <div style="font-size: 2rem; margin-bottom: 12px;">🌍</div>
+            <h3 style="font-size: 1.1rem; margin-bottom: 8px;">Built for Everyone</h3>
+            <p style="color: var(--text-secondary); font-size: 0.9rem;">Whether you're a solo creator or a media agency, AutoTube AI scales with your needs.</p>
+        </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="text-center" style="padding: 48px 0;">
+        <h2 style="font-size: 1.8rem; margin-bottom: 16px;">Ready to <span class="text-gradient">Get Started</span>?</h2>
+        <p style="color: var(--text-secondary); margin-bottom: 24px;">Join thousands of creators automating their YouTube growth.</p>
+        {% if current_user.is_authenticated %}
+        <a href="/dashboard" class="btn btn-primary btn-lg">Go to Dashboard →</a>
+        {% else %}
+        <a href="/register" class="btn btn-primary btn-lg">Start Free — 40 Tokens</a>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Footer -->
+{% include "partials/footer.html" %}
+{% endblock %}
